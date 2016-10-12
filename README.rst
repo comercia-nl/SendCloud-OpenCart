@@ -4,11 +4,8 @@ SendCloud OpenCart 2 Extension
 
 **This module is provided as is. Comercia actively supports this module as of October 1st 2016**
 
-.. image:: https://readthedocs.org/projects/sendcloud-opencart/badge/?version=latest
-       :target: http://sendcloud-opencart.readthedocs.org/en/latest/
-
-.. image:: https://readthedocs.org/projects/sendcloud-opencart-dutch/badge/?version=latest
-       :target: http://sendcloud-opencart.readthedocs.org/nl/latest/
+.. image:: https://readthedocs.org/projects/comercia-sendcloud-opencart/badge/?version=latest
+       :target: http://comercia-sendcloud-opencart.readthedocs.io/en/latest/
 
 This extension allows you to transport (export) orders to SendCloud in OpenCart 2.
 After transporting the order information to SendCloud you can generate shipment labels within the SendCloud platform.
@@ -22,12 +19,12 @@ Links
 
 Documentation:
   English:
-  	http://sendcloud-opencart.readthedocs.org/en/latest/
-
-  Dutch:	
-  	http://sendcloud-opencart.readthedocs.org/nl/latest/
+  	http://comercia-sendcloud-opencart.readthedocs.io/en/latest/
 
 OpenCart Extension Store:
+
+Dutch OpenCart Specialist:
+  https://www.comercia.nl
 
 SendCloud:
   https://www.sendcloud.nl
