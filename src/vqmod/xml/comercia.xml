@@ -1,0 +1,13 @@
+<modification>
+    <id>Comercia Utility</id>
+    <version>1.0.3</version>
+    <vqmver>2.3.0</vqmver>
+    <author>Comercia-Mark Smit</author>
+    <file name="system/startup.php">
+        <operation error="skip">
+            <search position="after"><![CDATA[<?php]]></search>
+            <add>
+                <![CDATA[include_once(DIR_SYSTEM."/comercia/util.php");]]></add>
+        </operation>
+    </file>
+</modification>
