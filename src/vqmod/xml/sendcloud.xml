@@ -2,7 +2,7 @@
 	<id>SendCloud OpenCart 2 Extension</id>
 	<version>1.0.3</version>
 	<vqmver>2.3.0</vqmver>
-	<author>SendCloud</author>
+	<author>SendCloud/Comercia</author>
 	<file name="admin/view/template/sale/order_list.tpl">
 		<operation error="abort">
 			<search position="before"><![CDATA[<button type="submit" id="button-shipping"]]></search>
@@ -30,8 +30,8 @@
 	</file>
 	<file name="admin/controller/sale/order.php">
 		<operation error="abort">
-			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], 'SSL');]]></search>
-			<add><![CDATA[$data['sendcloud_url'] = $this->url->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+			<search position="after"><![CDATA[$data['invoice'] = \comercia\Util::url()->link('sale/order/invoice', 'token=' . $this->session->data['token'], true);]]></search>
+			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], true);]]></add>
 		</operation>
 	</file>
 </modification>

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/../sendcloud/sendcloud_api.php');
+require_once(DIR_SYSTEM."sendcloud/sendcloud_api.php");
 
 class ControllerModuleSendcloud extends Controller {
 
