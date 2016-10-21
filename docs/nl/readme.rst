@@ -25,6 +25,11 @@ Een niet open-source versie van de extensie voor OpenCart 1.5.x kan gedownload w
 
 Je webwinkel updaten naar OpenCart 2 is aangeraden om te kunnnen profiteren van de laatste updates.
 
+Hulp van Comercia
+=================
+Wanneer je ondersteuning nodig hebt op het gebied van OpenCart in zijn algemeen of OpenCart-ingetratie met SendCloud,
+neemt u contact op met support@comercia.nl of maak een ticket aan op https://www.comercia.nl/klanten/submitticket.php?step=2&deptid=2
+
 Hulp van SendCloud
 ==================
 Als je hulp nodig hebt dan kun je contact opnemen via: contact@sendcloud.nl

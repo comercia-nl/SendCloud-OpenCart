@@ -7,8 +7,7 @@
 SendCloud OpenCart 2 Extensie
 *****************************
 
-This documentation is auto generated. 
-It starts with the README from GitHub followed by the other documentation. 
+Deze documentatie is automatisch gegenereerd.
 
 .. toctree::
    :maxdepth: 2
