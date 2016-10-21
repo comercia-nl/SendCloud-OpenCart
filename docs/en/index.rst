@@ -8,7 +8,6 @@ SendCloud OpenCart 2 Extension
 ******************************
 
 This documentation is auto generated. 
-It starts with the README from GitHub followed by the other documentation. 
 
 .. toctree::
    :maxdepth: 2

@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'SendCloud OpenCart 2 Extension'
-copyright = '2014, SendCloud BV'
+copyright = '2016, Comercia'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -206,7 +206,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'SendCloudOpenCart2.tex', 'SendCloud OpenCart 2 Extension Documentation',
-   'SendCloud BV', 'manual'),
+   'Comercia', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -236,7 +236,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'sendcloudopencart2', 'SendCloud OpenCart 2 Extension Documentation',
-     ['SendCloud BV'], 1)
+     ['Comercia'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -250,7 +250,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'SendCloudOpenCart2', 'SendCloud OpenCart 2 Extension Documentation',
-   'SendCloud BV', 'SendCloudOpenCart2', 'One line description of project.',
+   'Comercia', 'SendCloudOpenCart2', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -283,7 +283,7 @@ texinfo_documents = [
 # would mean that specific document would be compressed
 # regardless of the global pdf_compressed setting.
 pdf_documents = [
-('index', u'SendCloud OpenCart 2 Extension Documentation', u'SendCloud OpenCart 2 Extension', u'SendCloud BV'),
+('index', u'SendCloud OpenCart 2 Extension Documentation', u'SendCloud OpenCart 2 Extension', u'Comercia'),
 ]
 # A comma-separated list of custom stylesheets. Example:
 pdf_stylesheets = ['sphinx','kerning','a4']

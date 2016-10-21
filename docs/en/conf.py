@@ -4,5 +4,5 @@ from config.shared import *
 
 # Unique config for the English language here:
 pdf_documents = [
-('index', u'SendCloud OpenCart 2 Extension Documentation - EN', u'SendCloud OpenCart 2 Extension Documentation - English', u'SendCloud BV'),
+('index', u'SendCloud OpenCart 2 Extension Documentation - EN', u'SendCloud OpenCart 2 Extension Documentation - English', u'Comercia'),
 ]
