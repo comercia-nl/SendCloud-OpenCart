@@ -30,12 +30,8 @@
 	</file>
 	<file name="admin/controller/sale/order.php">
 		<operation error="skip">
-			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], true);]]></search>
-			<add><![CDATA[$data['sendcloud_url'] = $this->url->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], true);]]></add>
-		</operation>
-		<operation error="skip">
-			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], 'SSL');]]></search>
-			<add><![CDATA[$data['sendcloud_url'] = $this->url->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>
+			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], true);]]></add>
 		</operation>
 	</file>
 </modification>
