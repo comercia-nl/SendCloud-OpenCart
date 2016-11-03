@@ -30,7 +30,7 @@
 	</file>
 	<file name="admin/controller/sale/order.php">
 		<operation error="abort">
-			<search position="after"><![CDATA[$data['invoice'] = \comercia\Util::url()->link('sale/order/invoice', 'token=' . $this->session->data['token'], true);]]></search>
+			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>
 			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], true);]]></add>
 		</operation>
 	</file>
