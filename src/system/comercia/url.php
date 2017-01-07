@@ -15,6 +15,10 @@
 
         private function _url(){
             global $registry;
+            if (!$registry->has('url')) {
+                $registry->set('url', new Url(HTTPS_SERVER));
+            }
+
             return $registry->get("url");
         }
     }
