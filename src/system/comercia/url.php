@@ -16,7 +16,7 @@
         private function _url(){
             global $registry;
             if (!$registry->has('url')) {
-                $registry->set('url', new Url(HTTPS_SERVER));
+                $registry->set('url', new Url(HTTP_SERVER));
             }
 
             return $registry->get("url");
