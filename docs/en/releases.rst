@@ -2,6 +2,11 @@
 Releases
 ********
 
+1.0.4
+=====
+
+* Added 2.3 support, removed unsupported formats.
+
 1.0.3
 =====
 
