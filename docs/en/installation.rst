@@ -20,7 +20,7 @@ Extract the OpenCart extension to a location at your computer.
  
 3.  Installing vQmod
 ====================
-If you’ve already installed vQmod or if you prefer OCmod you can skip this step and go to :ref:`step 4 <step-four>`.
+If you’ve already installed vQmod you can skip this step and go to :ref:`step 4 <step-four>`.
 
 1. Download latest version of vQmod for OpenCart from GitHub.
 	https://github.com/vqmod/vqmod/releases
@@ -49,21 +49,6 @@ Login on the `SendCloud Panel <https://panel.sendcloud.nl>`_  with your SendClou
 
 Copy your public and secret key. 
 
-6. (optional) Upload the OCmod XML file
-=======================================
-
-If you don't use vQmod and if you want to use OCmod for the overrides in the OpenCart system you need upload the sendcloud.ocmod.xml file.
-The file can be found in the folder in the folder `ocmod/` of this module. 
-
-Upload the file `sendcloud.ocmod.xml` with help of the extension installer wizard of OpenCart and proceed with the next step. 
-
-.. image:: ../images/upload_ocmod.png
-
-Don't forget to clear the cache to activate this file. This can be done by going to the modifications page. Select the SendCloud module modification and press the upper right blue and orange buttons to reload the module and clear the cache of the selected SendCloud module.
-
-.. image:: ../images/clear_cache_ocmod.png
- 
- 
 7.  Activate the SendCloud Extension
 ====================================
 Login to the OpenCart admin area. Go to ``Extensions -> Modules`` and click on the green button from the SendCloud Extension.
