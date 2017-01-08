@@ -1,6 +1,6 @@
 <modification>
     <id>Comercia Utility</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <vqmver>2.3.0</vqmver>
     <author>Comercia-Mark Smit</author>
     <file name="system/startup.php">
