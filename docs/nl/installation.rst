@@ -50,7 +50,7 @@ Login in het `SendCloud Panel <https://panel.sendcloud.nl>`_  met je SendCloud a
  
 Kopieer de public en secret key.
 
-7.  Activeren van de SendCloud Extensie
+6.  Activeren van de SendCloud Extensie
 =======================================
 Login in de OpenCart admin. Ga naar ``Extensies -> Modules`` en klik op de groene knop bij de SendCloud Extensie. 
 
@@ -58,7 +58,7 @@ Login in de OpenCart admin. Ga naar ``Extensies -> Modules`` en klik op de groen
  
 De SendCloud extensie is nu geïnstalleerd. 
 
-8.  De SendCloud Extensie instellen
+7.  De SendCloud Extensie instellen
 ===================================
 Klik op de blauwe "edit" knop. 
 
