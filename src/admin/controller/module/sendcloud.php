@@ -21,11 +21,10 @@ class ControllerModuleSendcloud extends Controller {
 		$data['text_disabled']= $this->language->get('text_disabled');
 		$data['text_enabled']= $this->language->get('text_enabled');
 
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('sendcloud', $this->request->post);
 			$this->session->data['success'] = $data['msg_settings_saved'];
-			$this->response->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
+			$this->response->redirect($this->url->link('module/sendcloud', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 		  
 		$sendcloud_settings = $this->model_setting_setting->getSetting('sendcloud');
@@ -109,7 +108,8 @@ class ControllerModuleSendcloud extends Controller {
 	}
 	
 	protected function validate() {
-		if (!$this->user->hasPermission('modify', 'module/information')) {
+		
+		if (!$this->user->hasPermission('modify', 'module/sendcloud')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
