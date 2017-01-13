@@ -1,8 +1,8 @@
 <modification>
 	<id>SendCloud OpenCart 2 Extension</id>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<vqmver>2.3.0</vqmver>
-	<author>SendCloud/Comercia</author>
+	<author>Comercia</author>
 	<file name="admin/view/template/sale/order_list.tpl">
 		<operation error="abort">
 			<search position="before"><![CDATA[<button type="submit" id="button-shipping"]]></search>
