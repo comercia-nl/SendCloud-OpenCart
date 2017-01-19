@@ -3,7 +3,7 @@ PYTHON = python
 RELEASE_VERSION := $(shell $(PYTHON) -c "from helper import RELEASE_VERSION; print(RELEASE_VERSION);")
 
 BUILD_ROOT = "dist/SendCloud-OpenCart-2-Extension-$(RELEASE_VERSION)"
-BUILD_SENDCLOUD_ROOT = $(BUILD_ROOT)/upload/admin/controller/sendcloud
+BUILD_SENDCLOUD_ROOT = $(BUILD_ROOT)/upload/system/sendcloud
 BUILD_DOCS_ROOT = $(BUILD_ROOT)/docs/
 
 usage:
@@ -17,7 +17,7 @@ build-extension:
 	rm -rf ./dist/
 	mkdir -p $(BUILD_SENDCLOUD_ROOT)
 
-	cp -r ./src/admin ./src/image ./src/vqmod $(BUILD_ROOT)/upload/
+	cp -r ./src/admin ./src/image ./src/vqmod ./src/system $(BUILD_ROOT)/upload/
 	curl https://raw.githubusercontent.com/SendCloud/SendCloud-API-PHP-Wrapper/a40dfd55acfea2d33301169c63d59c82a68b47f4/src/SendCloudApi.php \
 		> "$(BUILD_SENDCLOUD_ROOT)/sendcloud_api.php"
 	echo 'Extension can be found in $(BUILD_ROOT)'

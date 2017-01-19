@@ -1,6 +1,6 @@
 <modification>
     <id>Comercia Utility</id>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <vqmver>2.3.0</vqmver>
     <author>Comercia - Mark Smit</author>
     <file name="system/startup.php">
@@ -10,10 +10,31 @@
                 <![CDATA[include_once(DIR_SYSTEM."/comercia/util.php");]]></add>
         </operation>
     </file>
+
     <file name="system/framework.php">
         <operation error="skip">
             <search position="before"><![CDATA[$registry = new Registry();]]></search>
             <add><![CDATA[global $registry;]]></add>
         </operation>
     </file>
+
+    <file name="admin/controller/extension/extension/module.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($extension == 'sendcloud') {
+                $data['extensions'][] = array(
+                'name'      => $this->language->get('heading_title'),
+                'module'    => $module_data,
+                'install'   => $this->url->link('extension/extension/module/install', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
+                'uninstall' => $this->url->link('extension/extension/module/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
+                'installed' => in_array($extension, $extensions),
+                'edit'      => $this->url->link('module/' . $extension, 'token=' . $this->session->data['token'], true)
+                );
+                continue;
+            }
+			]]></add>
+        </operation>
+    </file>
+
 </modification>
