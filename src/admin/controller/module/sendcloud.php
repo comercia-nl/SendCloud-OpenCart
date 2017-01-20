@@ -1,5 +1,7 @@
 <?php
 require_once(DIR_SYSTEM."sendcloud/sendcloud_api.php");
+require_once(DIR_SYSTEM."comercia/util.php");
+use comercia\Util;
 
 class ControllerModuleSendcloud extends Controller {
 
@@ -24,7 +26,8 @@ class ControllerModuleSendcloud extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('sendcloud', $this->request->post);
 			$this->session->data['success'] = $data['msg_settings_saved'];
-			$this->response->redirect($this->url->link('module/sendcloud', 'token=' . $this->session->data['token'], 'SSL'));
+			(Util::version()->isMinimal(2,3)) ? $path = 'extension/extension' : $path = 'extension/module';
+			$this->response->redirect($this->url->link($path, 'token=' . $this->session->data['token'], 'SSL'));
 		}
 		  
 		$sendcloud_settings = $this->model_setting_setting->getSetting('sendcloud');
@@ -108,8 +111,8 @@ class ControllerModuleSendcloud extends Controller {
 	}
 	
 	protected function validate() {
-		
-		if (!$this->user->hasPermission('modify', 'module/sendcloud')) {
+		(Util::version()->isMinimal(2,3)) ? $path = 'module/sendcloud' : $path = 'module/information';
+		if (!$this->user->hasPermission('modify', $path)) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
