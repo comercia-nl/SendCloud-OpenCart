@@ -26,7 +26,7 @@ class ControllerModuleSendcloud extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('sendcloud', $this->request->post);
 			$this->session->data['success'] = $data['msg_settings_saved'];
-			(Util::version()->isMinimal(2,2)) ? $path = 'extension/extension' : $path = 'extension/module';
+			(Util::version()->isMinimal(2,3)) ? $path = 'extension/extension' : $path = 'extension/module';
 			$this->response->redirect($this->url->link($path, 'token=' . $this->session->data['token'], 'SSL'));
 		}
 		  
