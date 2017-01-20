@@ -111,7 +111,7 @@ class ControllerModuleSendcloud extends Controller {
 	}
 	
 	protected function validate() {
-		(Util::version()->isMinimal(2,2)) ? $path = 'module/sendcloud' : $path = 'module/information';
+		(Util::version()->isMinimal(2,3)) ? $path = 'module/sendcloud' : $path = 'module/information';
 		if (!$this->user->hasPermission('modify', $path)) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
