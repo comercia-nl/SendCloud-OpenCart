@@ -43,9 +43,17 @@ Upload the files from the ``upload`` folder from the extension package to your w
  
 5.  Get SendCloud API keys
 ==========================
-Login on the `SendCloud Panel <https://panel.sendcloud.nl>`_  with your SendCloud account.  Choose ``Settings (Instellingen) -> API``.
+Login on the `SendCloud Panel <https://panel.sendcloud.nl>`_  with your SendCloud account.  Choose ``Integraties``.
 
-.. image:: ../images/api_keys.png
+.. image:: ../images/integrations_menu.png
+
+From the overview page that comes up, click the ``Connect`` button underneath the SendCloud logo.
+
+.. image:: ../images/integrations.png
+
+On the next screen, type in a name for your integration, for example "OpenCart" or the name of your webshop. The API keys will be automatically generated after you press ``Save``.
+
+.. image:: ../images/api_settings.png
 
 Copy your public and secret key. 
 

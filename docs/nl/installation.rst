@@ -44,10 +44,18 @@ Upload de bestanden uit de ``upload`` in de extensie map naar je webwinkel.
  
 5.  De SendCloud API sleutels bemachtigen
 =========================================
-Login in het `SendCloud Panel <https://panel.sendcloud.nl>`_  met je SendCloud account.  Kies ``Instellingen -> API``.
+Login in het `SendCloud Panel <https://panel.sendcloud.nl>`_  met je SendCloud account.  Kies ``Integraties``.
 
-.. image:: ../images/api_keys.png
- 
+.. image:: ../images/integrations_menu.png
+
+Op het volgende scherm, klik de groene ``Connect`` knop onder het SendCloud logo.
+
+.. image:: ../images/integrations.png
+
+Op de volgende pagina kiest u een naam voor uw integratie, bijvoorbeeld "OpenCart" of de naam van uw webshop en vult u deze in, in het ``Naam`` veld. Nadat u op ``Save`` heeft geklikt, worden de API keys automatisch gegenereerd.
+
+.. image:: ../images/api_settings.png
+
 Kopieer de public en secret key.
 
 6.  Activeren van de SendCloud Extensie

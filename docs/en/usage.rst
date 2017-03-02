@@ -10,7 +10,17 @@ In the OpenCart admin go to ``Sales -> Orders``.
 Select the orders you want to transport to SendCloud and click the button with the SendCloud logo.
 
 .. image:: ../images/extension_transport.png
- 
+
+Process orders in SendCloud
+===========================
+Login on the `SendCloud Panel <https://panel.sendcloud.nl>`_  with your SendCloud account.
+In the blue top menu, select the plug icon (if you have multiple integrations, there can be multiple icons in this bar, in this case, select the plug icon that corresponds to the newly set up webshop).
+
+.. image:: ../images/plug_icon.png
+
+On the overview page that comes up, you will find the orders that have been sent through the SendCloud module from your OpenCart webshop.
+
+.. image:: ../images/module_orders.png
 
 Error messages
 ==============
