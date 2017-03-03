@@ -2,6 +2,12 @@
 Releases
 ********
 
+1.0.6
+=====
+
+* Compatibility fixes for 2.0.x
+* Updated documentation.
+
 1.0.5
 =====
 
@@ -20,7 +26,7 @@ Releases
 1.0.2
 =====
 
-* Fixed notifiy setting in orderhistory.
+* Fixed notify setting in orderhistory.
 
 1.0.1
 =====

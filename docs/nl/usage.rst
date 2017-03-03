@@ -10,10 +10,20 @@ Ga naar je bestellingen in de OpenCart admin. ``Verkopen -> Orders``.
 Selecteer vervolgens de orders die je wilt overzetten en klik op de knop met het SendCloud logo. 
 
 .. image:: ../images/extension_transport.png
- 
 
-Fout meldingen
-==============
+Orders verwerken in SendCloud
+=============================
+Login in het `SendCloud Panel <https://panel.sendcloud.nl>`_  met uw SendCloud account.
+In het blauwe top menu, selecteer het plug icoontje (als u meerdere integraties actief heeft, kunnen er meerdere icoontjes in deze balk staan, in dit geval kiest u het plug icoontje voor uw nieuw opgezette integratie).
+
+.. image:: ../images/plug_icon.png
+
+Op de overzichtspagina die toont nadat u op het plug icoontje heeft geklikt, vindt u de orders die verstuurd zijn via de SendCloud module vanuit uw OpenCart webshop.
+
+.. image:: ../images/module_orders.png
+
+Foutmeldingen
+=============
 .. image:: ../images/extension_error_shipping_details.png
 
 Een of meerder orders heeft geen verzendgegevens (shipping details). Ga naar het detailoverzicht van de order en kijk of de verzendgegevens zijn ingevuld.
