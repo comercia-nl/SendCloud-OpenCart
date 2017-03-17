@@ -3,20 +3,6 @@
     <version>1.0.6</version>
     <vqmver>2.3.0</vqmver>
     <author>Comercia - Mark Smit</author>
-    <file name="system/startup.php">
-        <operation error="skip">
-            <search position="after"><![CDATA[<?php]]></search>
-            <add>
-                <![CDATA[include_once(DIR_SYSTEM."/comercia/util.php");]]></add>
-        </operation>
-    </file>
-
-    <file name="system/framework.php">
-        <operation error="skip">
-            <search position="before"><![CDATA[$registry = new Registry();]]></search>
-            <add><![CDATA[global $registry;]]></add>
-        </operation>
-    </file>
 
     <file name="admin/controller/extension/extension/module.php">
         <operation error="skip">
@@ -36,5 +22,16 @@
 			]]></add>
         </operation>
     </file>
+
+    <file name="catalog/controller/common/header.php">
+        <operation>
+            <search position="after"><![CDATA[function index(]]></search>
+            <add><![CDATA[
+                comercia\util::load()->controller("common/sendcloud/checkout");
+            ]]>
+            </add>
+        </operation>
+    </file>
+
 
 </modification>
