@@ -10,7 +10,7 @@ class ControllerModuleSendcloud extends Controller
 
     public function index()
     {
-        //load the langauge data
+        //load the language data
         $data = array();
         Util::load()->language("module/sendcloud", $data);
 
