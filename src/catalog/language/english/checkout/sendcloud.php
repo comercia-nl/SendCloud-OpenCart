@@ -1,3 +1,3 @@
 <?php
-$_["action_location_picker"] = "Service punt selecteren";
+$_["action_location_picker"] = "Select a service point.";
 ?>

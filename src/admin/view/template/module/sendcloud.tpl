@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="panel-heading">
-                        <?php echo $checkout_header_label ?>
+                        <?php echo $checkout_header_label; ?>
                     </div>
                     <div id="checkout-method">
                         <div class="form-group">
@@ -199,7 +199,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="sendcloud_address2_as_housenumber"></label>
                         <div class="col-sm-10">
-                            <a class="btn btn-primary" href="http://panel.sendcloud.nl/" target="_blank">SendCloud Panel
+                            <a class="btn btn-primary" href="//panel.sendcloud.nl/" target="_blank">SendCloud Panel
                                 <i class="fa fa-external-link"></i></a>
                         </div>
                     </div>

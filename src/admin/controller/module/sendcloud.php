@@ -54,7 +54,7 @@ class ControllerModuleSendcloud extends Controller
             ->fillSelectboxOptions("checkout_presets",Util::arrayHelper()->keyToVal($pickerPresets))
         ;
         Util::breadcrumb($data)
-            ->add("text_home", "comon/home")
+            ->add("text_home", "common/home")
             ->add("settings_title", "module/sendcloud");
 
 

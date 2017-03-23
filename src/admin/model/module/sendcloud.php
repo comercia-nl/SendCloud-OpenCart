@@ -15,7 +15,7 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "",
                 "sendcloud_checkout_selector_fake_click" => ""
             ),
-            "Open Cart" => array(
+            "OpenCart" => array(
                 "sendcloud_checkout_route" => "checkout/checkout",
                 "sendcloud_checkout_picker_selector" => "#shipping-new",
                 "sendcloud_checkout_picker_position" => "before",
