@@ -1,25 +1,45 @@
 <?php
-    namespace comercia;
-    class Url{
-        function link($route,$params="",$ssl=false){
-            if(!$ssl){
-                return $this->_url()->link($route,$params);
-            }else{
-                if(Util::version()->isMinimal(2,2)){
-                    return $this->_url()->link($route,$params,true);
+namespace comercia;
+class Url
+{
+    function link($route, $params = "", $ssl = true)
+    {
+        $session=Util::session();
+
+        if(Util::info()->IsInAdmin()&&strpos($params,"route=")===false){
+            if($session->token){
+                if($params){
+                    $params.="&token=".$session->token;
                 }else{
-                    return $this->_url()->link($route,$params,"ssl");
+                    $params="token=".$session->token;
                 }
             }
         }
 
-        private function _url(){
-            global $registry;
-            if (!$registry->has('url')) {
-                $registry->set('url', new Url(HTTP_SERVER));
-            }
+        if ($ssl && !defined(HTTPS_SERVER)) {
+            $ssl = false;
+        }
 
-            return $registry->get("url");
+        if (!$ssl) {
+            return $this->_url()->link($route, $params);
+        } else {
+            if (Util::version()->isMinimal("2.2")) {
+                return $this->_url()->link($route, $params, true);
+            } else {
+                return $this->_url()->link($route, $params, "ssl");
+            }
         }
     }
+
+    private function _url()
+    {
+        $registry = Util::registry();
+        if (!$registry->has('url')) {
+            $registry->set('url', new Url(HTTP_SERVER));
+        }
+
+        return $registry->get("url");
+    }
+}
+
 ?>

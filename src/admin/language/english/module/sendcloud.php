@@ -1,9 +1,9 @@
 <?php
-$_['heading_title']       = 'SendCloud OpenCart Extension';
-$_['settings_title'] 	  = 'SendCloud Settings';
-$_['settings_h3']		  = 'Modify SendCloud Setttings';
+$_['heading_title'] = 'SendCloud OpenCart Extension';
+$_['settings_title'] = 'SendCloud Settings';
+$_['settings_h3'] = 'Modify SendCloud Setttings';
 $_['default_status_label'] = 'Set the order state after transport to';
-$_['default_status']   	  = '---';
+$_['default_status'] = '---';
 
 $_['sendcloud_address2_as_housenumber_label'] = 'Use address 2 as housenumber';
 
@@ -16,4 +16,28 @@ $_['msg_success'] = 'Orders successfully sent to SendCloud. <a href="https://pan
 $_['log_message'] = 'Transported to SendCloud.';
 
 $_['error_no_orders'] = 'Error: No orders selected.';
+
+$_["checkout_header_label"] = "Checkout options";//checkout related
+
+$_["checkout_picker_route_label"] = "Route";
+$_["checkout_picker_selector_label"] = "Selector";
+$_["checkout_picker_selector_position_before"] = "Before";
+$_["checkout_picker_selector_position_after"] = "After";
+$_["checkout_picker_selector_position_replace"] = "Replace";
+$_["checkout_picker_selector_position_prepend"] = "Prepend";
+$_["checkout_picker_selector_position_append"] = "Append";
+
+$_["checkout_selector_address_label"] = "Address selector";
+$_["checkout_selector_address2_label"] = "Address2 selector";
+$_["checkout_selector_city_label"] = "city selector";
+$_["checkout_selector_postcode_label"] = "Postcode selector";
+
+$_["checkout_selector_fake_click_label"] = "Fake click selector";
+
+$_["checkout_presets_label"] = "Checkout module";
+$_["checkout_apply_label"] = "Apply";
+
+$_["checkout_method_label"] = "Checkout options";
+$_["checkout_method_picker_label"] = "Choose checkout method";
+$_["checkout_method_advanced_label"] = "Advanced checkout options";
 ?>
