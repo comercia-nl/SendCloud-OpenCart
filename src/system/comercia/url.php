@@ -6,7 +6,7 @@ class Url
     {
         $session=Util::session();
 
-        if(Util::info()->IsInAdmin()&&strpos($params,"route=")===false){
+        if ($session->token && $session->user_id && strpos($params,"route=")===false) {
             if($session->token){
                 if($params){
                     $params.="&token=".$session->token;

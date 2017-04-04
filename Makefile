@@ -17,7 +17,7 @@ build-extension:
 	rm -rf ./dist/
 	mkdir -p $(BUILD_SENDCLOUD_ROOT)
 
-	cp -r ./src/admin ./src/image ./src/vqmod ./src/system $(BUILD_ROOT)/upload/
+	cp -r ./src/admin ./src/catalog ./src/image ./src/vqmod ./src/system $(BUILD_ROOT)/upload/
 	curl https://raw.githubusercontent.com/SendCloud/SendCloud-API-PHP-Wrapper/a40dfd55acfea2d33301169c63d59c82a68b47f4/src/SendCloudApi.php \
 		> "$(BUILD_SENDCLOUD_ROOT)/sendcloud_api.php"
 	echo 'Extension can be found in $(BUILD_ROOT)'

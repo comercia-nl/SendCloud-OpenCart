@@ -8,7 +8,7 @@ class ControllerCommonSendcloud extends Controller
         $settings = Util::config()->getGroup("sendcloud");
 
         //if this is the right location to inject the sendcloud checkout options
-        if ($settings["sendcloud_checkout_route"] == Util::request()->get()->route) {
+        if (!empty($settings["sendcloud_checkout_route"]) && $settings["sendcloud_checkout_route"] == Util::request()->get()->route) {
             //add the sendcloud api
             Util::document()->addScript('//embed.sendcloud.sc/spp/1.0.0/api.min.js');
 
