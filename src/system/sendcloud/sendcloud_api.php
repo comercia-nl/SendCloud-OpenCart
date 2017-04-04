@@ -201,9 +201,15 @@ class SendCloudApi
             if (!$object) {
                 throw new SendCloudApiException('There must be an object when we want to create or update');
             }
+
+            $headers = array('Content-Type: application/json');
+            if ($url == 'parcels' && $method == 'post') {
+                array_push($headers, 'Sendcloud-Partner-Id: 85b43620-ad0a-451e-8bc8-a61e2c056920');
+            }
+
             $curl_options = array(
                 CURLOPT_URL				=> $this->getUrl($url),
-                CURLOPT_HTTPHEADER		=> array('Content-Type: application/json'),
+                CURLOPT_HTTPHEADER		=> $headers,
                 CURLOPT_CUSTOMREQUEST	=> strtoupper($method),
                 CURLOPT_POSTFIELDS		=> json_encode($object),
             );
