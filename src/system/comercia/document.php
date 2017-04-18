@@ -35,9 +35,9 @@ class Document
         $this->document->addStyle(Util::http()->getPathFor($href),$rel,$media);
     }
 
-    public function addScript($href, $postion = 'header')
+    public function addScript($href, $position = 'header')
     {
-        $this->document->addScript(Util::http()->getPathFor($href),$postion);
+        $this->document->addScript(Util::http()->getPathFor($href),$position);
     }
 
     public function addVariable($name,$value)

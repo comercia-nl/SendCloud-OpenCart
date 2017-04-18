@@ -30,6 +30,15 @@ class ControllerCommonSendcloud extends Controller
 
     }
 
+    public function getCountryId() {
+        $isocode = $this->request->get["isocode"];
+        $model=Util::load()->model("module/sendcloud");
+        $country = $model->getCountryId($isocode);
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($country['country_id']));
+    }
+
 
 
 }

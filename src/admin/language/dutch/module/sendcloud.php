@@ -31,6 +31,8 @@ $_["checkout_selector_address_label"] = "Adres selector";
 $_["checkout_selector_address2_label"] = "Adres2 selector";
 $_["checkout_selector_city_label"] = "Stad selector";
 $_["checkout_selector_postcode_label"] = "Postcode selector";
+$_["checkout_selector_country_label"] = "Land selector";
+$_["checkout_selector_zone_label"] = "Zone selector";
 
 $_["checkout_selector_fake_click_label"] = "Simuleer klik op";
 
@@ -39,6 +41,7 @@ $_["checkout_apply_label"] = "Toepassen";
 
 $_["checkout_method_label"] = "Kassa opties";
 $_["checkout_method_picker_label"] = "Kies een kassa module";
+$_["checkout_disable_label"] = "Schakel kassa selectie uit";
 $_["checkout_method_advanced_label"] = "Geavanceerde kassa opties";
 
 ?>

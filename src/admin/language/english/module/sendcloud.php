@@ -31,6 +31,8 @@ $_["checkout_selector_address_label"] = "Address selector";
 $_["checkout_selector_address2_label"] = "Address2 selector";
 $_["checkout_selector_city_label"] = "city selector";
 $_["checkout_selector_postcode_label"] = "Postcode selector";
+$_["checkout_selector_country_label"] = "Country selector";
+$_["checkout_selector_zone_label"] = "Zone selector";
 
 $_["checkout_selector_fake_click_label"] = "Fake click selector";
 
@@ -39,5 +41,6 @@ $_["checkout_apply_label"] = "Apply";
 
 $_["checkout_method_label"] = "Checkout options";
 $_["checkout_method_picker_label"] = "Choose checkout method";
+$_["checkout_disable_label"] = "Disable checkout selection";
 $_["checkout_method_advanced_label"] = "Advanced checkout options";
 ?>
