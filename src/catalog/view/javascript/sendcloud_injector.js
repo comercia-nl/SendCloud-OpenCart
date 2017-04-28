@@ -14,6 +14,7 @@ $(function () {
     var _api_key;
     var _use_address2;
     var _button_css;
+    var _checkout_preset;
 
     var spAddress;
     var spAddress2;
@@ -21,8 +22,9 @@ $(function () {
     var spCity;
     var spCountry;
 
-    var shippingSaved = false;
-    var shippingMethodSaved = false;
+    var locationPickerCalled = false;
+    var countrySaved = false;
+    var zoneSaved = false;
 
     function init() {
         //Get the needed selectors
@@ -37,9 +39,10 @@ $(function () {
         _api_key=sendcloud_settings["sendcloud_checkout_api_key"];
         _use_address2=sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
         _address2=sendcloud_settings["sendcloud_checkout_selector_address2"];
-        _button_css = sendcloud_settings["sendcloud_checkout_button_css"];
+        _button_css = sendcloud_settings["sendcloud_checkout_selector_button_css"];
+        _checkout_preset = sendcloud_settings["sendcloud_checkout_preset"];
         //inject the picker
-        inject("<div class='pull-left sendcloud'><a class='btn btn-info locationPicker'>" + action_location_picker + "</a></div>");
+        inject("<div class='pull-left sendcloud'><a class='" + _button_css + " locationPicker'>" + action_location_picker + "</a></div>");
     }
 
 
@@ -64,23 +67,62 @@ $(function () {
             var $injectObject = $(htmlToInject)
             $(".locationPicker", $injectObject).click(openLocationPicker);
 
-            if ($(_address).length && $(_address).val() != spAddress) {
+            if ($(_address).length && $(_address).val() != spAddress && locationPickerCalled == true) {
                 $(_address).val(spAddress);
                 $(_address2).val(spAddress2);
                 $(_city).val(spCity);
                 $(_postcode).val(spPostcode);
-                $(_country).val(spCountry);
+
+                if (_checkout_preset == "Journal") {
+                    $("#input-shipping-firstname").val($("#input-payment-firstname").val());
+                    $("#input-shipping-lastname").val($("#input-payment-lastname").val());
+                    $(_country).val($("#input-payment-country").val());
+                } else if (_checkout_preset == "OpenCart") {
+                    if ($("select[name=address_id]").length > 0) {
+                        var fullAddress = $("select[name=address_id] option:selected").text();
+                        var fullName = fullAddress.substr(0, fullAddress.indexOf(','));
+                        fullName = fullName.split(' ');
+                        var lastName = "";
+
+                        $("#input-shipping-firstname").val(fullName[0]);
+                        $.each(fullName, function (key, value) {
+                           if (key > 0) {
+                               lastName += value;
+                           }
+                        });
+                        $("#input-shipping-lastname").val(lastName);
+                    } else {
+                        $("#input-shipping-firstname").val($("#input-payment-firstname").val());
+                        $("#input-shipping-lastname").val($("#input-payment-lastname").val());
+                    }
+
+                    $(_country).val($("#input-payment-country").val());
+                    $("input[name=shipping_address][value='new']").prop("checked",true);
+                }
             }
 
-            if ($(_zone +' option').length > 1 && shippingSaved == false) {
-                    $(_zone + ' option:eq(1)').attr('selected', 'selected');
-                    if ($('#button-guest-shipping').length > 0) {
-                        $('#button-guest-shipping').trigger("click");
-                    } else {
-                        $('#button-shipping-address').trigger("click");
-                    }
-                shippingSaved = true;
+            if (_checkout_preset == "Journal") {
+                if ($(_country + ' option').length > 1 && countrySaved == false && spCountry != undefined) {
+                    $(_country).val(spCountry);
+                    $(document).trigger('journal_checkout_shipping_changed');
+                    countrySaved = true;
+                }
             }
+
+            if ($(_zone +' option').length > 1 && zoneSaved == false) {
+                $(_zone + ' option:eq(1)').attr('selected', 'selected');
+
+                    if (_checkout_preset == "OpenCart") {
+                        if ($('#button-guest-shipping').length > 0) {
+                            $('#button-guest-shipping').trigger("click");
+                        } else {
+                            $('#button-shipping-address').trigger("click");
+                        }
+                    }
+
+                zoneSaved = true;
+            }
+
 
             if (!$('#collapse-shipping-method').hasClass('in') && (!($('a[href=\'#collapse-payment-method\']').length))) {
                 $('a[href=\'#collapse-shipping-method\']').trigger('click');
@@ -109,7 +151,7 @@ $(function () {
             url: 'index.php?route=common/sendcloud/getCountryId&isocode='+isocode,
             type: 'get',
             success: function (json) {
-                spCountry = parseInt(json);
+                //spCountry = parseInt(json);
                 return json;
             }
         });
@@ -117,9 +159,14 @@ $(function () {
 
     function openLocationPicker() {
         //call the sendcloud api to show service points
-        if($(_fake_click).prop('checked') == false){
+        if($(_fake_click).prop('checked') == false && _checkout_preset == "OpenCart"){
+            $(_fake_click).click();
+        } else if ($(_fake_click).prop('checked') == true && _checkout_preset == "Journal") {
+            $(_fake_click).click();
+        } else if ($(_fake_click).prop('checked') == false && _checkout_preset == "") {
             $(_fake_click).click();
         }
+
         var config = {
             // API key is required, replace it below with your API key
             'apiKey': _api_key,
@@ -154,6 +201,8 @@ $(function () {
 
                     spAddress = servicePointObject.street + " " + servicePointObject.house_number;
                 }
+
+                locationPickerCalled = true;
             },
             // third arg: failure callback function
             // this is also called with ["Closed"] when the SPP window is closed.
@@ -164,7 +213,6 @@ $(function () {
             }
         );
     }
-
 
     init();
 });

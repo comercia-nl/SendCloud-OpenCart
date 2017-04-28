@@ -35,6 +35,7 @@ $_["checkout_selector_country_label"] = "Country selector";
 $_["checkout_selector_zone_label"] = "Zone selector";
 
 $_["checkout_selector_fake_click_label"] = "Fake click selector";
+$_["checkout_selector_button_css_label"] = "CSS tag for selector button";
 
 $_["checkout_presets_label"] = "Checkout module";
 $_["checkout_apply_label"] = "Apply";

@@ -31,6 +31,7 @@ $(function(){
         $("#checkout-method").hide();
         $("#checkout-picker").hide();
         $("#checkout-advanced").show();
+        $("#checkout-disable").show();
     });
 
     $("#checkout_preset_apply").click(function(){

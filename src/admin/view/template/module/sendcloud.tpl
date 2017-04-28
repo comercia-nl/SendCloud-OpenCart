@@ -129,15 +129,6 @@
                         <input type="hidden" name="sendcloud_checkout_preset" value="<?php echo $sendcloud_checkout_preset?>">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
-
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="button" class="btn btn-success checkout-picker-button" id=""
-                                       value="<?php echo $checkout_method_picker_label; ?>">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
                                 <?php echo $checkout_picker_route_label; ?>
                             </label>
                             <div class="col-sm-10">
@@ -226,6 +217,16 @@
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="sendcloud_checkout_selector_fake_click"
                                        value="<?php echo $sendcloud_checkout_selector_fake_click; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_button_css_label ;?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_selector_button_css"
+                                       value="<?php echo $sendcloud_checkout_selector_button_css; ?>"/>
                             </div>
                         </div>
 

@@ -22,11 +22,23 @@ Op de overzichtspagina die toont nadat u op het plug icoontje heeft geklikt, vin
 
 .. image:: ../images/module_orders.png
 
+Afhaal locatiekiezer gebruiken
+==============================
+Om de afhaal locatiekiezer te gebruiken opent u de module in OpenCart en klikt u ``Choose checkout method / Kies een kassa module``. Er verschijnt vervolgens een dropdown waarin u uw kassamodule kunt kiezen.
+
+.. image:: ../images/choose_checkout_method.png
+
+Op dit moment is er support voor de standaard OpenCart module en de Journal Quickcheckout module, ondersteuning voor andere checkouts zal volgen.
+
+Na het selecteren van uw gewenste kassamodule klikt u op de groene knop ``Apply`` om de instellingen uit te rollen, en vervolgens op de blauwe knop bovenaan om het geheel op te slaan.
+
+.. image:: ../images/select_checkout_dropdown_apply.png
+
 Foutmeldingen
 =============
 .. image:: ../images/extension_error_shipping_details.png
 
-Een of meerder orders heeft geen verzendgegevens (shipping details). Ga naar het detailoverzicht van de order en kijk of de verzendgegevens zijn ingevuld.
+Een of meerdere orders heeft geen verzendgegevens (shipping details). Ga naar het detailoverzicht van de order en kijk of de verzendgegevens zijn ingevuld.
 Let erop dat betalings gegevens niet hetzelfde zijn als de verzendgegevens. 
 
 .. image:: ../images/extension_error_api_keys.png

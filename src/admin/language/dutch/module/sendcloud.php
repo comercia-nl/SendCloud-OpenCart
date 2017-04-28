@@ -35,6 +35,7 @@ $_["checkout_selector_country_label"] = "Land selector";
 $_["checkout_selector_zone_label"] = "Zone selector";
 
 $_["checkout_selector_fake_click_label"] = "Simuleer klik op";
+$_["checkout_selector_button_css_label"] = "CSS tag voor checkout selector knop";
 
 $_["checkout_presets_label"] = "Kassa module";
 $_["checkout_apply_label"] = "Toepassen";

@@ -16,7 +16,8 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "",
                 "sendcloud_checkout_selector_country" => "",
                 "sendcloud_checkout_selector_zone" => "",
-                "sendcloud_checkout_selector_fake_click" => ""
+                "sendcloud_checkout_selector_fake_click" => "",
+                "sendcloud_checkout_selector_button_css" => ""
             ),
             "OpenCart" => array(
                 "sendcloud_checkout_preset" => "OpenCart",
@@ -29,7 +30,8 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "#input-shipping-postcode",
                 "sendcloud_checkout_selector_country" => "#input-shipping-country",
                 "sendcloud_checkout_selector_zone" => "#input-shipping-zone",
-                "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]"
+                "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]",
+                "sendcloud_checkout_selector_button_css" => "btn btn-info"
             ),
             "Journal" => array(
                 "sendcloud_checkout_preset" => "Journal",
@@ -42,9 +44,10 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "#input-shipping-postcode",
                 "sendcloud_checkout_selector_country" => "#input-shipping-country",
                 "sendcloud_checkout_selector_zone" => "#input-shipping-zone",
-                "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]"
-            ),
-            "Ajax Quick Checkout" => array(
+                "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]",
+                "sendcloud_checkout_selector_button_css" => "btn-primary button"
+            )
+            /*"Ajax Quick Checkout" => array(
                 "sendcloud_checkout_preset" => "Ajax Quick Checkout",
                 "sendcloud_checkout_route" => "checkout/checkout",
                 "sendcloud_checkout_picker_selector" => "#payment_address_shipping_address",
@@ -55,7 +58,8 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "#shipping_address_postcode",
                 "sendcloud_checkout_selector_country" => "#shipping_address_country",
                 "sendcloud_checkout_selector_zone" => "#shipping_address_zone",
-                "sendcloud_checkout_selector_fake_click" => "#payment_address_shipping_address"
+                "sendcloud_checkout_selector_fake_click" => "#payment_address_shipping_address",
+                "sendcloud_checkout_selector_button_css" => "btn btn-info"
             ),
             "Quick Checkout"=>array(
                 "sendcloud_checkout_preset" => "Quick Checkout",
@@ -68,8 +72,9 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_postcode" => "#input-shipping-postcode",
                 "sendcloud_checkout_selector_country" => "#input-shipping-country",
                 "sendcloud_checkout_selector_zone" => "#input-shipping-zone",
-                "sendcloud_checkout_selector_fake_click" => "#shipping"
-            )
+                "sendcloud_checkout_selector_fake_click" => "#shipping",
+                "sendcloud_checkout_selector_button_css" => "btn btn-info"
+            )*/
         );
     }
 }
