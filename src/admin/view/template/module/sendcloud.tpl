@@ -94,6 +94,19 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="checkout-disable">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_method_label; ?>
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="button" class="btn btn-danger checkout-disable-button" id=""
+                                       value="<?php echo $checkout_disable_label; ?>">
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="checkout-picker">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
@@ -101,8 +114,9 @@
                             </label>
                             <div class="col-sm-8">
                                 <?php
+                                $selected = !empty($sendcloud_checkout_preset) ? $sendcloud_checkout_preset : "";
                     echo comercia\util::html()->
-                                selectbox("checkout_preset_options","",$checkout_presets,"form-control");
+                                selectbox("checkout_preset_options",$selected,$checkout_presets,"form-control");
                                 ?>
                             </div>
                             <div class="col-sm-2">
@@ -112,15 +126,7 @@
                         </div>
                     </div>
                     <div id="checkout-advanced">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="button" class="btn btn-success checkout-picker-button" id=""
-                                       value="<?php echo $checkout_method_picker_label; ?>">
-                            </div>
-                        </div>
+                        <input type="hidden" name="sendcloud_checkout_preset" value="<?php echo $sendcloud_checkout_preset?>">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
                                 <?php echo $checkout_picker_route_label; ?>
@@ -186,6 +192,26 @@
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_country_label ;?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_selector_country"
+                                       value="<?php echo $sendcloud_checkout_selector_country; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_zone_label ;?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_selector_zone"
+                                       value="<?php echo $sendcloud_checkout_selector_zone; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
                                 <?php echo $checkout_selector_fake_click_label ;?>
                             </label>
                             <div class="col-sm-10">
@@ -194,12 +220,22 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_button_css_label ;?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_selector_button_css"
+                                       value="<?php echo $sendcloud_checkout_selector_button_css; ?>"/>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="sendcloud_address2_as_housenumber"></label>
                         <div class="col-sm-10">
-                            <a class="btn btn-primary" href="//panel.sendcloud.nl/" target="_blank">SendCloud Panel
+                            <a class="btn btn-primary" href="//panel.sendcloud.sc/" target="_blank">SendCloud Panel
                                 <i class="fa fa-external-link"></i></a>
                         </div>
                     </div>

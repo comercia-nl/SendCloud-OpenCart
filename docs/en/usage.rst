@@ -22,6 +22,18 @@ On the overview page that comes up, you will find the orders that have been sent
 
 .. image:: ../images/module_orders.png
 
+Using the delivery location picker
+==================================
+To use the delivery location picker, open the module settings and click on ``Choose checkout method``. A dropdown menu appears where you can select your preferred checkout method.
+
+.. image:: ../images/choose_checkout_method.png
+
+Currently we are supporting the default Opencart checkout and the Journal Quickcheckout modules, support for other checkouts will be rolled out in the future.
+
+After selecting the preferred checkout method, click the green ``Apply`` button to roll out the settings, followed by the blue ``Save`` button at the right top corner of the screen to save all the settings.
+
+.. image:: ../images/select_checkout_dropdown_apply.png
+
 Error messages
 ==============
 .. image:: ../images/extension_error_shipping_details.png

@@ -2,6 +2,12 @@
 Releases
 ********
 
+1.1.0
+=====
+
+* Added location picker
+* Updated the Comercia Framework
+
 1.0.6
 =====
 

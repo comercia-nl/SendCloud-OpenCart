@@ -8,7 +8,7 @@ class ControllerCommonSendcloud extends Controller
         $settings = Util::config()->getGroup("sendcloud");
 
         //if this is the right location to inject the sendcloud checkout options
-        if ($settings["sendcloud_checkout_route"] == Util::request()->get()->route) {
+        if (!empty($settings["sendcloud_checkout_route"]) && $settings["sendcloud_checkout_route"] == Util::request()->get()->route) {
             //add the sendcloud api
             Util::document()->addScript('//embed.sendcloud.sc/spp/1.0.0/api.min.js');
 
@@ -28,6 +28,15 @@ class ControllerCommonSendcloud extends Controller
             Util::document()->addVariable('action_location_picker', $sendcloud_language["action_location_picker"]);
         }
 
+    }
+
+    public function getCountryId() {
+        $isocode = $this->request->get["isocode"];
+        $model=Util::load()->model("module/sendcloud");
+        $country = $model->getCountryId($isocode);
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($country['country_id']));
     }
 
 
