@@ -68,11 +68,54 @@ class ControllerModuleSendcloud extends Controller
         //create links
         $data['form_action'] = Util::url()->link('module/sendcloud');
         $data['cancel'] = Util::url()->link(Util::route()->extension());
-
+        $data['url_patch']=Util::url()->link('module/sendcloud/patch');
+        $data["url_update_tracking"]=Util::url()->link('module/sendcloud/updateTrackingCodes');
+        $data["url_api_tracking"]=Util::url()->catalog('api/sendcloud/updateTrackingCodes');
 
         //create a response
-
         Util::response()->view("module/sendcloud.tpl", $data);
+    }
+
+    function patch(){
+        $this->runPatch();
+        Util::response()->redirect("module/sendcloud/index");
+    }
+
+    public function install() {
+        $this->runPatch();
+    }
+
+    private function runPatch(){
+        Util::patch()->runPatches(
+            array(
+                "tracking"=>function(){
+                    Util::patch()->table("order")
+                        ->addField("sendcloud_tracking","varchar(250)")
+                        ->addField("sendcloud_id","int")
+                        ->update();
+                }
+            )
+            ,__FILE__
+        );
+    }
+
+    function updateTrackingCodes(){
+        $sendcloud_settings = Util::config()->getGroup('sendcloud');
+        Util::load()->language("module/sendcloud");
+
+        if (!empty($sendcloud_settings['sendcloud_api_key']) && !empty($sendcloud_settings['sendcloud_api_secret'])) {
+            $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
+        }
+
+
+        $query=$this->db->query("select * from ".DB_PREFIX."order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
+        foreach($query->rows as $row){
+            $parcel=$api->parcels->get($row["sendcloud_id"]);
+            if($parcel["tracking_number"]){
+                $this->db->query("update  ".DB_PREFIX."order set sendcloud_tracking='".$parcel["tracking_number"]."' where order_id='".$row["order_id"]."'");
+            }
+        }
+        Util::response()->redirect("module/sendcloud/index");
     }
 
     protected function validate()
@@ -146,7 +189,7 @@ class ControllerModuleSendcloud extends Controller
         foreach ($orders as $order) {
 
             try {
-                $api->parcels->create(array(
+               $parcel=$api->parcels->create(array(
                         'name' => $order['shipping_firstname'] . ' ' . $order['shipping_lastname'],
                         'company_name' => $order['shipping_company'],
                         'address' => ($sendcloud_settings['sendcloud_address2_as_housenumber'] ? $order['shipping_address_1'] . ' ' . $order['shipping_address_2'] : $order['shipping_address_1']),
@@ -163,6 +206,7 @@ class ControllerModuleSendcloud extends Controller
                         'order_number' => $order['order_id']
                     )
                 );
+                $this->db->query("UPDATE `" . DB_PREFIX . "order` SET sendcloud_id='".$parcel["id"]."'  WHERE order_id = '" . (int)$order['order_id'] . "'");
             } catch (SendCloudApiException $exception) {
                 // TODO: Validate before transporting instead of catching the API errors.
                 $message = $this->language->get('msg_process_orders') . " " . $order_error_ids . $this->language->get('msg_api_error_reason') . $exception->message . '.';
@@ -187,9 +231,11 @@ class ControllerModuleSendcloud extends Controller
         $comment = nl2br($this->language->get('log_message'));
         $date_added = date($this->language->get('date_format_short'));
 
-        // Queries Borrowed from /catalog/model/checkout/order.php
-        $this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
-        $this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+        if($order_status_id) {
+            // Queries Borrowed from /catalog/model/checkout/order.php
+            $this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
+            $this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+        }
     }
 
     private function showErrorMessage($message)

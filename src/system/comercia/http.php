@@ -8,7 +8,7 @@ class Http
             Util::stringHelper()->startsWith($path, "https://") ||
             Util::stringHelper()->startsWith($path, "//"))
         ) {
-            $path=$this->applicationPath().$path;
+            $path = $this->applicationPath() . $path;
         }
         return $path;
     }
@@ -20,7 +20,7 @@ class Http
             $filePath = DIR_APPLICATION;
             $exp = explode("/", $filePath);
             $dir = $exp[count($exp) - 2];
-            $path .= $dir. "/" ;
+            $path .= $dir . "/";
         }
         return $path;
     }

@@ -126,7 +126,8 @@
                         </div>
                     </div>
                     <div id="checkout-advanced">
-                        <input type="hidden" name="sendcloud_checkout_preset" value="<?php echo $sendcloud_checkout_preset?>">
+                        <input type="hidden" name="sendcloud_checkout_preset"
+                               value="<?php echo $sendcloud_checkout_preset?>">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
                                 <?php echo $checkout_picker_route_label; ?>
@@ -232,11 +233,26 @@
 
                     </div>
 
+                    <div class="panel-heading"><?php echo $text_tracking; ?></div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="sendcloud_address2_as_housenumber"></label>
+                        <label class="col-sm-2 control-label"><?php echo $text_update_url;?></label>
+                        <div class="col-sm-10">  <div class="form-control"><?php echo $url_api_tracking;?></div></div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
+                           target="_blank"><?php echo $text_update_tracking?><i class="fa fa-external-link"></i></a>
+                    </div>
+
+                    <div class="panel-heading"><?php echo $text_maintenance; ?></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <a class="btn btn-primary" href="//panel.sendcloud.sc/" target="_blank">SendCloud Panel
                                 <i class="fa fa-external-link"></i></a>
+                            <a class="btn btn-success" href="<?php echo $url_patch; ?>"
+                               target="_blank"><?php echo $text_patch?><i class="fa fa-external-link"></i></a>
                         </div>
                     </div>
 

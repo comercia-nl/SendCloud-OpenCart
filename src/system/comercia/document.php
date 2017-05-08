@@ -3,11 +3,11 @@ namespace comercia;
 class Document
 {
     var $document;
-    var $variables=array();
+    var $variables = array();
 
     function __construct()
     {
-        $this->document=Util::registry()->get("document");
+        $this->document = Util::registry()->get("document");
     }
 
     public function setTitle($title)
@@ -27,22 +27,22 @@ class Document
 
     public function addLink($href, $rel)
     {
-        $this->document->addLink(Util::http()->getPathFor($href),$rel);
+        $this->document->addLink(Util::http()->getPathFor($href), $rel);
     }
 
     public function addStyle($href, $rel = 'stylesheet', $media = 'screen')
     {
-        $this->document->addStyle(Util::http()->getPathFor($href),$rel,$media);
+        $this->document->addStyle(Util::http()->getPathFor($href), $rel, $media);
     }
 
     public function addScript($href, $position = 'header')
     {
-        $this->document->addScript(Util::http()->getPathFor($href),$position);
+        $this->document->addScript(Util::http()->getPathFor($href), $position);
     }
 
-    public function addVariable($name,$value)
+    public function addVariable($name, $value)
     {
-        $this->variables[$name]=$value;
+        $this->variables[$name] = $value;
     }
 }
 

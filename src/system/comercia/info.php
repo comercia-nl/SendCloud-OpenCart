@@ -2,15 +2,17 @@
 namespace comercia;
 class Info
 {
-    function IsInAdmin(){
+    function IsInAdmin()
+    {
         global $application_context;
-        if (Util::version()->isMinimal("2.3")) {
-            return $application_context == "admin";
-        } else {
-            if (defined('DIR_CATALOG')) {
-                return $application_context = "admin";
-            }
-        }
+        return $application_context !== null && $application_context == "admin" ||
+            (defined("HTTPS_CATALOG") && HTTPS_CATALOG != HTTPS_SERVER || defined("HTTP_CATALOG") && HTTP_CATALOG != HTTPS_SERVER);
+    }
+
+    function theme()
+    {
+        return Util::config()->config_template;
     }
 }
+
 ?>

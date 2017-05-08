@@ -2,15 +2,51 @@
 namespace comercia;
 class Url
 {
+    function image($image){
+        if(Util::info()->IsInAdmin()) {
+            if (defined(HTTPS_CATALOG)) {
+                return HTTPS_CATALOG . "image/" . $image;
+            }
+            return HTTP_CATALOG . "image/" . $image;
+        }
+        if (defined(HTTPS_SERVER)) {
+            return HTTPS_SERVER . "image/" . $image;
+        }
+        return HTTP_SERVER . "image/" . $image;
+    }
+
+    function catalog($route, $params = "", $ssl = true){
+        $url=$this->getCatalogUrl($ssl)."index.php?route=".$route;
+        if($params){
+            $url.="&".$params;
+        }
+        return $url;
+    }
+
+    function getCatalogUrl($ssl=true){
+        if(Util::info()->IsInAdmin()) {
+            if (defined(HTTPS_CATALOG) && $ssl) {
+                return HTTPS_CATALOG;
+            }
+            return HTTP_CATALOG;
+        }
+        if (defined(HTTPS_SERVER) && $ssl) {
+            return HTTPS_SERVER;
+        }
+        return HTTP_SERVER;
+    }
+
     function link($route, $params = "", $ssl = true)
     {
-        $session=Util::session();
+        $session = Util::session();
 
         if ($session->token && $session->user_id && strpos($params,"route=")===false) {
-            if ($params) {
-                $params.="&token=".$session->token;
-            } else {
-                $params="token=".$session->token;
+            if ($session->token) {
+                if ($params) {
+                    $params .= "&token=" . $session->token;
+                } else {
+                    $params = "token=" . $session->token;
+                }
             }
         }
 
