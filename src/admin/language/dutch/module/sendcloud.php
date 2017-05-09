@@ -45,4 +45,11 @@ $_["checkout_method_picker_label"] = "Kies een kassa module";
 $_["checkout_disable_label"] = "Schakel kassa selectie uit";
 $_["checkout_method_advanced_label"] = "Geavanceerde kassa opties";
 
+$_["text_patch"]="Tabellen bijwerken";
+
+$_["text_tracking"]="Tracking";
+$_["text_update_tracking"]="Trackingcodes bijwerken";
+$_["text_update_url"]="Tracking update-url";
+
+$_["text_maintenance"]="Onderhoud";
 ?>

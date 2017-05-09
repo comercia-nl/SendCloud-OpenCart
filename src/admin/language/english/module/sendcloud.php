@@ -44,4 +44,15 @@ $_["checkout_method_label"] = "Checkout options";
 $_["checkout_method_picker_label"] = "Choose checkout method";
 $_["checkout_disable_label"] = "Disable checkout selection";
 $_["checkout_method_advanced_label"] = "Advanced checkout options";
+
+$_["text_patch"]="Update tables";
+
+
+$_["text_tracking"]="Tracking";
+$_["text_update_tracking"]="Update tracking codes";
+$_["text_update_url"]="Tracking update url";
+
+$_["text_maintenance"]="Maintenance";
+
+
 ?>

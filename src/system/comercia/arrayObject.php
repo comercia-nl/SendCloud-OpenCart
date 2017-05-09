@@ -11,7 +11,7 @@ class ArrayObject
 
     function __get($name)
     {
-        return @$this->data[$name]?:"";
+        return @$this->data[$name] ?: "";
     }
 
     function __set($name, $value)
@@ -19,8 +19,14 @@ class ArrayObject
         $this->data[$name] = $value;
     }
 
-    function remove($name){
+    function remove($name)
+    {
         unset($this->data[$name]);
+    }
+
+    function all()
+    {
+        return $this->data;
     }
 }
 

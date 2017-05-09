@@ -3,62 +3,20 @@ namespace comercia;
 
 class Load
 {
-    function controller($controller)
-    {
-
-        $controllerDir = DIR_APPLICATION . 'controller/';
-        $route = $this->getRouteInfo("controller", $controller, $controllerDir);
-
-        $className = $route["class"];
-        if(!class_exists($className)) {
-            require_once($controllerDir . $route["file"] . ".php");
-        }
-
-        $method = $route["method"]?$route["method"]:"index";
-        $controller = new $className(Util::registry());
-        $result = $controller->$method();
-        return $result ? $result : (@$controller->output ? $controller->output : "");
-    }
-
-
     function library($library)
     {
         $className = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $library))));
         $className = $className;
         $libDir = DIR_SYSTEM . "library/";
         $bestOption = $this->findBestOption($libDir, $library, "php");
-        if(!class_exists($className)) {
-            require_once($libDir . $bestOption["name"] . ".php");
+        if (!class_exists($className)) {
+            if(class_exists("VQMod")){
+                require_once(\VQMod::modCheck($libDir . $bestOption["name"] . ".php"));
+            }else {
+                require_once($libDir . $bestOption["name"] . ".php");
+            }
         }
         return new $className(Util::registry());
-    }
-
-    function model($model)
-    {
-        $modelDir = DIR_APPLICATION . 'model/';
-        $route = $this->getRouteInfo("model", $model, $modelDir);
-        $className = $route["class"];
-        if(!class_exists($className)) {
-            require_once($modelDir . $route["file"] . ".php");
-        }
-        return new $className(Util::registry());
-    }
-
-    function view($view, $data = array())
-    {
-
-        $bestOption = $this->findBestOption(DIR_TEMPLATE, $view, "tpl");
-        $view = $bestOption["name"];
-
-
-        $registry = Util::registry();
-        if (Util::version()->isMinimal("2")) {
-            return $registry->get("load")->view($view, $data);
-        }
-        $fakeControllerFile = __DIR__ . "/fakeController.php";
-        require_once($fakeControllerFile);
-        $controller = new FakeController($registry);
-        return $controller->getView($view, $data);
     }
 
     function findBestOption($dir, $name, $extension)
@@ -66,7 +24,7 @@ class Load
 
         //fiend associated files
         $posibilities = glob($dir . "" . $name . "*." . $extension);
-        $files=array();
+        $files = array();
         foreach ($posibilities as $file) {
             $file = str_replace(DIR_TEMPLATE, "", $file);
             $file = str_replace(".tpl", "", $file);
@@ -110,15 +68,19 @@ class Load
 
     }
 
-
-    function language($file, &$data = array())
+    function model($model)
     {
-        $registry = Util::registry();
-        $result = $registry->get("load")->language($file);
-        foreach ($result as $key => $val) {
-            $data[$key] = $val;
+        $modelDir = DIR_APPLICATION . 'model/';
+        $route = $this->getRouteInfo("model", $model, $modelDir);
+        $className = $route["class"];
+        if (!class_exists($className)) {
+            if(class_exists("VQMod")){
+                require_once(\VQMod::modCheck($modelDir . $route["file"] . ".php"));
+            }else{
+                require_once($modelDir . $route["file"] . ".php");
+            }
         }
-        return $result;
+        return new $className(Util::registry());
     }
 
     function getRouteInfo($prefix, $route, $dir)
@@ -154,10 +116,78 @@ class Load
         );
     }
 
-    function pageControllers(&$data){
+    function view($view, $data = array())
+    {
+        if (Util::info()->IsInAdmin()) {
+            $bestOption = $this->findBestOption(DIR_TEMPLATE, $view, "tpl");
+        } else {
+            $bestOption1 = $this->findBestOption(DIR_TEMPLATE . "default/template/", $view, "tpl");
+            $bestOption2 = $this->findBestOption(DIR_TEMPLATE . Util::info()->theme() . "/template/", $view, "tpl");
+            if ($bestOption1["version"] && !$bestOption2["version"]) {
+                $bestOption = $bestOption1;
+            } else {
+                $bestOption = $bestOption2;
+            }
+        }
+
+        $view = $bestOption["name"];
+
+        $registry = Util::registry();
+        if (Util::version()->isMinimal("2.2") || Util::version()->isMinimal("2") && Util::info()->IsInAdmin()) {
+            return $registry->get("load")->view($view, $data);
+        } else {
+            if (file_exists(DIR_TEMPLATE . Util::info()->theme() . '/template/' . $view)) {
+                return $registry->get("load")->view($this->config->get('config_template') . "/template/" . $view, $data);
+            } else {
+                return $registry->get("load")->view('default/template/' . $view, $data);
+            }
+        }
+        $fakeControllerFile = __DIR__ . "/fakeController.php";
+        if(class_exists("VQMod")){
+            require_once(\VQMod::modCheck($fakeControllerFile));
+        }else {
+            require_once($fakeControllerFile);
+        }
+        $controller = new FakeController($registry);
+        return $controller->getView($view, $data);
+    }
+
+    function language($file, &$data = array())
+    {
+        $registry = Util::registry();
+        $result = $registry->get("load")->language($file);
+        foreach ($result as $key => $val) {
+            $data[$key] = $val;
+        }
+        return $result;
+    }
+
+    function pageControllers(&$data)
+    {
         $data['header'] = Util::load()->controller('common/header');
         $data['column_left'] = Util::load()->controller('common/column_left');
         $data['footer'] = Util::load()->controller('common/footer');
+    }
+
+    function controller($controller)
+    {
+
+        $controllerDir = DIR_APPLICATION . 'controller/';
+        $route = $this->getRouteInfo("controller", $controller, $controllerDir);
+
+        $className = $route["class"];
+        if (!class_exists($className)) {
+            if(class_exists("VQMod")) {
+                require_once(\VQMod::modCheck($controllerDir . $route["file"] . ".php"));
+            }else {
+                require_once($controllerDir . $route["file"] . ".php");
+            }
+        }
+
+        $method = $route["method"] ? $route["method"] : "index";
+        $controller = new $className(Util::registry());
+        $result = $controller->$method();
+        return $result ? $result : (@$controller->output ? $controller->output : "");
     }
 }
 

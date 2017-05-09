@@ -10,13 +10,6 @@ class Form
         $this->data =& $data;
     }
 
-    function initializeKey($key)
-    {
-        if (!isset($this->data[$key])) {
-            $this->data[$key] = "";
-        }
-    }
-
     function fillFromSession($first)
     {
         if (is_array($first)) {
@@ -35,6 +28,12 @@ class Form
         return $this;
     }
 
+    function initializeKey($key)
+    {
+        if (!isset($this->data[$key])) {
+            $this->data[$key] = "";
+        }
+    }
 
     function fillFromSessionClear($first)
     {
@@ -121,6 +120,13 @@ class Form
         return new selectboxOptions($this->data, $key);
     }
 
+
+    function finish($function)
+    {
+        if ((Util::request()->server()->REQUEST_METHOD == 'POST')) {
+            $function($this->data);
+        }
+    }
 
 }
 

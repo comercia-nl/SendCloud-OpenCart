@@ -6,7 +6,7 @@ class Language
 
     function __construct()
     {
-        $this->language=Util::registry()->get("language");
+        $this->language = Util::registry()->get("language");
     }
 
     function __get($name)
@@ -14,8 +14,9 @@ class Language
         return $this->get($name);
     }
 
-    function get($name){
-        return @$this->language->get($name)?:"";
+    function get($name)
+    {
+        return @$this->language->get($name) ?: "";
     }
 
 
