@@ -25,7 +25,7 @@
 
     <file name="catalog/view/theme/*/template/common/header.tpl">
         <operation>
-            <search position="after"><![CDATA[<head]]></search>
+            <search position="after"><![CDATA[<head>]]></search>
             <add><![CDATA[<?php echo comercia\util::html()->variables();?>]]>
             </add>
         </operation>
@@ -33,7 +33,7 @@
 
     <file name="admin/view/template/common/header.tpl">
         <operation>
-            <search position="after"><![CDATA[<head]]></search>
+            <search position="after"><![CDATA[<head>]]></search>
             <add><![CDATA[<?php echo comercia\util::html()->variables();?>]]>
             </add>
         </operation>
