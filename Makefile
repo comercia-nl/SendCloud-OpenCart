@@ -20,6 +20,7 @@ build-extension:
 	cp -r ./src/admin ./src/catalog ./src/image ./src/vqmod ./src/system $(BUILD_ROOT)/upload/
 	curl https://raw.githubusercontent.com/SendCloud/SendCloud-API-PHP-Wrapper/a40dfd55acfea2d33301169c63d59c82a68b47f4/src/SendCloudApi.php \
 		> "$(BUILD_SENDCLOUD_ROOT)/sendcloud_api.php"
+    mv $(BUILD_ROOT)/upload/vqmod/xml/comercia_util.xml $(BUILD_ROOT)/upload/vqmod/xml/comercia.xml
 	echo 'Extension can be found in $(BUILD_ROOT)'
 
 build: build-pdf-docs build-extension
