@@ -27,7 +27,7 @@ Je webwinkel updaten naar OpenCart 2 is aangeraden om te kunnnen profiteren van 
 
 Hulp van Comercia
 =================
-Wanneer je ondersteuning nodig hebt op het gebied van OpenCart in zijn algemeen of OpenCart-ingetratie met SendCloud,
+Wanneer je ondersteuning nodig hebt op het gebied van OpenCart in zijn algemeen of OpenCart-integratie met SendCloud,
 neemt u contact op met support@comercia.nl of maak een ticket aan op https://www.comercia.nl/klanten/submitticket.php?step=2&deptid=2
 
 Hulp van SendCloud
