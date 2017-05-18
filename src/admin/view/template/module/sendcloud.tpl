@@ -241,8 +241,10 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
-                        <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
-                           target="_blank"><?php echo $text_update_tracking?><i class="fa fa-external-link"></i></a>
+                        <div class="col-sm-10">
+                            <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
+                             target="_blank"><?php echo $text_update_tracking?> <i class="fa fa-external-link"></i></a>
+                        </div>
                     </div>
 
                     <div class="panel-heading"><?php echo $text_maintenance; ?></div>
@@ -252,7 +254,7 @@
                             <a class="btn btn-primary" href="//panel.sendcloud.sc/" target="_blank">SendCloud Panel
                                 <i class="fa fa-external-link"></i></a>
                             <a class="btn btn-success" href="<?php echo $url_patch; ?>"
-                               target="_blank"><?php echo $text_patch?><i class="fa fa-external-link"></i></a>
+                               target="_blank"><?php echo $text_patch?> <i class="fa fa-external-link"></i></a>
                         </div>
                     </div>
 
