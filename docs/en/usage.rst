@@ -13,7 +13,7 @@ Select the orders you want to transport to SendCloud and click the button with t
 
 Process orders in SendCloud
 ===========================
-Login on the `SendCloud Panel <https://panel.sendcloud.nl>`_  with your SendCloud account.
+Login on the `SendCloud Panel <https://panel.sendcloud.sc>`_  with your SendCloud account.
 In the blue top menu, select the plug icon (if you have multiple integrations, there can be multiple icons in this bar, in this case, select the plug icon that corresponds to the newly set up webshop).
 
 .. image:: ../images/plug_icon.png
@@ -44,7 +44,7 @@ Be aware that payment information is not the same as shipping information.
 .. image:: ../images/extension_error_api_keys.png
  
 Check the SendCloud Extension's settings. The public key and/or secret key may be blank. If both settings are not blank check if your API keys are correct in the
-`SendCloud Panel <https://panel.sendcloud.nl/>`_.
+`SendCloud Panel <https://panel.sendcloud.sc/>`_.
  
 .. image:: ../images/extension_error_process.png
 
