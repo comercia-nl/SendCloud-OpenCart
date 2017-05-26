@@ -205,13 +205,24 @@ class Util
         return $document;
     }
 
-    public static function patch(){
+    public static function patch()
+    {
         static $patch = false;
         if (!$patch) {
             require_once(__DIR__ . "/patch.php");
             $patch = new Patch();
         }
         return $patch;
+    }
+
+    public static function log()
+    {
+        static $log= false;
+        if (!$log) {
+            require_once(__DIR__ . "/log.php");
+            $log = new Log("comercia.log");
+        }
+        return $log;
     }
 }
 
