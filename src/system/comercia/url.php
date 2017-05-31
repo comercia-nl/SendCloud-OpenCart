@@ -42,10 +42,12 @@ class Url
 
         if ($session->token && $session->user_id && strpos($params,"route=")===false) {
             if ($session->token) {
-                if ($params) {
-                    $params .= "&token=" . $session->token;
-                } else {
-                    $params = "token=" . $session->token;
+                if (!strpos($params, $session->token)) {
+                    if ($params) {
+                        $params .= "&token=" . $session->token;
+                    } else {
+                        $params = "token=" . $session->token;
+                    }
                 }
             }
         }

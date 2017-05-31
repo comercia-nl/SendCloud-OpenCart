@@ -33,7 +33,7 @@
 
 	<file name="admin/view/template/sale/order_list.tpl">
 		<operation error="abort">
-			<search position="before"><![CDATA[<button type="submit" id="button-shipping"]]></search>
+			<search position="before" index="1"><![CDATA[<button type="submit" id="button-shipping"]]></search>
 			<add><![CDATA[<button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="<?php echo $sendcloud_url; ?>" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>]]></add>
 		</operation>
 		<operation error="abort">
