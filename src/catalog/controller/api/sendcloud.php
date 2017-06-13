@@ -36,6 +36,8 @@ class ControllerApiSendcloud extends Controller
 
     public function servicePointSelected() {
         if (isset($this->request->get['spId']) && $this->request->get['spId']) {
+            // sets the chosen service point id for this session
+            // make sure it is saved with the order on checkout
             Util::session()->spId = $this->request->get['spId'];
         }
     }

@@ -186,7 +186,7 @@ $(function () {
                 $.get("index.php?route=api/sendcloud/servicePointSelected&spId=" + servicePointObject.id);
                 $(_city).val(servicePointObject.city);
                 $(_postcode).val(servicePointObject.postal_code);
-                
+
                 spCity = servicePointObject.city;
                 spPostcode = servicePointObject.postal_code;
                 spCountry = servicePointObject.country;
