@@ -200,7 +200,7 @@ class ControllerModuleSendcloud extends Controller
                         'email' => $order['email'],
                         'telephone' => $order['telephone'],
                         'country' => $order['shipping_iso_code_2'],
-                        'to_service_point' => $order['to_service_point'],
+                        'to_service_point' => $order['to_service_point'], // set the to be saved to_service_point here if applicable ('' means empty? don't know)
                         'order_number' => $order['order_id']
                     )
                 );
