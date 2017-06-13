@@ -212,7 +212,7 @@ class ControllerModuleSendcloud extends Controller
                     'country' => $order['shipping_iso_code_2'],
                     'order_number' => $order['order_id']
                 );
-                if ( ! empty($spId) && $spId != "null") {
+                if ( ! empty($spId) && strtolower($spId) != "null") {
                     $newParcel += ['to_service_point' => $spId];
                 }
                 $parcel = $api->parcels->create($newParcel);
