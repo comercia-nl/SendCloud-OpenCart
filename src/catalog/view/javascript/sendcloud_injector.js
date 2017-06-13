@@ -16,6 +16,7 @@ $(function () {
     var _button_css;
     var _checkout_preset;
 
+    var spId;
     var spAddress;
     var spAddress2;
     var spPostcode;
@@ -68,6 +69,7 @@ $(function () {
             $(".locationPicker", $injectObject).click(openLocationPicker);
 
             if ($(_address).length && $(_address).val() != spAddress && locationPickerCalled == true) {
+                $(_shipping_point_id).val(spId);
                 $(_address).val(spAddress);
                 $(_address2).val(spAddress2);
                 $(_city).val(spCity);
@@ -181,9 +183,11 @@ $(function () {
             config,
             // second arg: success callback function
             function (servicePointObject) {
+                $.get("index.php?route=api/sendcloud/servicePointSelected&spId=" + servicePointObject.id);
                 $(_city).val(servicePointObject.city);
                 $(_postcode).val(servicePointObject.postal_code);
 
+                spId = servicePointObject.id;
                 spCity = servicePointObject.city;
                 spPostcode = servicePointObject.postal_code;
                 spCountry = servicePointObject.country;

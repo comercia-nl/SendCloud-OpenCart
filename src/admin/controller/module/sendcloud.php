@@ -144,8 +144,6 @@ class ControllerModuleSendcloud extends Controller
         $selected = Util::request()->post()->selected;
         $order_model = Util::load()->model("sale/order");
 
-        $shipping_methods = $api->shipping_methods->get();
-
         $orders = Array();
         $errors = Array();
         $errors['no_shipping_details'] = Array();
@@ -166,17 +164,19 @@ class ControllerModuleSendcloud extends Controller
             Util::response()->redirect("sale/order");
         }
 
-        foreach ($selected as $key => $s) {
-            $order = $order_model->getOrder($s);
-            $shipment_id = $this->getSuitableCountry($shipping_methods, $order);
-
-            if ($shipment_id) {
-                $order['sendcloud_shipment_id'] = $shipment_id;
-                $orders[] = $order;
-            } else {
-                $errors['no_shipping_method'][] = $order['order_id'];
-            }
-        }
+// Commented out for future reference. Fixing COMDEVNL-490 asap now.
+//        $shipping_methods = $api->shipping_methods->get();
+//        foreach ($selected as $key => $s) {
+//            $order = $order_model->getOrder($s);
+//            $shipment_id = $this->getSuitableCountry($shipping_methods, $order);
+//
+//            if ($shipment_id) {
+//                $order['sendcloud_shipment_id'] = $shipment_id;
+//                $orders[] = $order;
+//            } else {
+//                $errors['no_shipping_method'][] = $order['order_id'];
+//            }
+//        }
 
         if (!empty($errors['no_shipping_method'])) {
 
@@ -200,9 +200,7 @@ class ControllerModuleSendcloud extends Controller
                         'email' => $order['email'],
                         'telephone' => $order['telephone'],
                         'country' => $order['shipping_iso_code_2'],
-                        'shipment' => array(
-                            'id' => $order['sendcloud_shipment_id']
-                        ),
+                        'to_service_point' => $order['to_service_point'],
                         'order_number' => $order['order_id']
                     )
                 );

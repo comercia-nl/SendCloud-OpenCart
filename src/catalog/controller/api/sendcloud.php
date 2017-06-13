@@ -33,4 +33,10 @@ class ControllerApiSendcloud extends Controller
         }
         echo json_encode(array("success"=>1,"message"=>"Success"));
     }
+
+    public function servicePointSelected() {
+        if (isset($this->request->get['spId']) && $this->request->get['spId']) {
+            Util::session()->spId = $this->request->get['spId'];
+        }
+    }
 }
