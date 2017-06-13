@@ -48,6 +48,15 @@
 		</operation>
 	</file>
 
+	<file name="catalog/controller/checkout/success.php">
+		<operation error="skip">
+			<search position="before"><![CDATA[unset($this->session->data['shipping_method']);]]></search>
+			<add><![CDATA[
+			unset($this->session->data['spId']);
+			]]></add>
+		</operation>
+	</file>
+
 	<file name="admin/view/template/sale/order_list.tpl">
 		<operation error="abort">
 			<search position="before" index="1"><![CDATA[<button type="submit" id="button-shipping"]]></search>
