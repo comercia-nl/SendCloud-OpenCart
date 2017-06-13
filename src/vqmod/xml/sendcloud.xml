@@ -3,6 +3,7 @@
 	<version>1.1.1</version>
 	<vqmver>2.3.0</vqmver>
 	<author>Comercia</author>
+
 	<file name="admin/controller/extension/extension/module.php">
 		<operation error="skip">
 			<search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
@@ -21,6 +22,7 @@
 			]]></add>
 		</operation>
 	</file>
+
 	<file name="catalog/controller/common/header.php">
 		<operation>
 			<search position="after"><![CDATA[function index(]]></search>
@@ -28,6 +30,21 @@
                 comercia\util::load()->controller("common/sendcloud/checkout");
             ]]>
 			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/checkout/confirm.php">
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);]]></search>
+			<add><![CDATA[
+			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . Util::session()->spId . "' WHERE order_id = '" . Util::session()->order_id . "'");
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($data);]]></search>
+			<add><![CDATA[
+			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . Util::session()->spId . "' WHERE order_id = '" . Util::session()->order_id . "'");
+			]]></add>
 		</operation>
 	</file>
 
@@ -56,6 +73,7 @@
 			</add>
 		</operation>
 	</file>
+
 	<file name="admin/controller/sale/order.php">
 		<operation error="abort">
 			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>

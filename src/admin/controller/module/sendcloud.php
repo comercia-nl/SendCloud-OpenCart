@@ -93,6 +93,11 @@ class ControllerModuleSendcloud extends Controller
                         ->addField("sendcloud_tracking","varchar(250)")
                         ->addField("sendcloud_id","int")
                         ->update();
+                },
+                "spId"=>function(){
+                    Util::patch()->table("order")
+                        ->addField("sendcloud_sp_id","varchar(250)")
+                        ->update();
                 }
             )
             ,__FILE__
@@ -106,7 +111,6 @@ class ControllerModuleSendcloud extends Controller
         if (!empty($sendcloud_settings['sendcloud_api_key']) && !empty($sendcloud_settings['sendcloud_api_secret'])) {
             $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
         }
-
 
         $query=$this->db->query("select * from ".DB_PREFIX."order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
         foreach($query->rows as $row){
@@ -164,10 +168,12 @@ class ControllerModuleSendcloud extends Controller
             Util::response()->redirect("sale/order");
         }
 
-// Commented out for future reference. Fixing COMDEVNL-490 asap now.
+        // TODO: refactor code below and remove comments when confident with changes
+// Commented out to track for possible short future reference. Fixing COMDEVNL-490 asap now.
 //        $shipping_methods = $api->shipping_methods->get();
-//        foreach ($selected as $key => $s) {
-//            $order = $order_model->getOrder($s);
+        foreach ($selected as $key => $s) {
+            $order = $order_model->getOrder($s);
+            $orders[] = $order;
 //            $shipment_id = $this->getSuitableCountry($shipping_methods, $order);
 //
 //            if ($shipment_id) {
@@ -176,7 +182,7 @@ class ControllerModuleSendcloud extends Controller
 //            } else {
 //                $errors['no_shipping_method'][] = $order['order_id'];
 //            }
-//        }
+        }
 
         if (!empty($errors['no_shipping_method'])) {
 
@@ -187,6 +193,7 @@ class ControllerModuleSendcloud extends Controller
         }
 
         foreach ($orders as $order) {
+            $spId = $this->db->query("SELECT sendcloud_sp_id FROM " . DB_PREFIX . "order WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
 
             try {
                $parcel=$api->parcels->create(array(
@@ -200,7 +207,7 @@ class ControllerModuleSendcloud extends Controller
                         'email' => $order['email'],
                         'telephone' => $order['telephone'],
                         'country' => $order['shipping_iso_code_2'],
-                        'to_service_point' => $order['to_service_point'], // set the to be saved to_service_point here if applicable ('' means empty? don't know)
+                        'to_service_point' => $spId,
                         'order_number' => $order['order_id']
                     )
                 );
