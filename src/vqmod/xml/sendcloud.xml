@@ -37,13 +37,13 @@
 		<operation error="skip">
 			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);]]></search>
 			<add><![CDATA[
-			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . Util::session()->spId . "' WHERE order_id = '" . Util::session()->order_id . "'");
+			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . \comercia\Util::session()->spId . "' WHERE order_id = '" . \comercia\Util::session()->order_id . "'");
 			]]></add>
 		</operation>
 		<operation error="skip">
 			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($data);]]></search>
 			<add><![CDATA[
-			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . Util::session()->spId . "' WHERE order_id = '" . Util::session()->order_id . "'");
+			$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . \comercia\Util::session()->spId . "' WHERE order_id = '" . \comercia\Util::session()->order_id . "'");
 			]]></add>
 		</operation>
 	</file>
