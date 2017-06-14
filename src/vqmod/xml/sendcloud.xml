@@ -37,16 +37,20 @@
 		<operation error="skip">
 			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);]]></search>
 			<add><![CDATA[
-			if ( ! empty(\comercia\Util::session()->spId)) {
-				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . \comercia\Util::session()->spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . \comercia\Util::session()->order_id . "'");
+			$spId = \comercia\Util::session()->spId;
+			$orderId = \comercia\Util::session()->order_id;
+            if (! empty($spId)) {
+				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . $orderId . "'");
 			}
 			]]></add>
 		</operation>
 		<operation error="skip">
 			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($data);]]></search>
 			<add><![CDATA[
-			if ( ! empty(\comercia\Util::session()->spId)) {
-				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . \comercia\Util::session()->spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . \comercia\Util::session()->order_id . "'");
+			$spId = \comercia\Util::session()->spId;
+			$orderId = \comercia\Util::session()->order_id;
+            if (! empty($spId)) {
+				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" .$orderId . "'");
 			}
 			]]></add>
 		</operation>
