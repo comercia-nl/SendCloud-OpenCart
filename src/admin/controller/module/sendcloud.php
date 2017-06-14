@@ -14,7 +14,7 @@ class ControllerModuleSendcloud extends Controller
         $data = array();
         Util::load()->language("module/sendcloud", $data);
 
-        $model=Util::load()->model("module/sendcloud");
+        $model = Util::load()->model("module/sendcloud");
 
         //handle the form when finished
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -31,7 +31,7 @@ class ControllerModuleSendcloud extends Controller
 
         $formFields = array("sendcloud_automate", "sendcloud_api_key", "sendcloud_api_secret", "sendcloud_address2_as_housenumber",  //basic information
             "sendcloud_checkout_preset", "sendcloud_checkout_route", "sendcloud_checkout_picker_selector", "sendcloud_checkout_picker_position", //where to inject the location picker
-            "sendcloud_checkout_selector_address","sendcloud_checkout_selector_address2","sendcloud_checkout_selector_city","sendcloud_checkout_selector_postcode", "sendcloud_checkout_selector_country", "sendcloud_checkout_selector_zone", //some checkout fields
+            "sendcloud_checkout_selector_address", "sendcloud_checkout_selector_address2", "sendcloud_checkout_selector_city", "sendcloud_checkout_selector_postcode", "sendcloud_checkout_selector_country", "sendcloud_checkout_selector_zone", //some checkout fields
             "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css" //when the selector finishes , the user might want to fake a click
         );
 
@@ -43,7 +43,7 @@ class ControllerModuleSendcloud extends Controller
             "checkout_picker_selector_position_append" => "append",
         );
 
-        $pickerPresets=$model->getPickerPresets();
+        $pickerPresets = $model->getPickerPresets();
 
 
         //place the prepared data into the form
@@ -51,9 +51,8 @@ class ControllerModuleSendcloud extends Controller
             ->fillFromSessionClear("error_warning", "success")
             ->fillFromPost($formFields)
             ->fillFromConfig($formFields)
-            ->fillSelectboxOptions("checkout_picker_position_options",$picker_positions)
-            ->fillSelectboxOptions("checkout_presets",Util::arrayHelper()->keyToVal($pickerPresets))
-        ;
+            ->fillSelectboxOptions("checkout_picker_position_options", $picker_positions)
+            ->fillSelectboxOptions("checkout_presets", Util::arrayHelper()->keyToVal($pickerPresets));
         Util::breadcrumb($data)
             ->add("text_home", "common/home")
             ->add("settings_title", "module/sendcloud");
@@ -61,45 +60,54 @@ class ControllerModuleSendcloud extends Controller
 
         //handle document related things
         Util::document()->setTitle(Util::language()->heading_title);
-        Util::document()->addVariable("picker_presets",$pickerPresets);
+        Util::document()->addVariable("picker_presets", $pickerPresets);
         util::document()->addScript("view/javascript/sendcloud.js");
 
 
         //create links
         $data['form_action'] = Util::url()->link('module/sendcloud');
         $data['cancel'] = Util::url()->link(Util::route()->extension());
-        $data['url_patch']=Util::url()->link('module/sendcloud/patch');
-        $data["url_update_tracking"]=Util::url()->link('module/sendcloud/updateTrackingCodes');
-        $data["url_api_tracking"]=Util::url()->catalog('api/sendcloud/updateTrackingCodes');
+        $data['url_patch'] = Util::url()->link('module/sendcloud/patch');
+        $data["url_update_tracking"] = Util::url()->link('module/sendcloud/updateTrackingCodes');
+        $data["url_api_tracking"] = Util::url()->catalog('api/sendcloud/updateTrackingCodes');
 
         //create a response
         Util::response()->view("module/sendcloud.tpl", $data);
     }
 
-    function patch(){
+    function patch()
+    {
         $this->runPatch();
         Util::response()->redirect("module/sendcloud/index");
     }
 
-    public function install() {
+    public function install()
+    {
         $this->runPatch();
     }
 
-    private function runPatch(){
+    private function runPatch()
+    {
         Util::patch()->runPatches(
             array(
-                "tracking"=>function(){
+                "tracking" => function () {
                     Util::patch()->table("order")
-                        ->addField("sendcloud_tracking","varchar(250)")
-                        ->addField("sendcloud_id","int")
+                        ->addField("sendcloud_tracking", "varchar(250)")
+                        ->addField("sendcloud_id", "int")
+                        ->update();
+                },
+                "spId" => function () {
+                    Util::patch()->table("order")
+                        ->addField("sendcloud_sp_id", "varchar(250)")
                         ->update();
                 }
             )
-            ,__FILE__
+            , __FILE__
         );
     }
 
-    function updateTrackingCodes(){
+    function updateTrackingCodes()
+    {
         $sendcloud_settings = Util::config()->getGroup('sendcloud');
         Util::load()->language("module/sendcloud");
 
@@ -107,12 +115,11 @@ class ControllerModuleSendcloud extends Controller
             $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
         }
 
-
-        $query=$this->db->query("select * from ".DB_PREFIX."order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
-        foreach($query->rows as $row){
-            $parcel=$api->parcels->get($row["sendcloud_id"]);
-            if($parcel["tracking_number"]){
-                $this->db->query("update  ".DB_PREFIX."order set sendcloud_tracking='".$parcel["tracking_number"]."' where order_id='".$row["order_id"]."'");
+        $query = $this->db->query("select * from " . DB_PREFIX . "order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
+        foreach ($query->rows as $row) {
+            $parcel = $api->parcels->get($row["sendcloud_id"]);
+            if ($parcel["tracking_number"]) {
+                $this->db->query("update  " . DB_PREFIX . "order set sendcloud_tracking='" . $parcel["tracking_number"] . "' where order_id='" . $row["order_id"] . "'");
             }
         }
         Util::response()->redirect("module/sendcloud/index");
@@ -144,8 +151,6 @@ class ControllerModuleSendcloud extends Controller
         $selected = Util::request()->post()->selected;
         $order_model = Util::load()->model("sale/order");
 
-        $shipping_methods = $api->shipping_methods->get();
-
         $orders = Array();
         $errors = Array();
         $errors['no_shipping_details'] = Array();
@@ -166,16 +171,20 @@ class ControllerModuleSendcloud extends Controller
             Util::response()->redirect("sale/order");
         }
 
+        // TODO: refactor code below and remove comments when confident with changes
+// Commented out to track for possible short future reference. Fixing COMDEVNL-490 asap now.
+//        $shipping_methods = $api->shipping_methods->get();
         foreach ($selected as $key => $s) {
             $order = $order_model->getOrder($s);
-            $shipment_id = $this->getSuitableCountry($shipping_methods, $order);
-
-            if ($shipment_id) {
-                $order['sendcloud_shipment_id'] = $shipment_id;
-                $orders[] = $order;
-            } else {
-                $errors['no_shipping_method'][] = $order['order_id'];
-            }
+            $orders[] = $order;
+//            $shipment_id = $this->getSuitableCountry($shipping_methods, $order);
+//
+//            if ($shipment_id) {
+//                $order['sendcloud_shipment_id'] = $shipment_id;
+//                $orders[] = $order;
+//            } else {
+//                $errors['no_shipping_method'][] = $order['order_id'];
+//            }
         }
 
         if (!empty($errors['no_shipping_method'])) {
@@ -187,26 +196,27 @@ class ControllerModuleSendcloud extends Controller
         }
 
         foreach ($orders as $order) {
+            $spId = $this->db->query("SELECT sendcloud_sp_id FROM " . DB_PREFIX . "order WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
 
             try {
-               $parcel=$api->parcels->create(array(
-                        'name' => $order['shipping_firstname'] . ' ' . $order['shipping_lastname'],
-                        'company_name' => $order['shipping_company'],
-                        'address' => ($sendcloud_settings['sendcloud_address2_as_housenumber'] ? $order['shipping_address_1'] . ' ' . $order['shipping_address_2'] : $order['shipping_address_1']),
-                        'address_2' => ($sendcloud_settings['sendcloud_address2_as_housenumber'] ? '' : $order['shipping_address_2']),
-                        'city' => $order['shipping_city'],
-                        'postal_code' => $order['shipping_postcode'],
-                        'requestShipment' => false,
-                        'email' => $order['email'],
-                        'telephone' => $order['telephone'],
-                        'country' => $order['shipping_iso_code_2'],
-                        'shipment' => array(
-                            'id' => $order['sendcloud_shipment_id']
-                        ),
-                        'order_number' => $order['order_id']
-                    )
+                $newParcel = array(
+                    'name' => $order['shipping_firstname'] . ' ' . $order['shipping_lastname'],
+                    'company_name' => $order['shipping_company'],
+                    'address' => ($sendcloud_settings['sendcloud_address2_as_housenumber'] ? $order['shipping_address_1'] . ' ' . $order['shipping_address_2'] : $order['shipping_address_1']),
+                    'address_2' => ($sendcloud_settings['sendcloud_address2_as_housenumber'] ? '' : $order['shipping_address_2']),
+                    'city' => $order['shipping_city'],
+                    'postal_code' => $order['shipping_postcode'],
+                    'requestShipment' => false,
+                    'email' => $order['email'],
+                    'telephone' => $order['telephone'],
+                    'country' => $order['shipping_iso_code_2'],
+                    'order_number' => $order['order_id']
                 );
-                $this->db->query("UPDATE `" . DB_PREFIX . "order` SET sendcloud_id='".$parcel["id"]."'  WHERE order_id = '" . (int)$order['order_id'] . "'");
+                if ( ! empty($spId) && strtolower($spId) != "null") {
+                    $newParcel += ['to_service_point' => $spId];
+                }
+                $parcel = $api->parcels->create($newParcel);
+                $this->db->query("UPDATE `" . DB_PREFIX . "order` SET sendcloud_id='" . $parcel["id"] . "'  WHERE order_id = '" . (int)$order['order_id'] . "'");
             } catch (SendCloudApiException $exception) {
                 // TODO: Validate before transporting instead of catching the API errors.
                 $message = $this->language->get('msg_process_orders') . " " . $order_error_ids . $this->language->get('msg_api_error_reason') . $exception->message . '.';
@@ -231,7 +241,7 @@ class ControllerModuleSendcloud extends Controller
         $comment = nl2br($this->language->get('log_message'));
         $date_added = date($this->language->get('date_format_short'));
 
-        if($order_status_id) {
+        if ($order_status_id) {
             // Queries Borrowed from /catalog/model/checkout/order.php
             $this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
             $this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");

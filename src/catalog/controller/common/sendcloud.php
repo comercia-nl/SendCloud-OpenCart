@@ -16,9 +16,9 @@ class ControllerCommonSendcloud extends Controller
             Util::document()->addScript('view/javascript/sendcloud_injector.js');
 
             //avoid injecting wrong information
-            $settings["sendcloud_checkout_api_key"]=$settings["sendcloud_api_key"];
-            $settings["sendcloud_checkout_address2_as_housenumber"]=$settings["sendcloud_address2_as_housenumber"];
-            $settings=Util::arrayHelper()->keepPrefix("sendcloud_checkout", $settings);
+            $settings["sendcloud_checkout_api_key"] = $settings["sendcloud_api_key"];
+            $settings["sendcloud_checkout_address2_as_housenumber"] = $settings["sendcloud_address2_as_housenumber"];
+            $settings = Util::arrayHelper()->keepPrefix("sendcloud_checkout", $settings);
 
             //inject the settings into javascript
             Util::document()->addVariable('sendcloud_settings', $settings);
@@ -27,20 +27,18 @@ class ControllerCommonSendcloud extends Controller
             $sendcloud_language = comercia\util::load()->language("checkout/sendcloud");
             Util::document()->addVariable('action_location_picker', $sendcloud_language["action_location_picker"]);
         }
-
     }
 
-    public function getCountryId() {
+    public function getCountryId()
+    {
         $isocode = $this->request->get["isocode"];
-        $model=Util::load()->model("module/sendcloud");
-        $country = $model->getCountryId($isocode);
+
+        $model = Util::load()->model("module/sendcloud");
+        $countryId = $model->getCountryId($isocode);
 
         $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($country['country_id']));
+        $this->response->setOutput(json_encode($countryId));
     }
-
-
-
 }
 
 ?>

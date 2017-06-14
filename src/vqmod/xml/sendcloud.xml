@@ -1,8 +1,9 @@
 <modification>
 	<id>SendCloud OpenCart 2 Extension</id>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<vqmver>2.3.0</vqmver>
 	<author>Comercia</author>
+
 	<file name="admin/controller/extension/extension/module.php">
 		<operation error="skip">
 			<search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
@@ -21,6 +22,7 @@
 			]]></add>
 		</operation>
 	</file>
+
 	<file name="catalog/controller/common/header.php">
 		<operation>
 			<search position="after"><![CDATA[function index(]]></search>
@@ -28,6 +30,38 @@
                 comercia\util::load()->controller("common/sendcloud/checkout");
             ]]>
 			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/checkout/confirm.php">
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);]]></search>
+			<add><![CDATA[
+			$spId = \comercia\Util::session()->spId;
+			$orderId = \comercia\Util::session()->order_id;
+            if (! empty($spId)) {
+				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . $orderId . "'");
+			}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->session->data['order_id'] = $this->model_checkout_order->addOrder($data);]]></search>
+			<add><![CDATA[
+			$spId = \comercia\Util::session()->spId;
+			$orderId = \comercia\Util::session()->order_id;
+            if (! empty($spId)) {
+				$this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" .$orderId . "'");
+			}
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/checkout/success.php">
+		<operation error="skip">
+			<search position="before"><![CDATA[unset($this->session->data['shipping_method']);]]></search>
+			<add><![CDATA[
+			unset($this->session->data['spId']);
+			]]></add>
 		</operation>
 	</file>
 
@@ -56,6 +90,7 @@
 			</add>
 		</operation>
 	</file>
+
 	<file name="admin/controller/sale/order.php">
 		<operation error="abort">
 			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>

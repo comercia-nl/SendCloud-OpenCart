@@ -123,7 +123,6 @@ $(function () {
                 zoneSaved = true;
             }
 
-
             if (!$('#collapse-shipping-method').hasClass('in') && (!($('a[href=\'#collapse-payment-method\']').length))) {
                 $('a[href=\'#collapse-shipping-method\']').trigger('click');
             }
@@ -151,7 +150,6 @@ $(function () {
             url: 'index.php?route=common/sendcloud/getCountryId&isocode='+isocode,
             type: 'get',
             success: function (json) {
-                //spCountry = parseInt(json);
                 return json;
             }
         });
@@ -181,6 +179,7 @@ $(function () {
             config,
             // second arg: success callback function
             function (servicePointObject) {
+                $.get("index.php?route=api/sendcloud/servicePointSelected&spId=" + servicePointObject.id);
                 $(_city).val(servicePointObject.city);
                 $(_postcode).val(servicePointObject.postal_code);
 
@@ -188,6 +187,7 @@ $(function () {
                 spPostcode = servicePointObject.postal_code;
                 spCountry = servicePointObject.country;
 
+                // Translate fetched country ISO code to OC country id
                 spCountry = getCountryCode(spCountry);
 
                 if(_use_address2){
