@@ -152,6 +152,10 @@
                             </div>
                         </div>
 
+                        <div class="panel-heading">
+                            <?php echo $checkout_selector_shipping_header_label; ?>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label">
                                 <?php echo $checkout_selector_address_label ;?>
@@ -209,6 +213,34 @@
                                 <input class="form-control" type="text" name="sendcloud_checkout_selector_zone"
                                        value="<?php echo $sendcloud_checkout_selector_zone; ?>"/>
                             </div>
+                        </div>
+
+                        <div class="panel-heading">
+                            <?php echo $checkout_selector_payment_header_label; ?>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_payment_postcode_label; ?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_payment_postcode"
+                                       value="<?php echo $sendcloud_checkout_payment_postcode; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                <?php echo $checkout_selector_payment_country_label; ?>
+                            </label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="sendcloud_checkout_payment_country"
+                                       value="<?php echo $sendcloud_checkout_payment_country; ?>"/>
+                            </div>
+                        </div>
+
+                        <div class="panel-heading">
+                            <?php echo $checkout_selector_extra_options_header_label; ?>
                         </div>
 
                         <div class="form-group">

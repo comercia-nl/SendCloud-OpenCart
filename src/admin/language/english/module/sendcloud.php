@@ -27,13 +27,22 @@ $_["checkout_picker_selector_position_replace"] = "Replace";
 $_["checkout_picker_selector_position_prepend"] = "Prepend";
 $_["checkout_picker_selector_position_append"] = "Append";
 
+// Shipping Address
+$_["checkout_selector_shipping_header_label"] = "Shipping Address";
 $_["checkout_selector_address_label"] = "Address selector";
 $_["checkout_selector_address2_label"] = "Address2 selector";
-$_["checkout_selector_city_label"] = "city selector";
+$_["checkout_selector_city_label"] = "City selector";
 $_["checkout_selector_postcode_label"] = "Postcode selector";
 $_["checkout_selector_country_label"] = "Country selector";
 $_["checkout_selector_zone_label"] = "Zone selector";
 
+// Payment address
+$_["checkout_selector_payment_header_label"] = "Payment Address";
+$_["checkout_selector_payment_postcode_label"] = "Postcode selector";
+$_["checkout_selector_payment_country_label"] = "Country selector";
+
+// Extra CSS Options
+$_["checkout_selector_extra_options_header_label"] = "Extra options";
 $_["checkout_selector_fake_click_label"] = "Fake click selector";
 $_["checkout_selector_button_css_label"] = "CSS tag for selector button";
 

@@ -4,23 +4,34 @@ $(function () {
 
     var _position;
     var _selector;
+
+    // Shipping Address
     var _address;
     var _address2;
     var _postcode;
     var _city;
     var _country;
     var _zone;
+
+    // Payment Address
+    var _paymentPostcode;
+    var _paymentCountry;
+
+    // Extra CSS Options
     var _fake_click;
     var _api_key;
     var _use_address2;
     var _button_css;
     var _checkout_preset;
 
+    // Service Point variables
     var spAddress;
     var spAddress2;
     var spPostcode;
     var spCity;
     var spCountry;
+
+    var isocode;
 
     var locationPickerCalled = false;
     var countrySaved = false;
@@ -35,6 +46,8 @@ $(function () {
         _city = sendcloud_settings["sendcloud_checkout_selector_city"];
         _country = sendcloud_settings["sendcloud_checkout_selector_country"];
         _zone = sendcloud_settings["sendcloud_checkout_selector_zone"];
+        _paymentPostcode = sendcloud_settings["sendcloud_checkout_payment_postcode"];
+        _paymentCountry = sendcloud_settings["sendcloud_checkout_payment_country"];
         _fake_click=sendcloud_settings["sendcloud_checkout_selector_fake_click"];
         _api_key=sendcloud_settings["sendcloud_checkout_api_key"];
         _use_address2=sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
@@ -76,7 +89,7 @@ $(function () {
                 if (_checkout_preset == "Journal") {
                     $("#input-shipping-firstname").val($("#input-payment-firstname").val());
                     $("#input-shipping-lastname").val($("#input-payment-lastname").val());
-                    $(_country).val($("#input-payment-country").val());
+                    $(_country).val($(_paymentCountry).val());
                 } else if (_checkout_preset == "OpenCart") {
                     if ($("select[name=address_id]").length > 0) {
                         var fullAddress = $("select[name=address_id] option:selected").text();
@@ -96,7 +109,7 @@ $(function () {
                         $("#input-shipping-lastname").val($("#input-payment-lastname").val());
                     }
 
-                    $(_country).val($("#input-payment-country").val());
+                    $(_country).val($(_paymentCountry).val());
                     $("input[name=shipping_address][value='new']").prop("checked",true);
                 }
             }
@@ -155,6 +168,16 @@ $(function () {
         });
     }
 
+    function getIsoCode(countryid){
+        $.ajax({
+            url: 'index.php?route=common/sendcloud/getIsoCode&country_id='+countryid,
+            type: 'get',
+            success: function (json) {
+                return json;
+            }
+        });
+    }
+
     function openLocationPicker() {
         //call the sendcloud api to show service points
         if($(_fake_click).prop('checked') == false && _checkout_preset == "OpenCart"){
@@ -165,11 +188,17 @@ $(function () {
             $(_fake_click).click();
         }
 
+        isocode = getIsoCode($(_paymentCountry).val());
+        var allowedIsoCodes = ['nl','be','de', 'fr'];
+        if ($.inArray(isocode, allowedIsoCodes) == -1){
+            isocode = 'nl';
+        }
+
         var config = {
             // API key is required, replace it below with your API key
             'apiKey': _api_key,
-            'country': "nl",
-            'postalCode': $(_postcode).val(),
+            'country': isocode,
+            'postalCode': $(_paymentPostcode).val(),
             'language': "nl",
             'carriers': [],
             'servicePointId': 0

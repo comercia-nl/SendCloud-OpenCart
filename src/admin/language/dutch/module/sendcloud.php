@@ -19,21 +19,22 @@ $_['error_no_orders'] = 'Fout: Je hebt geen orders geselecteerd.';
 
 $_["checkout_header_label"] = "Checkout options";//checkout related
 
-$_["checkout_picker_route_label"] = "Route";
-$_["checkout_picker_selector_label"] = "Selector";
-$_["checkout_picker_selector_position_before"] = "Voor";
-$_["checkout_picker_selector_position_after"] = "Achter";
-$_["checkout_picker_selector_position_replace"] = "Vervang";
-$_["checkout_picker_selector_position_prepend"] = "Begin";
-$_["checkout_picker_selector_position_append"] = "Eind";
-
-$_["checkout_selector_address_label"] = "Adres selector";
-$_["checkout_selector_address2_label"] = "Adres2 selector";
+// Shipping Address
+$_["checkout_selector_shipping_header_label"] = "Verzendadres";
+$_["checkout_selector_address_label"] = "Address_1 (straat) selector";
+$_["checkout_selector_address2_label"] = "Address_2 (huisnummer/toevoeging) selector";
 $_["checkout_selector_city_label"] = "Stad selector";
 $_["checkout_selector_postcode_label"] = "Postcode selector";
 $_["checkout_selector_country_label"] = "Land selector";
 $_["checkout_selector_zone_label"] = "Zone selector";
 
+// Payment Address
+$_["checkout_selector_payment_header_label"] = "Betaaladres";
+$_["checkout_selector_payment_postcode_label"] = "Postcode selector";
+$_["checkout_selector_payment_country_label"] = "Land selector";
+
+// Extra CSS Options
+$_["checkout_selector_extra_options_header_label"] = "Extra opties";
 $_["checkout_selector_fake_click_label"] = "Simuleer klik op";
 $_["checkout_selector_button_css_label"] = "CSS tag voor checkout selector knop";
 

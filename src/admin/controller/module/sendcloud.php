@@ -32,7 +32,8 @@ class ControllerModuleSendcloud extends Controller
         $formFields = array("sendcloud_automate", "sendcloud_api_key", "sendcloud_api_secret", "sendcloud_address2_as_housenumber",  //basic information
             "sendcloud_checkout_preset", "sendcloud_checkout_route", "sendcloud_checkout_picker_selector", "sendcloud_checkout_picker_position", //where to inject the location picker
             "sendcloud_checkout_selector_address", "sendcloud_checkout_selector_address2", "sendcloud_checkout_selector_city", "sendcloud_checkout_selector_postcode", "sendcloud_checkout_selector_country", "sendcloud_checkout_selector_zone", //some checkout fields
-            "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css" //when the selector finishes , the user might want to fake a click
+            "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css", //when the selector finishes , the user might want to fake a click
+            "sendcloud_checkout_payment_postcode", "sendcloud_checkout_payment_country" // Adding these fields so we can base our starting variables for the location picker on them.
         );
 
         $picker_positions = array(
