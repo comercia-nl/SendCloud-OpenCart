@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="panel-heading">
-                        <?php echo $checkout_header_label; ?>
+                        <?php echo $location_picker_heading; ?>
                     </div>
                     <div id="checkout-method">
                         <div class="form-group">
@@ -153,7 +153,7 @@
                         </div>
 
                         <div class="panel-heading">
-                            <?php echo $checkout_selector_shipping_header_label; ?>
+                            <?php echo $checkout_selector_shipping_heading; ?>
                         </div>
 
                         <div class="form-group">
@@ -216,7 +216,7 @@
                         </div>
 
                         <div class="panel-heading">
-                            <?php echo $checkout_selector_payment_header_label; ?>
+                            <?php echo $checkout_selector_payment_heading; ?>
                         </div>
 
                         <div class="form-group">
@@ -240,7 +240,7 @@
                         </div>
 
                         <div class="panel-heading">
-                            <?php echo $checkout_selector_extra_options_header_label; ?>
+                            <?php echo $checkout_selector_extra_options_heading; ?>
                         </div>
 
                         <div class="form-group">
@@ -265,7 +265,7 @@
 
                     </div>
 
-                    <div class="panel-heading"><?php echo $text_tracking; ?></div>
+                    <div class="panel-heading"><?php echo $tracking_heading; ?></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $text_update_url;?></label>
                         <div class="col-sm-10">  <div class="form-control"><?php echo $url_api_tracking;?></div></div>
@@ -279,7 +279,7 @@
                         </div>
                     </div>
 
-                    <div class="panel-heading"><?php echo $text_maintenance; ?></div>
+                    <div class="panel-heading"><?php echo $maintenance_heading; ?></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
