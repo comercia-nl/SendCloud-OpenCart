@@ -265,6 +265,30 @@
 
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $text_restrict_carriers_helper; ?>"><?php echo $text_restrict_carriers;?></span></label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <?php if ($sendcloud_checkout_selector_restrict_carriers) { ?>
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" checked="checked" />
+                                <?php echo $text_yes; ?>
+                                <?php } else { ?>
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" />
+                                <?php echo $text_yes; ?>
+                                <?php } ?>
+                            </label>
+                            <label class="radio-inline">
+                                <?php if (!$sendcloud_checkout_selector_restrict_carriers) { ?>
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" checked="checked" />
+                                <?php echo $text_no; ?>
+                                <?php } else { ?>
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" />
+                                <?php echo $text_no; ?>
+                                <?php } ?>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="panel-heading"><?php echo $tracking_heading; ?></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $text_update_url;?></label>

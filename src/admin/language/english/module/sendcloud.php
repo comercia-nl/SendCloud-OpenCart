@@ -55,12 +55,18 @@ $_["checkout_method_picker_label"] = "Choose checkout method";
 $_["checkout_disable_label"] = "Disable checkout selection";
 $_["checkout_method_advanced_label"] = "Advanced checkout options";
 
+$_["text_restrict_carriers"] = "Beperk afhaallocaties";
+$_["text_restrict_carriers_helper"] = "Beperk afhaallocaties tot de door U in SendCloud gekozen verzendpartijen (beta)";
+
 $_["text_patch"]="Update tables";
 
 
 $_["tracking_heading"]="Tracking";
 $_["text_update_tracking"]="Update tracking codes";
 $_["text_update_url"]="Tracking update url";
+
+$_["text_yes"] = "Yes";
+$_["text_no"] = "No";
 
 $_["maintenance_heading"]="Maintenance";
 

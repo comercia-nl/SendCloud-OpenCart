@@ -47,11 +47,17 @@ $_["checkout_method_picker_label"] = "Kies een kassa module";
 $_["checkout_disable_label"] = "Schakel kassa selectie uit";
 $_["checkout_method_advanced_label"] = "Geavanceerde kassa opties";
 
+$_["text_restrict_carriers"] = "Beperk afhaallocaties";
+$_["text_restrict_carriers_helper"] = "Beperk afhaallocaties tot de door U in SendCloud gekozen verzendpartijen (beta)";
+
 $_["text_patch"]="Tabellen bijwerken";
 
 $_["tracking_heading"]="Tracking";
 $_["text_update_tracking"]="Trackingcodes bijwerken";
 $_["text_update_url"]="Tracking update-url";
+
+$_["text_yes"] = "Ja";
+$_["text_no"] = "Nee";
 
 $_["maintenance_heading"]="Onderhoud";
 ?>

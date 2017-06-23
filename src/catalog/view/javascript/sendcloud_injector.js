@@ -185,12 +185,12 @@ $(function () {
             type: 'get',
             success: function (json) {
                 isocode = json;
-                var allowedIsoCodes = ['nl','be','de', 'fr'];
+                var allowedIsoCodes = ['nl','be','de','fr'];
                 if ($.inArray(isocode, allowedIsoCodes) == -1){
                     isocode = 'nl';
                 }
 
-                if (_carriers.length < 0) {
+                if (_carriers === undefined || _carriers === null) {
                     _carriers = '';
                 }
 
