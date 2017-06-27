@@ -4,23 +4,35 @@ $(function () {
 
     var _position;
     var _selector;
+
+    // Shipping Address
     var _address;
     var _address2;
     var _postcode;
     var _city;
     var _country;
     var _zone;
+
+    // Payment Address
+    var _paymentPostcode;
+    var _paymentCountry;
+
+    // Extra CSS Options
     var _fake_click;
     var _api_key;
     var _use_address2;
     var _button_css;
     var _checkout_preset;
 
+    // Service Point variables
     var spAddress;
     var spAddress2;
     var spPostcode;
     var spCity;
     var spCountry;
+    var _carriers;
+
+    var isocode;
 
     var locationPickerCalled = false;
     var countrySaved = false;
@@ -35,12 +47,15 @@ $(function () {
         _city = sendcloud_settings["sendcloud_checkout_selector_city"];
         _country = sendcloud_settings["sendcloud_checkout_selector_country"];
         _zone = sendcloud_settings["sendcloud_checkout_selector_zone"];
+        _paymentPostcode = sendcloud_settings["sendcloud_checkout_payment_postcode"];
+        _paymentCountry = sendcloud_settings["sendcloud_checkout_payment_country"];
         _fake_click=sendcloud_settings["sendcloud_checkout_selector_fake_click"];
         _api_key=sendcloud_settings["sendcloud_checkout_api_key"];
         _use_address2=sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
         _address2=sendcloud_settings["sendcloud_checkout_selector_address2"];
         _button_css = sendcloud_settings["sendcloud_checkout_selector_button_css"];
         _checkout_preset = sendcloud_settings["sendcloud_checkout_preset"];
+        _carriers = sendcloud_settings["sendcloud_checkout_carriers"];
         //inject the picker
         inject("<div class='pull-left sendcloud'><a class='" + _button_css + " locationPicker'>" + action_location_picker + "</a></div>");
     }
@@ -76,7 +91,7 @@ $(function () {
                 if (_checkout_preset == "Journal") {
                     $("#input-shipping-firstname").val($("#input-payment-firstname").val());
                     $("#input-shipping-lastname").val($("#input-payment-lastname").val());
-                    $(_country).val($("#input-payment-country").val());
+                    $(_country).val($(_paymentCountry).val());
                 } else if (_checkout_preset == "OpenCart") {
                     if ($("select[name=address_id]").length > 0) {
                         var fullAddress = $("select[name=address_id] option:selected").text();
@@ -96,7 +111,7 @@ $(function () {
                         $("#input-shipping-lastname").val($("#input-payment-lastname").val());
                     }
 
-                    $(_country).val($("#input-payment-country").val());
+                    $(_country).val($(_paymentCountry).val());
                     $("input[name=shipping_address][value='new']").prop("checked",true);
                 }
             }
@@ -165,53 +180,69 @@ $(function () {
             $(_fake_click).click();
         }
 
-        var config = {
-            // API key is required, replace it below with your API key
-            'apiKey': _api_key,
-            'country': "nl",
-            'postalCode': $(_postcode).val(),
-            'language': "nl",
-            'carriers': [],
-            'servicePointId': 0
-        }
-        sendcloud.servicePoints.open(
-            // first arg: config object
-            config,
-            // second arg: success callback function
-            function (servicePointObject) {
-                $.get("index.php?route=api/sendcloud/servicePointSelected&spId=" + servicePointObject.id);
-                $(_city).val(servicePointObject.city);
-                $(_postcode).val(servicePointObject.postal_code);
-
-                spCity = servicePointObject.city;
-                spPostcode = servicePointObject.postal_code;
-                spCountry = servicePointObject.country;
-
-                // Translate fetched country ISO code to OC country id
-                spCountry = getCountryCode(spCountry);
-
-                if(_use_address2){
-                    $(_address).val(servicePointObject.street);
-                    $(_address2).val(servicePointObject.house_number);
-
-                    spAddress = servicePointObject.street;
-                    spAddress2 = servicePointObject.house_number;
-                }else{
-                    $(_address).val(servicePointObject.street + " " + servicePointObject.house_number);
-
-                    spAddress = servicePointObject.street + " " + servicePointObject.house_number;
+        $.ajax({
+            url: 'index.php?route=common/sendcloud/getIsoCode&country_id=' + $(_paymentCountry).val(),
+            type: 'get',
+            success: function (json) {
+                isocode = json;
+                var allowedIsoCodes = ['nl','be','de','fr'];
+                if ($.inArray(isocode, allowedIsoCodes) == -1){
+                    isocode = 'nl';
                 }
 
-                locationPickerCalled = true;
-            },
-            // third arg: failure callback function
-            // this is also called with ["Closed"] when the SPP window is closed.
-            function (errors) {
-                errors.forEach(function (error) {
-                    console.log('Failure callback, reason: ' + error);
-                });
+                if (_carriers === undefined || _carriers === null) {
+                    _carriers = '';
+                }
+
+                var config = {
+                    // API key is required, replace it below with your API key
+                    'apiKey': _api_key,
+                    'country': isocode,
+                    'postalCode': $(_paymentPostcode).val(),
+                    'language': "nl",
+                    'carriers': _carriers,
+                    'servicePointId': 0
+                }
+                sendcloud.servicePoints.open(
+                    // first arg: config object
+                    config,
+                    // second arg: success callback function
+                    function (servicePointObject) {
+                        $.get("index.php?route=api/sendcloud/servicePointSelected&spId=" + servicePointObject.id);
+                        $(_city).val(servicePointObject.city);
+                        $(_postcode).val(servicePointObject.postal_code);
+
+                        spCity = servicePointObject.city;
+                        spPostcode = servicePointObject.postal_code;
+                        spCountry = servicePointObject.country;
+
+                        // Translate fetched country ISO code to OC country id
+                        spCountry = getCountryCode(spCountry);
+
+                        if (_use_address2) {
+                            $(_address).val(servicePointObject.street);
+                            $(_address2).val(servicePointObject.house_number);
+
+                            spAddress = servicePointObject.street;
+                            spAddress2 = servicePointObject.house_number;
+                        } else {
+                            $(_address).val(servicePointObject.street + " " + servicePointObject.house_number);
+
+                            spAddress = servicePointObject.street + " " + servicePointObject.house_number;
+                        }
+
+                        locationPickerCalled = true;
+                    },
+                    // third arg: failure callback function
+                    // this is also called with ["Closed"] when the SPP window is closed.
+                    function (errors) {
+                        errors.forEach(function (error) {
+                            console.log('Failure callback, reason: ' + error);
+                        });
+                    }
+                );
             }
-        );
+        });
     }
 
     init();
