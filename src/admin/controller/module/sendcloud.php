@@ -117,11 +117,11 @@ class ControllerModuleSendcloud extends Controller
             $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
         }
 
-        $query = $this->db->query("select * from " . DB_PREFIX . "order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
+        $query = $this->db->query("select * from `" . DB_PREFIX . "order` where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
         foreach ($query->rows as $row) {
             $parcel = $api->parcels->get($row["sendcloud_id"]);
             if ($parcel["tracking_number"]) {
-                $this->db->query("UPDATE  " . DB_PREFIX . "order SET sendcloud_tracking='" . $parcel["tracking_number"] . "' WHERE order_id='" . $row["order_id"] . "'");
+                $this->db->query("UPDATE  `" . DB_PREFIX . "order` SET sendcloud_tracking='" . $parcel["tracking_number"] . "' WHERE order_id='" . $row["order_id"] . "'");
             }
         }
         Util::response()->redirect("module/sendcloud/index");
@@ -222,7 +222,7 @@ class ControllerModuleSendcloud extends Controller
         }
 
         foreach ($orders as $order) {
-            $spId = $this->db->query("SELECT sendcloud_sp_id FROM " . DB_PREFIX . "order WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
+            $spId = $this->db->query("SELECT sendcloud_sp_id FROM `" . DB_PREFIX . "order` WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
 
             try {
                 $newParcel = array(
