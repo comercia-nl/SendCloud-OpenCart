@@ -35,16 +35,15 @@ $(function () {
         _city = sendcloud_settings["sendcloud_checkout_selector_city"];
         _country = sendcloud_settings["sendcloud_checkout_selector_country"];
         _zone = sendcloud_settings["sendcloud_checkout_selector_zone"];
-        _fake_click=sendcloud_settings["sendcloud_checkout_selector_fake_click"];
-        _api_key=sendcloud_settings["sendcloud_checkout_api_key"];
-        _use_address2=sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
-        _address2=sendcloud_settings["sendcloud_checkout_selector_address2"];
+        _fake_click = sendcloud_settings["sendcloud_checkout_selector_fake_click"];
+        _api_key = sendcloud_settings["sendcloud_checkout_api_key"];
+        _use_address2 = sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
+        _address2 = sendcloud_settings["sendcloud_checkout_selector_address2"];
         _button_css = sendcloud_settings["sendcloud_checkout_selector_button_css"];
         _checkout_preset = sendcloud_settings["sendcloud_checkout_preset"];
         //inject the picker
         inject("<div class='pull-left sendcloud'><a class='" + _button_css + " locationPicker'>" + action_location_picker + "</a></div>");
     }
-
 
     function inject(html) {
         htmlToInject = html;
@@ -60,14 +59,14 @@ $(function () {
 
     function doInject() {
         //see if there is something to inject at all
-        $selectedObject = $(_selector);
+        var $selectedObject = $(_selector);
         if ($selectedObject.length > 0) {
 
             //create the object to inject
-            var $injectObject = $(htmlToInject)
+            var $injectObject = $(htmlToInject);
             $(".locationPicker", $injectObject).click(openLocationPicker);
 
-            if ($(_address).length && $(_address).val() != spAddress && locationPickerCalled == true) {
+            if ($(_address).length && locationPickerCalled == true) {
                 $(_address).val(spAddress);
                 $(_address2).val(spAddress2);
                 $(_city).val(spCity);
@@ -112,13 +111,13 @@ $(function () {
             if ($(_zone +' option').length > 1 && zoneSaved == false) {
                 $(_zone + ' option:eq(1)').attr('selected', 'selected');
 
-                    if (_checkout_preset == "OpenCart") {
-                        if ($('#button-guest-shipping').length > 0) {
-                            $('#button-guest-shipping').trigger("click");
-                        } else {
-                            $('#button-shipping-address').trigger("click");
-                        }
+                if (_checkout_preset == "OpenCart") {
+                    if ($('#button-guest-shipping').length > 0) {
+                        $('#button-guest-shipping').trigger("click");
+                    } else {
+                        $('#button-shipping-address').trigger("click");
                     }
+                }
 
                 zoneSaved = true;
             }
@@ -127,30 +126,29 @@ $(function () {
                 $('a[href=\'#collapse-shipping-method\']').trigger('click');
             }
 
-            $selectedObject.each(function(){
-                $this=$(this);
+            $selectedObject.each(function () {
+                $this = $(this);
 
-                if (_position == "after" && $(".sendcloud",$this.parent()).length<1) {
+                if (_position == "after" && $(".sendcloud", $this.parent()).length < 1) {
                     $this.after($injectObject);
-                } else if (_position == "before" && $(".sendcloud",$this.parent()).length<1) {
+                } else if (_position == "before" && $(".sendcloud", $this.parent()).length < 1) {
                     $this.before($injectObject);
-                } else if (_position == "replace" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "replace" && $(".sendcloud", $this).length < 1) {
                     $this.html($injectObject);
-                } else if (_position == "append" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "append" && $(".sendcloud", $this).length < 1) {
                     $this.append($injectObject);
-                } else if (_position == "prepend" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "prepend" && $(".sendcloud", $this).length < 1) {
                     $this.prepend($injectObject);
                 }
             });
         }
     }
 
-    function getCountryCode(isocode){
+    function setCountryCode(isoCode){
         $.ajax({
-            url: 'index.php?route=common/sendcloud/getCountryId&isocode='+isocode,
-            type: 'get',
+            url: 'index.php?route=common/sendcloud/getCountryId&isocode=' + isoCode,
             success: function (json) {
-                return json;
+                spCountry = json;
             }
         });
     }
@@ -169,11 +167,11 @@ $(function () {
             // API key is required, replace it below with your API key
             'apiKey': _api_key,
             'country': "nl",
-            'postalCode': $(_postcode).val(),
+            'postalCode': $('#input-payment-postcode').val(),
             'language': "nl",
             'carriers': [],
             'servicePointId': 0
-        }
+        };
         sendcloud.servicePoints.open(
             // first arg: config object
             config,
@@ -185,10 +183,9 @@ $(function () {
 
                 spCity = servicePointObject.city;
                 spPostcode = servicePointObject.postal_code;
-                spCountry = servicePointObject.country;
 
-                // Translate fetched country ISO code to OC country id
-                spCountry = getCountryCode(spCountry);
+                // Translate fetched country ISO code to OC country id & set it to spCountry
+                setCountryCode(servicePointObject.country);
 
                 if(_use_address2){
                     $(_address).val(servicePointObject.street);
