@@ -17,7 +17,9 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_country" => "",
                 "sendcloud_checkout_selector_zone" => "",
                 "sendcloud_checkout_selector_fake_click" => "",
-                "sendcloud_checkout_selector_button_css" => ""
+                "sendcloud_checkout_selector_button_css" => "",
+                "sendcloud_checkout_payment_postcode" => "",
+                "sendcloud_checkout_payment_country" => ""
             ),
             "OpenCart" => array(
                 "sendcloud_checkout_preset" => "OpenCart",
@@ -31,7 +33,9 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_country" => "#input-shipping-country",
                 "sendcloud_checkout_selector_zone" => "#input-shipping-zone",
                 "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]",
-                "sendcloud_checkout_selector_button_css" => "btn btn-info"
+                "sendcloud_checkout_selector_button_css" => "btn btn-info",
+                "sendcloud_checkout_payment_postcode" => "#input-payment-postcode",
+                "sendcloud_checkout_payment_country" => "#input-payment-country"
             ),
             "Journal" => array(
                 "sendcloud_checkout_preset" => "Journal",
@@ -45,7 +49,9 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_country" => "#input-shipping-country",
                 "sendcloud_checkout_selector_zone" => "#input-shipping-zone",
                 "sendcloud_checkout_selector_fake_click" => "input[name=shipping_address]",
-                "sendcloud_checkout_selector_button_css" => "btn-primary button"
+                "sendcloud_checkout_selector_button_css" => "btn-primary button",
+                "sendcloud_checkout_payment_postcode" => "#input-payment-postcode",
+                "sendcloud_checkout_payment_country" => "#input-payment-country"
             )
             /*"Ajax Quick Checkout" => array(
                 "sendcloud_checkout_preset" => "Ajax Quick Checkout",

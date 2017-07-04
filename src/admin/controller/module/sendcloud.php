@@ -19,6 +19,7 @@ class ControllerModuleSendcloud extends Controller
         //handle the form when finished
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->request->post['sendcloud_automate'] = (int)$this->request->post['sendcloud_automate'];
+            $this->request->post['sendcloud_checkout_carriers'] = $this->getCarriers($this->request->post['sendcloud_checkout_selector_restrict_carriers']);
             Util::config()->set('sendcloud', $this->request->post);
             Util::session()->success = $data['msg_settings_saved'];
             Util::response()->redirect(Util::route()->extension());
@@ -28,11 +29,12 @@ class ControllerModuleSendcloud extends Controller
         $statuses = $this->db->query('SELECT * FROM ' . DB_PREFIX . 'order_status');
         $data['statuses'] = $statuses->rows;
 
-
         $formFields = array("sendcloud_automate", "sendcloud_api_key", "sendcloud_api_secret", "sendcloud_address2_as_housenumber",  //basic information
             "sendcloud_checkout_preset", "sendcloud_checkout_route", "sendcloud_checkout_picker_selector", "sendcloud_checkout_picker_position", //where to inject the location picker
             "sendcloud_checkout_selector_address", "sendcloud_checkout_selector_address2", "sendcloud_checkout_selector_city", "sendcloud_checkout_selector_postcode", "sendcloud_checkout_selector_country", "sendcloud_checkout_selector_zone", //some checkout fields
-            "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css" //when the selector finishes , the user might want to fake a click
+            "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css", //when the selector finishes , the user might want to fake a click
+            "sendcloud_checkout_payment_postcode", "sendcloud_checkout_payment_country", // Adding these fields so we can base our starting variables for the location picker on them.
+            "sendcloud_checkout_selector_restrict_carriers"
         );
 
         $picker_positions = array(
@@ -115,14 +117,38 @@ class ControllerModuleSendcloud extends Controller
             $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
         }
 
-        $query = $this->db->query("select * from " . DB_PREFIX . "order where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
+        $query = $this->db->query("select * from `" . DB_PREFIX . "order` where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
         foreach ($query->rows as $row) {
             $parcel = $api->parcels->get($row["sendcloud_id"]);
             if ($parcel["tracking_number"]) {
-                $this->db->query("update  " . DB_PREFIX . "order set sendcloud_tracking='" . $parcel["tracking_number"] . "' where order_id='" . $row["order_id"] . "'");
+                $this->db->query("UPDATE  `" . DB_PREFIX . "order` SET sendcloud_tracking='" . $parcel["tracking_number"] . "' WHERE order_id='" . $row["order_id"] . "'");
             }
         }
         Util::response()->redirect("module/sendcloud/index");
+    }
+
+    function getCarriers($enabled = 0){
+        $sendcloud_settings = Util::config()->getGroup('sendcloud');
+        Util::load()->language("module/sendcloud");
+
+        if (!empty($sendcloud_settings['sendcloud_api_key']) && !empty($sendcloud_settings['sendcloud_api_secret']) && $enabled > 0) {
+            $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
+            $carriersArray = [];
+            $shipping_methods = $api->shipping_methods->get();
+            foreach ($shipping_methods as $shipping_method) {
+                if ($shipping_method['carrier'] != "sendcloud") {
+                    if (!in_array($shipping_method['carrier'], $carriersArray)) {
+                        $carriersArray[] = $shipping_method['carrier'];
+                    }
+                }
+            }
+
+            if (!empty($carriersArray)){
+                return implode(',',$carriersArray);
+            } else {
+                return '';
+            }
+        }
     }
 
     protected function validate()
@@ -196,7 +222,7 @@ class ControllerModuleSendcloud extends Controller
         }
 
         foreach ($orders as $order) {
-            $spId = $this->db->query("SELECT sendcloud_sp_id FROM " . DB_PREFIX . "order WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
+            $spId = $this->db->query("SELECT sendcloud_sp_id FROM `" . DB_PREFIX . "order` WHERE order_id = '" . $order['order_id'] . "'")->row['sendcloud_sp_id'];
 
             try {
                 $newParcel = array(

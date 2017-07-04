@@ -17,7 +17,8 @@ $_['log_message'] = 'Transported to SendCloud.';
 
 $_['error_no_orders'] = 'Error: No orders selected.';
 
-$_["checkout_header_label"] = "Checkout options";//checkout related
+// Location picker Options
+$_["location_picker_heading"] = "Location Picker";
 
 $_["checkout_picker_route_label"] = "Route";
 $_["checkout_picker_selector_label"] = "Selector";
@@ -27,13 +28,22 @@ $_["checkout_picker_selector_position_replace"] = "Replace";
 $_["checkout_picker_selector_position_prepend"] = "Prepend";
 $_["checkout_picker_selector_position_append"] = "Append";
 
+// Shipping Address
+$_["checkout_selector_shipping_heading"] = "Shipping Address";
 $_["checkout_selector_address_label"] = "Address selector";
 $_["checkout_selector_address2_label"] = "Address2 selector";
-$_["checkout_selector_city_label"] = "city selector";
+$_["checkout_selector_city_label"] = "City selector";
 $_["checkout_selector_postcode_label"] = "Postcode selector";
 $_["checkout_selector_country_label"] = "Country selector";
 $_["checkout_selector_zone_label"] = "Zone selector";
 
+// Payment address
+$_["checkout_selector_payment_heading"] = "Payment Address";
+$_["checkout_selector_payment_postcode_label"] = "Postcode selector";
+$_["checkout_selector_payment_country_label"] = "Country selector";
+
+// Extra CSS Options
+$_["checkout_selector_extra_options_heading"] = "Extra options";
 $_["checkout_selector_fake_click_label"] = "Fake click selector";
 $_["checkout_selector_button_css_label"] = "CSS tag for selector button";
 
@@ -45,14 +55,20 @@ $_["checkout_method_picker_label"] = "Choose checkout method";
 $_["checkout_disable_label"] = "Disable checkout selection";
 $_["checkout_method_advanced_label"] = "Advanced checkout options";
 
+$_["text_restrict_carriers"] = "Restrict pickup locations";
+$_["text_restrict_carriers_helper"] = "Restrict pickup locations to carriers you have enabled in SendCloud (beta)";
+
 $_["text_patch"]="Update tables";
 
 
-$_["text_tracking"]="Tracking";
+$_["tracking_heading"]="Tracking";
 $_["text_update_tracking"]="Update tracking codes";
 $_["text_update_url"]="Tracking update url";
 
-$_["text_maintenance"]="Maintenance";
+$_["text_yes"] = "Yes";
+$_["text_no"] = "No";
+
+$_["maintenance_heading"]="Maintenance";
 
 
 ?>
