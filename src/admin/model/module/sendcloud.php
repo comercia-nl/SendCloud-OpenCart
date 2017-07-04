@@ -40,8 +40,8 @@ class ModelModuleSendcloud extends Model
             "Journal" => array(
                 "sendcloud_checkout_preset" => "Journal",
                 "sendcloud_checkout_route" => "checkout/checkout",
-                "sendcloud_checkout_picker_selector" => "#shipping-new",
-                "sendcloud_checkout_picker_position" => "after",
+                "sendcloud_checkout_picker_selector" => "#shipping-address",
+                "sendcloud_checkout_picker_position" => "before",
                 "sendcloud_checkout_selector_address" => "#input-shipping-address-1",
                 "sendcloud_checkout_selector_address2" => "#input-shipping-address-2",
                 "sendcloud_checkout_selector_city" => "#input-shipping-city",
