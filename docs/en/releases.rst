@@ -2,6 +2,25 @@
 Releases
 ********
 
+1.1.3
+=====
+
+* Make location picker compatible with multiple Sendcloud supported countries.
+* Added an option to restrict carriers in the location picker.
+* Made the VQMod more generic to avoid clashes with other modules.
+* Minor bug fixes.
+
+1.1.2
+=====
+
+* Fixed issues with parcel creation.
+
+1.1.1
+=====
+
+* Added partner header.
+* Minor bug fixes and CSS outlining.
+
 1.1.0
 =====
 
