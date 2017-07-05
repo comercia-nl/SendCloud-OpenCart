@@ -32,13 +32,13 @@ $(function () {
     var spCountry;
     var _carriers;
 
-    var isocode;
+    var isoCode;
 
     var locationPickerCalled = false;
     var countrySaved = false;
     var zoneSaved = false;
 
-    function init() {
+    function init () {
         //Get the needed selectors
         _position = sendcloud_settings["sendcloud_checkout_picker_position"];
         _selector = sendcloud_settings["sendcloud_checkout_picker_selector"];
@@ -49,10 +49,10 @@ $(function () {
         _zone = sendcloud_settings["sendcloud_checkout_selector_zone"];
         _paymentPostcode = sendcloud_settings["sendcloud_checkout_payment_postcode"];
         _paymentCountry = sendcloud_settings["sendcloud_checkout_payment_country"];
-        _fake_click=sendcloud_settings["sendcloud_checkout_selector_fake_click"];
-        _api_key=sendcloud_settings["sendcloud_checkout_api_key"];
-        _use_address2=sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
-        _address2=sendcloud_settings["sendcloud_checkout_selector_address2"];
+        _fake_click = sendcloud_settings["sendcloud_checkout_selector_fake_click"];
+        _api_key = sendcloud_settings["sendcloud_checkout_api_key"];
+        _use_address2 = sendcloud_settings["sendcloud_checkout_address2_as_housenumber"];
+        _address2 = sendcloud_settings["sendcloud_checkout_selector_address2"];
         _button_css = sendcloud_settings["sendcloud_checkout_selector_button_css"];
         _checkout_preset = sendcloud_settings["sendcloud_checkout_preset"];
         _carriers = sendcloud_settings["sendcloud_checkout_carriers"];
@@ -60,20 +60,19 @@ $(function () {
         inject("<div class='pull-left sendcloud'><a class='" + _button_css + " locationPicker'>" + action_location_picker + "</a></div>");
     }
 
-
-    function inject(html) {
+    function inject (html) {
         htmlToInject = html;
 
         //start the timer to inject when an object pops up.. After some testing it turned out this is way faster than the options jquery offers for this.
         injectionTimer();
     }
 
-    function injectionTimer() {
+    function injectionTimer () {
         doInject();
         setTimeout(injectionTimer, 250);
     }
 
-    function doInject() {
+    function doInject () {
         //see if there is something to inject at all
         var $selectedObject = $(_selector);
         if ($selectedObject.length > 0) {
@@ -101,9 +100,9 @@ $(function () {
 
                         $("#input-shipping-firstname").val(fullName[0]);
                         $.each(fullName, function (key, value) {
-                           if (key > 0) {
-                               lastName += value;
-                           }
+                            if (key > 0) {
+                                lastName += value;
+                            }
                         });
                         $("#input-shipping-lastname").val(lastName);
                     } else {
@@ -112,7 +111,7 @@ $(function () {
                     }
 
                     $(_country).val($(_paymentCountry).val());
-                    $("input[name=shipping_address][value='new']").prop("checked",true);
+                    $("input[name=shipping_address][value='new']").prop("checked", true);
                 }
             }
 
@@ -124,16 +123,16 @@ $(function () {
                 }
             }
 
-            if ($(_zone +' option').length > 1 && zoneSaved == false) {
+            if ($(_zone + ' option').length > 1 && zoneSaved == false) {
                 $(_zone + ' option:eq(1)').attr('selected', 'selected');
 
-                    if (_checkout_preset == "OpenCart") {
-                        if ($('#button-guest-shipping').length > 0) {
-                            $('#button-guest-shipping').trigger("click");
-                        } else {
-                            $('#button-shipping-address').trigger("click");
-                        }
+                if (_checkout_preset == "OpenCart") {
+                    if ($('#button-guest-shipping').length > 0) {
+                        $('#button-guest-shipping').trigger("click");
+                    } else {
+                        $('#button-shipping-address').trigger("click");
                     }
+                }
 
                 zoneSaved = true;
             }
@@ -142,27 +141,27 @@ $(function () {
                 $('a[href=\'#collapse-shipping-method\']').trigger('click');
             }
 
-            $selectedObject.each(function(){
-                $this=$(this);
+            $selectedObject.each(function () {
+                $this = $(this);
 
-                if (_position == "after" && $(".sendcloud",$this.parent()).length<1) {
+                if (_position == "after" && $(".sendcloud", $this.parent()).length < 1) {
                     $this.after($injectObject);
-                } else if (_position == "before" && $(".sendcloud",$this.parent()).length<1) {
+                } else if (_position == "before" && $(".sendcloud", $this.parent()).length < 1) {
                     $this.before($injectObject);
-                } else if (_position == "replace" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "replace" && $(".sendcloud", $this).length < 1) {
                     $this.html($injectObject);
-                } else if (_position == "append" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "append" && $(".sendcloud", $this).length < 1) {
                     $this.append($injectObject);
-                } else if (_position == "prepend" && $(".sendcloud",$this).length<1) {
+                } else if (_position == "prepend" && $(".sendcloud", $this).length < 1) {
                     $this.prepend($injectObject);
                 }
             });
         }
     }
 
-    function setCountryCode(isoCode){
+    function setCountryCode (isoCode) {
         $.ajax({
-            url: 'index.php?route=common/sendcloud/getCountryId&isocode='+isocode,
+            url: 'index.php?route=common/sendcloud/getCountryId&isocode=' + isoCode,
             type: 'get',
             success: function (json) {
                 spCountry = json;
@@ -170,9 +169,9 @@ $(function () {
         });
     }
 
-    function openLocationPicker() {
+    function openLocationPicker () {
         //call the sendcloud api to show service points
-        if($(_fake_click).prop('checked') == false && _checkout_preset == "OpenCart"){
+        if ($(_fake_click).prop('checked') == false && _checkout_preset == "OpenCart") {
             $(_fake_click).click();
         } else if ($(_fake_click).prop('checked') == true && _checkout_preset == "Journal") {
             $(_fake_click).click();
@@ -184,10 +183,10 @@ $(function () {
             url: 'index.php?route=common/sendcloud/getIsoCode&country_id=' + $(_paymentCountry).val(),
             type: 'get',
             success: function (json) {
-                isocode = json;
-                var allowedIsoCodes = ['nl','be','de','fr'];
-                if ($.inArray(isocode, allowedIsoCodes) == -1){
-                    isocode = 'nl';
+                isoCode = json;
+                var allowedIsoCodes = ['nl', 'be', 'de', 'fr'];
+                if ($.inArray(isoCode, allowedIsoCodes) == -1) {
+                    isoCode = 'nl';
                 }
 
                 if (_carriers === undefined || _carriers === null) {
@@ -197,12 +196,12 @@ $(function () {
                 var config = {
                     // API key is required, replace it below with your API key
                     'apiKey': _api_key,
-                    'country': isocode,
+                    'country': isoCode,
                     'postalCode': $(_paymentPostcode).val(),
                     'language': "nl",
                     'carriers': _carriers,
                     'servicePointId': 0
-                }
+                };
                 sendcloud.servicePoints.open(
                     // first arg: config object
                     config,
