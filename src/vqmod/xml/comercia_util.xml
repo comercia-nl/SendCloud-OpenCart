@@ -1,6 +1,6 @@
 <modification>
     <id>Comercia Utility</id>
-    <version>1.1.0</version>
+    <version>1.0.6</version>
     <vqmver>2.3.0</vqmver>
     <author>Comercia - Mark Smit</author>
 
@@ -35,6 +35,14 @@
         <operation>
             <search position="after"><![CDATA[<head>]]></search>
             <add><![CDATA[<?php echo comercia\util::html()->variables();?>]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="system/engine/action.php">
+        <operation error="skip">
+            <search position="replace"><![CDATA[if (is_dir(DIR_APPLICATION . 'controller/' . $path)) {]]></search>
+            <add><![CDATA[	if (is_dir(DIR_APPLICATION . 'controller/' . $path) && !is_file(DIR_APPLICATION . 'controller/' . str_replace(array('../', '..\\', '..'), '', $path) . '.php')) {]]>
             </add>
         </operation>
     </file>

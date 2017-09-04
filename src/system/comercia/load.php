@@ -10,13 +10,16 @@ class Load
         $libDir = DIR_SYSTEM . "library/";
         $bestOption = $this->findBestOption($libDir, $library, "php");
         if (!class_exists($className)) {
-            if(class_exists("VQMod")){
+            if (class_exists("VQMod")) {
                 require_once(\VQMod::modCheck($libDir . $bestOption["name"] . ".php"));
-            }else {
+            } else {
                 require_once($libDir . $bestOption["name"] . ".php");
             }
         }
-        return new $className(Util::registry());
+
+        $result = new $className(Util::registry());
+        Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
+        return $result;
     }
 
     function findBestOption($dir, $name, $extension)
@@ -74,13 +77,16 @@ class Load
         $route = $this->getRouteInfo("model", $model, $modelDir);
         $className = $route["class"];
         if (!class_exists($className)) {
-            if(class_exists("VQMod")){
+            if (class_exists("VQMod")) {
                 require_once(\VQMod::modCheck($modelDir . $route["file"] . ".php"));
-            }else{
+            } else {
                 require_once($modelDir . $route["file"] . ".php");
             }
         }
-        return new $className(Util::registry());
+
+        $result = new $className(Util::registry());
+        Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
+        return $result;
     }
 
     function getRouteInfo($prefix, $route, $dir)
@@ -133,23 +139,27 @@ class Load
         $view = $bestOption["name"];
 
         $registry = Util::registry();
-        if (Util::version()->isMinimal("2.2") || Util::version()->isMinimal("2") && Util::info()->IsInAdmin()) {
-            return $registry->get("load")->view($view, $data);
-        } else {
-            if (file_exists(DIR_TEMPLATE . Util::info()->theme() . '/template/' . $view)) {
-                return $registry->get("load")->view($this->config->get('config_template') . "/template/" . $view, $data);
+        if(Util::version()->isMinimal(2.0)) {
+            if (Util::version()->isMinimal("2.2") || Util::version()->isMinimal("2") && Util::info()->IsInAdmin()) {
+                return $registry->get("load")->view($view, $data);
             } else {
-                return $registry->get("load")->view('default/template/' . $view, $data);
+                if (file_exists(DIR_TEMPLATE . Util::info()->theme() . '/template/' . $view)) {
+                    return $registry->get("load")->view($this->config->get('config_template') . "/template/" . $view, $data);
+                } else {
+                    return $registry->get("load")->view('default/template/' . $view, $data);
+                }
             }
         }
+
         $fakeControllerFile = __DIR__ . "/fakeController.php";
-        if(class_exists("VQMod")){
+        if (class_exists("VQMod")) {
             require_once(\VQMod::modCheck($fakeControllerFile));
-        }else {
+        } else {
             require_once($fakeControllerFile);
         }
         $controller = new FakeController($registry);
-        return $controller->getView($view, $data);
+        $result= $controller->getView($view, $data);
+        return $result;
     }
 
     function language($file, &$data = array())
@@ -177,17 +187,30 @@ class Load
 
         $className = $route["class"];
         if (!class_exists($className)) {
-            if(class_exists("VQMod")) {
+            if (class_exists("VQMod")) {
                 require_once(\VQMod::modCheck($controllerDir . $route["file"] . ".php"));
-            }else {
+            } else {
                 require_once($controllerDir . $route["file"] . ".php");
             }
         }
 
-        $method = $route["method"] ? $route["method"] : "index";
-        $controller = new $className(Util::registry());
-        $result = $controller->$method();
-        return $result ? $result : (@$controller->output ? $controller->output : "");
+        $rc=new \ReflectionClass($className);
+        if ($rc->isInstantiable()) {
+            $method = $route["method"] ? $route["method"] : "index";
+            $controller = new $className(Util::registry());
+            $mr = new \ReflectionMethod($className, $method);
+            $mr->setAccessible(true);
+            $result = $mr->invoke($controller);
+
+            if(!$result) {
+                $pr = new \ReflectionProperty($className, "output");
+                $pr->setAccessible(true);
+                $result=$pr->getValue($controller);
+            }
+
+            return $result ?:"";
+        }
+        return "";
     }
 }
 

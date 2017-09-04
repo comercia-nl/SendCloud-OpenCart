@@ -42,12 +42,10 @@ class Url
 
         if ($session->token && $session->user_id && strpos($params,"route=")===false) {
             if ($session->token) {
-                if (!strpos($params, $session->token)) {
-                    if ($params) {
-                        $params .= "&token=" . $session->token;
-                    } else {
-                        $params = "token=" . $session->token;
-                    }
+                if ($params) {
+                    $params .= "&token=" . $session->token;
+                } else {
+                    $params = "token=" . $session->token;
                 }
             }
         }
@@ -56,15 +54,18 @@ class Url
             $ssl = false;
         }
 
+        $result="";
         if (!$ssl) {
-            return $this->_url()->link($route, $params);
+             $result=$this->_url()->link($route, $params);
         } else {
             if (Util::version()->isMinimal("2.2")) {
-                return $this->_url()->link($route, $params, true);
+                $result= $this->_url()->link($route, $params, true);
             } else {
-                return $this->_url()->link($route, $params, "ssl");
+                $result= $this->_url()->link($route, $params, "ssl");
             }
         }
+
+        return str_replace("&amp;","&",$result);
     }
 
     private function _url()

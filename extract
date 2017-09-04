@@ -1,0 +1,7 @@
+#!/bin/bash
+modulePath="$PWD"
+rm -r upload  > /dev/null 2>&1 
+mkdir upload
+cd "$1"
+file="$modulePath/extract_files"
+cp -r --parents $(cat $file) "$modulePath/src" 
