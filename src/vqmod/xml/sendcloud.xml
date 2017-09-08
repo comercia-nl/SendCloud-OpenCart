@@ -4,25 +4,6 @@
 	<vqmver>2.3.0</vqmver>
 	<author>Comercia</author>
 
-	<file name="admin/controller/extension/extension/module.php">
-		<operation error="skip">
-			<search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
-			<add position="before"><![CDATA[
-            if ($extension == 'sendcloud') {
-                $data['extensions'][] = array(
-                'name'      => $this->language->get('heading_title'),
-                'module'    => $module_data,
-                'install'   => $this->url->link('extension/extension/module/install', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
-                'uninstall' => $this->url->link('extension/extension/module/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
-                'installed' => in_array($extension, $extensions),
-                'edit'      => $this->url->link('module/' . $extension, 'token=' . $this->session->data['token'], true)
-                );
-                continue;
-            }
-			]]></add>
-		</operation>
-	</file>
-
 	<file name="catalog/controller/common/header.php">
 		<operation>
 			<search position="after"><![CDATA[function index(]]></search>
@@ -65,10 +46,10 @@
 		</operation>
 	</file>
 
-	<file name="admin/view/template/sale/order_list.tpl">
+	<file name="admin/view/template/sale/order_list.*">
 		<operation error="skip">
 			<search position="before" index="1"><![CDATA[<button type="submit" id="button-shipping"]]></search>
-			<add><![CDATA[<button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="<?php echo $sendcloud_url; ?>" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>]]></add>
+			<add><![CDATA[<button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="{{sendcloud_url}}" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>]]></add>
 		</operation>
 		<operation error="skip">
 			<search position="after"><![CDATA[$('input[name^=\'selected\']').on('change', function() {]]></search>
@@ -94,7 +75,7 @@
 	<file name="admin/controller/sale/order.php">
 		<operation error="abort">
 			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>
-			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk', 'token=' . $this->session->data['token'], true);]]></add>
+			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk');]]></add>
 		</operation>
 	</file>
 </modification>

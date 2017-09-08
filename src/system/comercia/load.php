@@ -31,6 +31,7 @@ class Load
         foreach ($posibilities as $file) {
             $file = str_replace(DIR_TEMPLATE, "", $file);
             $file = str_replace(".tpl", "", $file);
+            $file = str_replace(".twig", "", $file);
             $expFile = str_replace(")", "", $file);
             $exp = explode("(", $expFile);
             $files[] = array(
@@ -124,11 +125,18 @@ class Load
 
     function view($view, $data = array())
     {
-        if (Util::info()->IsInAdmin()) {
-            $bestOption = $this->findBestOption(DIR_TEMPLATE, $view, "tpl");
+        if (Util::version()->isMinimal("3.0")) {
+            $extension = "twig";
+            $view=str_replace(".tpl",".twig",$view);
         } else {
-            $bestOption1 = $this->findBestOption(DIR_TEMPLATE . "default/template/", $view, "tpl");
-            $bestOption2 = $this->findBestOption(DIR_TEMPLATE . Util::info()->theme() . "/template/", $view, "tpl");
+            $extension = "tpl";
+        }
+
+        if (Util::info()->IsInAdmin()) {
+            $bestOption = $this->findBestOption(DIR_TEMPLATE, $view, $extension);
+        } else {
+            $bestOption1 = $this->findBestOption(DIR_TEMPLATE . "default/template/", $view, $extension);
+            $bestOption2 = $this->findBestOption(DIR_TEMPLATE . Util::info()->theme() . "/template/", $view, $extension);
             if ($bestOption1["version"] && !$bestOption2["version"]) {
                 $bestOption = $bestOption1;
             } else {
@@ -139,7 +147,14 @@ class Load
         $view = $bestOption["name"];
 
         $registry = Util::registry();
-        if(Util::version()->isMinimal(2.0)) {
+        if(Util::version()->isMinimal(3.0)){
+            try{
+                return $registry->get("load")->view($view, $data);
+            }catch (\Exception $ex){
+                return $this->tplFallback($view, $data);
+            }
+        }
+        elseif (Util::version()->isMinimal(2.0)) {
             if (Util::version()->isMinimal("2.2") || Util::version()->isMinimal("2") && Util::info()->IsInAdmin()) {
                 return $registry->get("load")->view($view, $data);
             } else {
@@ -158,8 +173,36 @@ class Load
             require_once($fakeControllerFile);
         }
         $controller = new FakeController($registry);
-        $result= $controller->getView($view, $data);
+        $result = $controller->getView($view, $data);
         return $result;
+    }
+
+    public function tplFallback($view, $_data = array()) {
+        $view=str_replace(".twig",".tpl",$view);
+
+        if (Util::info()->IsInAdmin()) {
+            $bestOption = $this->findBestOption(DIR_TEMPLATE, $view, "tpl");
+        } else {
+            $bestOption1 = $this->findBestOption(DIR_TEMPLATE . "default/template/", $view,  "tpl");
+            $bestOption2 = $this->findBestOption(DIR_TEMPLATE . Util::info()->theme() . "/template/", $view,  "tpl");
+            if ($bestOption1["version"] && !$bestOption2["version"]) {
+                $bestOption = $bestOption1;
+            } else {
+                $bestOption = $bestOption2;
+            }
+        }
+
+        $view = $bestOption["name"];
+
+        $file = DIR_TEMPLATE . $view;
+
+        if (is_file($file)) {
+            extract($_data);
+            ob_start();
+            require($file);
+            return ob_get_clean();
+        }
+
     }
 
     function language($file, &$data = array())
@@ -194,7 +237,7 @@ class Load
             }
         }
 
-        $rc=new \ReflectionClass($className);
+        $rc = new \ReflectionClass($className);
         if ($rc->isInstantiable()) {
             $method = $route["method"] ? $route["method"] : "index";
             $controller = new $className(Util::registry());
@@ -202,13 +245,16 @@ class Load
             $mr->setAccessible(true);
             $result = $mr->invoke($controller);
 
-            if(!$result) {
-                $pr = new \ReflectionProperty($className, "output");
-                $pr->setAccessible(true);
-                $result=$pr->getValue($controller);
+            if (!$result) {
+                try {
+                    $pr = new \ReflectionProperty($className, "output");
+                    $pr->setAccessible(true);
+                    $result = $pr->getValue($controller);
+                } catch (\Exception $ex) {
+                }
             }
 
-            return $result ?:"";
+            return $result ?: "";
         }
         return "";
     }

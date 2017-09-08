@@ -3,6 +3,7 @@ system/sendcloud
 vqmod/xml/comercia_util.xml
 vqmod/xml/sendcloud.xml
 admin/controller/module/sendcloud.php
+admin/controller/extension/module/sendcloud.php
 admin/view/javascript/sendcloud.js
 admin/view/template/extension/module/sendcloud.tpl
 admin/view/template/module/sendcloud.tpl

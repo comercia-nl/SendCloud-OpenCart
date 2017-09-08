@@ -2,8 +2,9 @@
 namespace comercia;
 class Url
 {
-    function image($image){
-        if(Util::info()->IsInAdmin()) {
+    function image($image)
+    {
+        if (Util::info()->IsInAdmin()) {
             if (defined(HTTPS_CATALOG)) {
                 return HTTPS_CATALOG . "image/" . $image;
             }
@@ -15,16 +16,18 @@ class Url
         return HTTP_SERVER . "image/" . $image;
     }
 
-    function catalog($route, $params = "", $ssl = true){
-        $url=$this->getCatalogUrl($ssl)."index.php?route=".$route;
-        if($params){
-            $url.="&".$params;
+    function catalog($route, $params = "", $ssl = true)
+    {
+        $url = $this->getCatalogUrl($ssl) . "index.php?route=" . $route;
+        if ($params) {
+            $url .= "&" . $params;
         }
         return $url;
     }
 
-    function getCatalogUrl($ssl=true){
-        if(Util::info()->IsInAdmin()) {
+    function getCatalogUrl($ssl = true)
+    {
+        if (Util::info()->IsInAdmin()) {
             if (defined(HTTPS_CATALOG) && $ssl) {
                 return HTTPS_CATALOG;
             }
@@ -40,12 +43,18 @@ class Url
     {
         $session = Util::session();
 
-        if ($session->token && $session->user_id && strpos($params,"route=")===false) {
-            if ($session->token) {
+        if (Util::version()->isMinimal(3.0)) {
+            $tokenName = "user_token";
+        } else {
+            $tokenName = "token";
+        }
+
+        if ($session->$tokenName && $session->user_id && strpos($params, "route=") === false) {
+            if ($session->$tokenName) {
                 if ($params) {
-                    $params .= "&token=" . $session->token;
+                    $params .= "&".$tokenName."=" . $session->$tokenName;
                 } else {
-                    $params = "token=" . $session->token;
+                    $params = $tokenName."=" . $session->$tokenName;
                 }
             }
         }
@@ -54,18 +63,18 @@ class Url
             $ssl = false;
         }
 
-        $result="";
+        $result = "";
         if (!$ssl) {
-             $result=$this->_url()->link($route, $params);
+            $result = $this->_url()->link($route, $params);
         } else {
             if (Util::version()->isMinimal("2.2")) {
-                $result= $this->_url()->link($route, $params, true);
+                $result = $this->_url()->link($route, $params, true);
             } else {
-                $result= $this->_url()->link($route, $params, "ssl");
+                $result = $this->_url()->link($route, $params, "ssl");
             }
         }
 
-        return str_replace("&amp;","&",$result);
+        return str_replace("&amp;", "&", $result);
     }
 
     private function _url()
