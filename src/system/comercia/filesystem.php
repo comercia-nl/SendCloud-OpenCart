@@ -10,4 +10,15 @@ class Filesystem
         }
         rmdir($path);
     }
+
+    function getLatestVersion($before,$after){
+        $posibilities = glob(DIR_APPLICATION.$before."*".$after);
+        arsort($posibilities);
+        reset($posibilities);
+        if(count($posibilities)) {
+            return str_replace(DIR_APPLICATION,"",$posibilities[0]);
+        }else{
+            return "";
+        }
+    }
 }

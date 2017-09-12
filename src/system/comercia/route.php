@@ -4,7 +4,13 @@ class Route
 {
     function extension()
     {
-        return (Util::version()->isMinimal("2.3")) ? $path = 'extension/extension' : $path = 'extension/module';
+        if(Util::version()->isMinimal("3.0")){
+            return "marketplace/extension";
+        }elseif(Util::version()->isMinimal("2.3"))
+        {
+            return 'extension/extension';
+        }
+        return 'extension/module';
     }
 }
 
