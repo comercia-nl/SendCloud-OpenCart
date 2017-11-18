@@ -1,16 +1,13 @@
 <modification>
 	<id>SendCloud OpenCart 2 Extension</id>
-	<version>1.1.3</version>
+	<version>1.2.0</version>
 	<vqmver>2.3.0</vqmver>
 	<author>Comercia</author>
 
 	<file name="catalog/controller/common/header.php">
 		<operation>
 			<search position="after"><![CDATA[function index(]]></search>
-			<add><![CDATA[
-                comercia\util::load()->controller("common/sendcloud/checkout");
-            ]]>
-			</add>
+			<add><![CDATA[comercia\util::load()->controller("common/sendcloud/checkout");]]></add>
 		</operation>
 	</file>
 
@@ -40,9 +37,7 @@
 	<file name="catalog/controller/checkout/success.php">
 		<operation error="skip">
 			<search position="before"><![CDATA[unset($this->session->data['shipping_method']);]]></search>
-			<add><![CDATA[
-			unset($this->session->data['spId']);
-			]]></add>
+			<add><![CDATA[unset($this->session->data['spId']);]]></add>
 		</operation>
 	</file>
 
@@ -76,6 +71,27 @@
 		<operation error="abort">
 			<search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>
 			<add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk');]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/controller/extension/extension/module.php">
+		<operation error="skip">
+			<search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
+			<add position="before"><![CDATA[
+			if (\comercia\Util::version()->isMaximal('2.3.0.2')) {
+             if ($extension == 'sendcloud') {
+                $data['extensions'][] = array(
+                'name'      => $this->language->get('heading_title'),
+                'module'    => $module_data,
+                'install'   => $this->url->link('extension/extension/module/install', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
+                'uninstall' => $this->url->link('extension/extension/module/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
+                'installed' => in_array($extension, $extensions),
+                'edit'      => $this->url->link('module/' . $extension, 'token=' . $this->session->data['token'], true)
+                );
+                continue;
+             }
+            }
+			]]></add>
 		</operation>
 	</file>
 </modification>
