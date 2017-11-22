@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'SendCloud OpenCart 2 Extension'
-copyright = '2016, Comercia'
+copyright = '2017, Comercia'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

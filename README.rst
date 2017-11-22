@@ -54,7 +54,7 @@ A non-open source extension for OpenCart 1.5.x can be downloaded from the OpenCa
 Upgrading to OpenCart 2 is recommended to stay up to date with the latest updates.
 
 Support from Comercia
-======================
+=====================
 Should you need any OpenCart or SendCloud-integration support, please contact us on support@comercia.nl or drop us a ticket at https://www.comercia.nl/klanten/submitticket.php?step=2&deptid=2
 
 Support from SendCloud
