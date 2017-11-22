@@ -2,6 +2,11 @@
 Releases
 ********
 
+1.2.0
+=====
+
+* Added support for OpenCart 3.x.
+
 1.1.3
 =====
 
