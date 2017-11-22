@@ -278,8 +278,9 @@ class ControllerModuleSendcloud extends Controller
     private function showErrorMessage($message)
     {
         // FIXME: Hack to show error message.
-        $this->session->data['success'] = "<span class='alert alert-danger' style='width:100%; width: calc(100% + 22px); float:left; position:relative; top:-29px; left:-11px;'><i class='fa fa-exclamation-circle'></i> " . $message . "</span>";
-        \comercia\Util::response()->redirect('sale/order');
+        $this->session->data['success'] = "<span class='alert alert-danger' style='width:100%; width: calc(100% + 22px); float:left; position:relative; top:-29px; left:-11px;'>
+		<i class='fa fa-exclamation-circle'></i> " . $message . "</span>";
+        Util::response()->redirect("sale/order");
     }
 
     private function getSuitableCountry($shipping_methods, $order)
