@@ -35,26 +35,70 @@ class PatchTable
         return $query->num_rows;
     }
 
+    function columnExists($columnName = '')
+    {
+        $prefix = DB_PREFIX;
+        $query = $this->db->query("SHOW COLUMNS FROM `" . $prefix . $this->name . "` LIKE '" . $columnName . "';");
+        return $query->num_rows;
+    }
+
     function update()
     {
         $prefix = DB_PREFIX;
-        $query = "alter table `" . $prefix . $this->name . "` ";
+        $query = "ALTER TABLE `" . $prefix . $this->name . "` ";
+
+        $i = 0;
         if (isset($this->actions["addField"])) {
-            $i = 0;
             foreach ($this->actions["addField"] as $action) {
-                if ($i > 0) {
-                    $query .= ",";
+                if (!$this->columnExists($action['name'])) {
+                    if ($i > 0) {
+                        $query .= ",";
+                    }
+
+                    if($action["default"]!==null && $action["default"]!==false){
+                        $action["default"]="'".$action["default"]."'";
+                    }
+                    $query .= "ADD `" . $action["name"] . "` " . $action["type"]. ($action["default"]!==false?" DEFAULT ".$action["default"]:"");
+                    $i++;
                 }
-                $query .= "ADD `" . $action["name"] . "` " . $action["type"];
-                $i++;
             }
         }
-        $query .= "";
+
+        if (isset($this->actions["editField"])) {
+            foreach ($this->actions["editField"] as $action) {
+                if ($this->columnExists($action['name'])) {
+                    if ($i > 0) {
+                        $query .= ",";
+                    }
+
+                    if($action["default"]!==null && $action["default"]!==false){
+                        $action["default"]="'".$action["default"]."'";
+                    }
+                    $query .= "MODIFY `" . $action["name"] . "` " . $action["type"]. ($action["default"]!==false?" DEFAULT ".$action["default"]:"");
+                    $i++;
+                }
+            }
+        }
+
+
+        if (isset($this->actions['removeField'])) {
+            foreach ($this->actions['removeField'] as $action) {
+                if ($this->columnExists($action['name'])) {
+                    if ($i > 0) {
+                        $query .= ',';
+                    }
+                    $query .= "DROP COLUMN `" . $action['name'] . "`";
+                    $i++;
+                }
+            }
+        }
         $this->db->query($query);
 
         if (isset($this->actions["addIndex"])) {
             foreach ($this->actions["addIndex"] as $action) {
-                $this->db->query("CREATE INDEX `" . $action["name"] . "` ON `" . $prefix . $this->name . "` (`" . $action["name"] . "`);");
+                if ($this->columnExists($action['name'])) {
+                    $this->db->query("CREATE INDEX `" . $action["name"] . "` ON `" . $prefix . $this->name . "` (`" . $action["name"] . "`);");
+                }
             }
         }
     }
@@ -84,11 +128,33 @@ class PatchTable
         return $this;
     }
 
-    function addField($field, $type)
+    function addField($field, $type,$default=false)
     {
         $this->actions["addField"][] = array(
             "name" => $field,
-            "type" => $type
+            "type" => $type,
+            "default"=>$default
+        );
+
+        return $this;
+    }
+
+
+    function editField($field, $type,$default=false)
+    {
+        $this->actions["editField"][] = array(
+            "name" => $field,
+            "type" => $type,
+            "default"=>$default
+        );
+
+        return $this;
+    }
+
+    function removeField($field)
+    {
+        $this->actions['removeField'][] = array(
+            'name' => $field
         );
 
         return $this;
@@ -102,6 +168,4 @@ class PatchTable
 
         return $this;
     }
-
-
 }

@@ -38,13 +38,17 @@ class ModuleSettings
     function postFinish($func){
         $this->postFinish=$func;
     }
-    function run()
+    function run($forceRedirect = false)
     {
         //load the language data
         $data = array();
         $name = $this->name;
         $form = Util::form($data);
         Util::load()->language("module/" . $name, $data);
+
+        if ($forceRedirect) {
+            $data['redirect'] = $forceRedirect;
+        }
 
         $form->finish(function ($data) {
             Util::config()->set($this->name, Util::request()->post()->all());
@@ -53,7 +57,7 @@ class ModuleSettings
             if (is_callable($postFinish)) {
                 $postFinish($data);
             }
-            Util::response()->redirect(Util::route()->extension());
+            Util::response()->redirect(@$data['redirect'] ?: Util::route()->extension());
         });
 
         //handle the form when finished
@@ -78,7 +82,7 @@ class ModuleSettings
         Util::document()->setTitle(Util::language()->heading_title);
 
         //create links
-        $data['action'] = Util::url()->link('module/' . $name);
+        $data['action'] = Util::version()->isMinimal("2.3")?Util::url()->link('extension/module/' . $name):Util::url()->link('module/' . $name);
         $data['cancel'] = Util::url()->link(Util::route()->extension());
 
         //create a response

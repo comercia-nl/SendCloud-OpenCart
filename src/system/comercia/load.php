@@ -5,21 +5,40 @@ class Load
 {
     function library($library)
     {
-        $className = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $library))));
-        $className = $className;
-        $libDir = DIR_SYSTEM . "library/";
-        $bestOption = $this->findBestOption($libDir, $library, "php");
-        if (!class_exists($className)) {
-            if (class_exists("VQMod")) {
-                require_once(\VQMod::modCheck($libDir . $bestOption["name"] . ".php"));
-            } else {
-                require_once($libDir . $bestOption["name"] . ".php");
+        if(is_array($library)){
+            $libraries=$library;
+            $result=[];
+            foreach($libraries as $library){
+                $result[$library]=$this->library($library);
             }
+            return $result;
+        };
+
+        static $singletons=[];
+        if(!isset($singletons[$library])){
+            $className = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $library))));
+            $className = $className;
+            $libDir = DIR_SYSTEM . "library/";
+            $bestOption = $this->findBestOption($libDir, $library, "php");
+            if (!class_exists($className)) {
+                if (class_exists("VQMod")) {
+                    @include_once(\VQMod::modCheck($libDir . $bestOption["name"] . ".php"));
+                } else {
+                    @include_once($libDir . $bestOption["name"] . ".php");
+                }
+            }
+
+            if(class_exists($className)) {
+                $result = new $className(Util::registry());
+                Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
+                $singletons[$library]=$result;
+            }else{
+                $singletons[$library]=false;
+            }
+
         }
 
-        $result = new $className(Util::registry());
-        Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
-        return $result;
+        return $singletons[$library];
     }
 
     function findBestOption($dir, $name, $extension)
@@ -74,20 +93,33 @@ class Load
 
     function model($model)
     {
+        $model=$this->rewriteModel($model);
+        if(is_array($model)){
+            $models=$model;
+            $result=[];
+            foreach($models as $model){
+                $result[$model]=$this->model($model);
+            }
+            return $result;
+        };
+
         $modelDir = DIR_APPLICATION . 'model/';
         $route = $this->getRouteInfo("model", $model, $modelDir);
         $className = $route["class"];
         if (!class_exists($className)) {
             if (class_exists("VQMod")) {
-                require_once(\VQMod::modCheck($modelDir . $route["file"] . ".php"));
+                @include_once(\VQMod::modCheck($modelDir . $route["file"] . ".php"));
             } else {
-                require_once($modelDir . $route["file"] . ".php");
+                @include_once($modelDir . $route["file"] . ".php");
             }
         }
 
-        $result = new $className(Util::registry());
-        Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
-        return $result;
+        if(class_exists($className)) {
+            $result = new $className(Util::registry());
+            Util::registry()->set(Util::stringHelper()->ccToUnderline($className), $result);
+            return $result;
+        }
+        return false;
     }
 
     function getRouteInfo($prefix, $route, $dir)
@@ -96,6 +128,7 @@ class Load
 
         $fileRoute = "";
         $method = "";
+        $params=[];
         while ($parts) {
             $file = $dir . implode('/', $parts) . '.php';
 
@@ -103,6 +136,9 @@ class Load
                 $fileRoute = implode('/', $parts);
                 break;
             } else {
+                if($method) {
+                    $params[] = $method;
+                }
                 $method = array_pop($parts);
             }
         }
@@ -119,7 +155,8 @@ class Load
         return array(
             "file" => $bestOption["name"],
             "class" => $className,
-            "method" => $method
+            "method" => $method,
+            "params"=>$params
         );
     }
 
@@ -205,10 +242,25 @@ class Load
 
     }
 
-    function language($file, &$data = array())
+    function language($file, &$data = array(),$language=false)
     {
+        if(is_array($file)){
+            $files=$file;
+            $result=[];
+            foreach($files as $file){
+                $result=array_merge($result,$this->language($file,$data));
+            }
+            return $result;
+        };
+
+        $file=$this->rewriteLanguage($file);
+
         $registry = Util::registry();
-        $result = $registry->get("load")->language($file);
+        if($language){
+          $language->load($file);
+        } else {
+            $result = $registry->get("load")->language($file);
+        }
         foreach ($result as $key => $val) {
             $data[$key] = $val;
         }
@@ -225,38 +277,78 @@ class Load
     function controller($controller)
     {
 
+        if(is_array($controller)){
+            $controllers=$controller;
+            $result=[];
+            foreach($controllers as $controller){
+                $result[$controller]=$this->controller($controller);
+            }
+            return $result;
+        };
+
         $controllerDir = DIR_APPLICATION . 'controller/';
         $route = $this->getRouteInfo("controller", $controller, $controllerDir);
 
         $className = $route["class"];
         if (!class_exists($className)) {
             if (class_exists("VQMod")) {
-                require_once(\VQMod::modCheck($controllerDir . $route["file"] . ".php"));
+                @include_once(\VQMod::modCheck($controllerDir . $route["file"] . ".php"));
             } else {
-                require_once($controllerDir . $route["file"] . ".php");
+                @include_once($controllerDir . $route["file"] . ".php");
             }
         }
 
-        $rc = new \ReflectionClass($className);
-        if ($rc->isInstantiable()) {
-            $method = $route["method"] ? $route["method"] : "index";
-            $controller = new $className(Util::registry());
-            $mr = new \ReflectionMethod($className, $method);
-            $mr->setAccessible(true);
-            $result = $mr->invoke($controller);
-
-            if (!$result) {
-                try {
-                    $pr = new \ReflectionProperty($className, "output");
-                    $pr->setAccessible(true);
-                    $result = $pr->getValue($controller);
-                } catch (\Exception $ex) {
+        if(class_exists($className)) {
+            $rc = new \ReflectionClass($className);
+            if ($rc->isInstantiable()) {
+                $method = $route["method"] ? $route["method"] : "index";
+                $controller = new $className(Util::registry());
+                $mr = new \ReflectionMethod($className, $method);
+                $mr->setAccessible(true);
+                if(!empty($route["params"])) {
+                    $result = $mr->invokeArgs($controller, $route["params"]);
+                }else{
+                    $result = $mr->invoke($controller);
                 }
-            }
 
-            return $result ?: "";
+                if (!$result) {
+                    try {
+                        $pr = new \ReflectionProperty($className, "output");
+                        $pr->setAccessible(true);
+                        $result = $pr->getValue($controller);
+                    } catch (\Exception $ex) {
+                    }
+                }
+
+                return $result ?: "";
+            }
         }
         return "";
+    }
+
+    private function rewriteModel($model)
+    {
+    return   Util::stringHelper()->rewriteForVersion($model,
+           [
+               [
+                   ""=>"sale/custom_field",
+                   "2.1"=>"customer/custom_field"
+               ]
+           ]
+       );
+    }
+
+
+    private function rewriteLanguage($model)
+    {
+       return Util::stringHelper()->rewriteForVersion($model,
+            [
+                [
+                    ""=>"payment/",
+                    "2.3"=>"extension/payment/"
+                ]
+            ]
+        );
     }
 }
 

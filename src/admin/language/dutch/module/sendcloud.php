@@ -4,6 +4,8 @@ $_['settings_title'] = 'SendCloud Instellingen';
 $_['settings_h3'] = 'SendCloud instellingen aanpassen';
 $_['default_status_label'] = 'Zet status van bestelling automatisch op:';
 $_['default_status'] = '---';
+$_['entry_status'] = 'status';
+
 
 $_['sendcloud_address2_as_housenumber_label'] = 'Gebruik adres 2 als huisnummer';
 
@@ -16,6 +18,16 @@ $_['msg_success'] = 'Orders verzonden naar SendCloud. <a href="https://panel.sen
 $_['log_message'] = 'Overgezet naar SendCloud';
 
 $_['error_no_orders'] = 'Fout: Je hebt geen orders geselecteerd.';
+
+$_["shipping_method_heading"] = "Verzendmethode";
+$_["shipping_method_activate"] = "Inschakelen";
+$_["shipping_method_deactivate"] = "Uitschakelen";
+
+$_["shipping_method_tax_class"]= "Belastingroep";
+$_["shipping_method_sort_order"]= "Sorteervolgorde";
+
+
+
 
 // Location Picker Options
 $_["location_picker_heading"] = "Locatie Picker";

@@ -63,6 +63,8 @@
                             </select>
                         </div>
                     </div>
+
+
                     <div class="form-group">
                         <label class="col-sm-2 control-label"
                                for="sendcloud_address2_as_housenumber"><?php echo $sendcloud_address2_as_housenumber_label; ?></label>
@@ -78,6 +80,42 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="panel-heading">
+                        <?php echo $shipping_method_heading; ?>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo $entry_status; ?></label>
+                        <div class="col-sm-10">
+                            <a href="<?php echo $shipping_toggle_url; ?>" class="btn btn-<?php echo $shipping_installed?"warning":"success"; ?>">
+                                <?php echo $shipping_installed?$shipping_method_deactivate:$shipping_method_activate ?>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            <?php echo $shipping_method_tax_class; ?>
+                        </label>
+                        <div class="col-sm-10">
+                            <?php
+                    echo comercia\util::html()->selectbox("sendcloud_tax_class_id",$sendcloud_tax_class_id,$tax_classes,"form-control");
+                            ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            <?php echo $shipping_method_sort_order; ?>
+                        </label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="sendcloud_sort_order"
+                                   value="<?php echo $sendcloud_sort_order; ?>"/>
+                        </div>
+                    </div>
+
+
+
                     <div class="panel-heading">
                         <?php echo $location_picker_heading; ?>
                     </div>
@@ -266,23 +304,26 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $text_restrict_carriers_helper; ?>"><?php echo $text_restrict_carriers;?></span></label>
+                        <label class="col-sm-2 control-label"><span data-toggle="tooltip"
+                                                                    title="<?php echo $text_restrict_carriers_helper; ?>"><?php echo $text_restrict_carriers;?></span></label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
                                 <?php if ($sendcloud_checkout_selector_restrict_carriers) { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" checked="checked" />
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1"
+                                       checked="checked"/>
                                 <?php echo $text_yes; ?>
                                 <?php } else { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" />
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1"/>
                                 <?php echo $text_yes; ?>
                                 <?php } ?>
                             </label>
                             <label class="radio-inline">
                                 <?php if (!$sendcloud_checkout_selector_restrict_carriers) { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" checked="checked" />
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0"
+                                       checked="checked"/>
                                 <?php echo $text_no; ?>
                                 <?php } else { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" />
+                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0"/>
                                 <?php echo $text_no; ?>
                                 <?php } ?>
                             </label>
@@ -292,14 +333,17 @@
                     <div class="panel-heading"><?php echo $tracking_heading; ?></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $text_update_url;?></label>
-                        <div class="col-sm-10">  <div class="form-control"><?php echo $url_api_tracking;?></div></div>
+                        <div class="col-sm-10">
+                            <div class="form-control"><?php echo $url_api_tracking;?></div>
+                        </div>
 
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
-                             target="_blank"><?php echo $text_update_tracking?> <i class="fa fa-external-link"></i></a>
+                               target="_blank"><?php echo $text_update_tracking?> <i
+                                        class="fa fa-external-link"></i></a>
                         </div>
                     </div>
 

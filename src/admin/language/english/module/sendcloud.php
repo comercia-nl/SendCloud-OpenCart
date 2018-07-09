@@ -4,6 +4,7 @@ $_['settings_title'] = 'SendCloud Settings';
 $_['settings_h3'] = 'Modify SendCloud Setttings';
 $_['default_status_label'] = 'Set the order state after transport to';
 $_['default_status'] = '---';
+$_['entry_status'] = 'status';
 
 $_['sendcloud_address2_as_housenumber_label'] = 'Use address 2 as housenumber';
 
@@ -16,6 +17,16 @@ $_['msg_success'] = 'Orders successfully sent to SendCloud. <a href="https://pan
 $_['log_message'] = 'Transported to SendCloud.';
 
 $_['error_no_orders'] = 'Error: No orders selected.';
+
+$_["shipping_method_heading"] = "Shipping method";
+$_["shipping_method_activate"] = "Activate";
+$_["shipping_method_deactivate"] = "Deactivate";
+
+$_["shipping_method_tax_class"]= "Tax class";
+$_["shipping_method_sort_order"]= "Sort order";
+
+
+
 
 // Location picker Options
 $_["location_picker_heading"] = "Location Picker";

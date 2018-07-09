@@ -25,4 +25,13 @@ catalog/language/nl-nl/checkout/sendcloud.php
 catalog/language/english/checkout/sendcloud.php
 catalog/model/module/sendcloud.php
 image/module/sendcloud/sendcloud.svg
-
+admin/controller/shipping/sendcloud.php
+admin/controller/extension/shipping/sendcloud.php
+admin/language/dutch/shipping/sendcloud.php
+admin/language/dutch/extension/shipping/sendcloud.php
+admin/language/english/shipping/sendcloud.php
+admin/language/english/extension/shipping/sendcloud.php
+admin/language/nl-nl/shipping/sendcloud.php
+admin/language/nl-nl/extension/shipping/sendcloud.php
+admin/language/en-gb/shipping/sendcloud.php
+admin/language/en-gb/extension/shipping/sendcloud.php

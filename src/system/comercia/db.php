@@ -17,6 +17,9 @@ class db
 
         $i = 0;
         foreach ($data as $key => $value) {
+            if (!$this->columnExists($table, $key)) {
+                continue;
+            }
             if ($i++) {
                 $query .= ",";
             }
@@ -53,6 +56,18 @@ class db
         return (bool)$query->num_rows;
     }
 
+    public function columnExists($table, $column)
+    {
+        static $columns = [];
+
+        if (!isset($columns[$table][$column])) {
+            $query = "SHOW COLUMNS FROM `" . DB_PREFIX . $table . "` LIKE '" . $column . "'";
+            $columns[$table][$column] = (bool)$this->_db()->query($query)->num_rows;
+        }
+
+        return $columns[$table][$column];
+    }
+
     private function whereForKeys($table, $data, $keys = null)
     {
         if (!$keys) {
@@ -69,13 +84,28 @@ class db
         return $result;
     }
 
-    public function saveDataObjectArray($table, $data)
+    private function whereForData($data)
     {
-        foreach ($data as $obj) {
-            $this->saveDataObject($table, $obj);
+        $result = '';
+
+        $i = 0;
+        foreach ($data as $key => $value) {
+            if ($i++) {
+                $result .= ' && ';
+            }
+
+            $result .= "`" . $key . "` = '" . $this->_db()->escape($value) . "'";
         }
+
+        return $result;
     }
 
+    public function saveDataObjectArray($table, $data,$keys=null)
+    {
+        foreach ($data as $obj) {
+            $this->saveDataObject($table, $obj,$keys=null);
+        }
+    }
     private function _db()
     {
         $registry = Util::registry();
@@ -84,6 +114,50 @@ class db
         }
 
         return $registry->get("db");
+    }
+
+    public function select($table, $fields = [], $where = [])
+    {
+        if (empty($fields)) {
+            $fields[] = '*';
+        }
+
+        $query = "SELECT ";
+
+        $i = 0;
+        foreach ($fields as $field)
+        {
+            if($i++) {
+                $query .= ',';
+            }
+            $query .= $field == '*' ? $field : '`' . $field . '`';
+        }
+
+
+        $query .= " FROM `" . DB_PREFIX . $table . "`";
+
+        if (!empty($where)) {
+            $query .= " WHERE ";
+            $query .= $this->whereForData($where);
+        }
+
+        $result = $this->_db()->query($query);
+
+        if ($result->num_rows > 1) {
+            return $result->rows;
+        }
+
+        return $result->row;
+    }
+    public function query($query)
+    {
+        $result = $this->_db()->query($query);
+
+        if ($result) {
+            return $result->rows;
+        }
+
+        return [];
     }
 }
 ?>
