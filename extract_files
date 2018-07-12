@@ -18,12 +18,12 @@ admin/language/english/module/sendcloud.php
 admin/model/module/sendcloud.php
 catalog/controller/api/sendcloud.php
 catalog/controller/common/sendcloud.php
-catalog/view/javascript/sendcloud_injector.js
+catalog/view/javascript/sendcloud.js
 catalog/language/en-gb/checkout/sendcloud.php
 catalog/language/dutch/checkout/sendcloud.php
 catalog/language/nl-nl/checkout/sendcloud.php
 catalog/language/english/checkout/sendcloud.php
-catalog/model/module/sendcloud.php
+catalog/model/shipping/sendcloud.php
 image/module/sendcloud/sendcloud.svg
 admin/controller/shipping/sendcloud.php
 admin/controller/extension/shipping/sendcloud.php

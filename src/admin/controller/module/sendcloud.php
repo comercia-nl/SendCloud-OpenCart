@@ -1,6 +1,7 @@
 <?php
 require_once(DIR_SYSTEM . "sendcloud/sendcloud_api.php");
 require_once(DIR_SYSTEM . "comercia/util.php");
+
 use comercia\Util;
 
 class ControllerModuleSendcloud extends Controller
@@ -19,7 +20,6 @@ class ControllerModuleSendcloud extends Controller
         //handle the form when finished
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->request->post['sendcloud_automate'] = (int)$this->request->post['sendcloud_automate'];
-            $this->request->post['sendcloud_checkout_carriers'] = $this->getCarriers($this->request->post['sendcloud_checkout_selector_restrict_carriers']);
             Util::config()->set('sendcloud', $this->request->post);
             Util::session()->success = $data['msg_settings_saved'];
             Util::response()->redirect(Util::route()->extension());
@@ -30,11 +30,7 @@ class ControllerModuleSendcloud extends Controller
         $data['statuses'] = $statuses->rows;
 
         $formFields = array("sendcloud_automate", "sendcloud_api_key", "sendcloud_api_secret", "sendcloud_address2_as_housenumber",  //basic information
-            "sendcloud_checkout_preset", "sendcloud_checkout_route", "sendcloud_checkout_picker_selector", "sendcloud_checkout_picker_position", //where to inject the location picker
-            "sendcloud_checkout_selector_address", "sendcloud_checkout_selector_address2", "sendcloud_checkout_selector_city", "sendcloud_checkout_selector_postcode", "sendcloud_checkout_selector_country", "sendcloud_checkout_selector_zone", //some checkout fields
-            "sendcloud_checkout_selector_fake_click", "sendcloud_checkout_selector_button_css", //when the selector finishes , the user might want to fake a click
-            "sendcloud_checkout_payment_postcode", "sendcloud_checkout_payment_country", // Adding these fields so we can base our starting variables for the location picker on them.
-            "sendcloud_checkout_selector_restrict_carriers","sendcloud_sort_order","sendcloud_tax_class_id"
+            "sendcloud_sort_order", "sendcloud_tax_class_id","sendcloud_locationpicker"
         );
 
         $picker_positions = array(
@@ -47,7 +43,7 @@ class ControllerModuleSendcloud extends Controller
 
         $pickerPresets = $model->getPickerPresets();
 
-        $taxClasses=Util::load()->model("localisation/tax_class")->getTaxClasses();
+        $taxClasses = Util::load()->model("localisation/tax_class")->getTaxClasses();
 
 
         //place the prepared data into the form
@@ -56,23 +52,22 @@ class ControllerModuleSendcloud extends Controller
             ->fillFromPost($formFields)
             ->fillFromConfig($formFields)
             ->fillSelectboxOptions("checkout_picker_position_options", $picker_positions)
-            ->fillSelectboxOptions("tax_classes",Util::arrayHelper()->keyValuePairs($taxClasses,"title","tax_class_id"))
+            ->fillSelectboxOptions("tax_classes", Util::arrayHelper()->keyValuePairs($taxClasses, "title", "tax_class_id"))
             ->fillSelectboxOptions("checkout_presets", Util::arrayHelper()->keyToVal($pickerPresets));
 
-            Util::breadcrumb($data)
+        Util::breadcrumb($data)
             ->add("text_home", "common/home")
             ->add("settings_title", "module/sendcloud");
 
         //load external configuration
 
-        $data["shipping_installed"]=$model->isShippingInstalled();
-        $data["shipping_toggle_url"]=Util::url()->link("module/sendcloud/toggleShipping");
+        $data["shipping_installed"] = $model->isShippingInstalled();
+        $data["shipping_toggle_url"] = Util::url()->link("module/sendcloud/toggleShipping");
 
         //handle document related things
         Util::document()->setTitle(Util::language()->heading_title);
         Util::document()->addVariable("picker_presets", $pickerPresets);
         util::document()->addScript("view/javascript/sendcloud.js");
-
 
         //create links
         $data['form_action'] = Util::url()->link('module/sendcloud');
@@ -85,12 +80,13 @@ class ControllerModuleSendcloud extends Controller
         Util::response()->view("module/sendcloud.tpl", $data);
     }
 
-    function toggleShipping(){
-        if(Util::load()->model("module/sendcloud")->isShippingInstalled()){
+    function toggleShipping()
+    {
+        if (Util::load()->model("module/sendcloud")->isShippingInstalled()) {
             $this->db->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = 'shipping' AND `code` = 'sendcloud'");
-        }else{
-            Util::load()->model("extension/extension")->install("shipping","sendcloud");
-            Util::config()->sendcloud_status=true;
+        } else {
+            Util::load()->model("extension/extension")->install("shipping", "sendcloud");
+            Util::config()->sendcloud_status = true;
         }
         Util::response()->redirectBack();
     }
@@ -145,7 +141,8 @@ class ControllerModuleSendcloud extends Controller
         Util::response()->redirect("module/sendcloud/index");
     }
 
-    function getCarriers($enabled = 0){
+    function getCarriers($enabled = 0)
+    {
         $sendcloud_settings = Util::config()->getGroup('sendcloud');
         Util::load()->language("module/sendcloud");
 
@@ -161,8 +158,8 @@ class ControllerModuleSendcloud extends Controller
                 }
             }
 
-            if (!empty($carriersArray)){
-                return implode(',',$carriersArray);
+            if (!empty($carriersArray)) {
+                return implode(',', $carriersArray);
             } else {
                 return '';
             }
@@ -259,22 +256,20 @@ class ControllerModuleSendcloud extends Controller
                 );
 
 
-                if ( ! empty($spId) && strtolower($spId) != "null") {
+                if (!empty($spId) && strtolower($spId) != "null") {
                     $newParcel += ['to_service_point' => $spId];
                 }
 
-                $shippingCode=$order["shipping_code"];
-                if(substr($shippingCode,0,strlen("sendcloud"))=="sendcloud"){
+                $shippingCode = $order["shipping_code"];
+                if (substr($shippingCode, 0, strlen("sendcloud")) == "sendcloud") {
                     $methods = $api->shipping_methods->get();
-                    foreach($methods as $method){
-                        if("sendcloud.".$method["id"]==$shippingCode){
-                            $newParcel["shipment"]=$method;
+                    foreach ($methods as $method) {
+                        if ("sendcloud." . $method["id"] == $shippingCode) {
+                            $newParcel["shipment"] = $method;
                             break;
                         }
                     }
                 }
-
-
 
 
                 $parcel = $api->parcels->create($newParcel);

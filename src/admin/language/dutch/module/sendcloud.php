@@ -28,36 +28,7 @@ $_["shipping_method_sort_order"]= "Sorteervolgorde";
 
 
 
-
-// Location Picker Options
-$_["location_picker_heading"] = "Locatie Picker";
-
-// Shipping Address
-$_["checkout_selector_shipping_heading"] = "Verzendadres";
-$_["checkout_selector_address_label"] = "Address_1 (straat) selector";
-$_["checkout_selector_address2_label"] = "Address_2 (huisnummer/toevoeging) selector";
-$_["checkout_selector_city_label"] = "Stad selector";
-$_["checkout_selector_postcode_label"] = "Postcode selector";
-$_["checkout_selector_country_label"] = "Land selector";
-$_["checkout_selector_zone_label"] = "Zone selector";
-
-// Payment Address
-$_["checkout_selector_payment_heading"] = "Betaaladres";
-$_["checkout_selector_payment_postcode_label"] = "Postcode selector";
-$_["checkout_selector_payment_country_label"] = "Land selector";
-
-// Extra CSS Options
-$_["checkout_selector_extra_options_heading"] = "Extra opties";
-$_["checkout_selector_fake_click_label"] = "Simuleer klik op";
-$_["checkout_selector_button_css_label"] = "CSS tag voor checkout selector knop";
-
-$_["checkout_presets_label"] = "Kassa module";
-$_["checkout_apply_label"] = "Toepassen";
-
-$_["checkout_method_label"] = "Kassa opties";
-$_["checkout_method_picker_label"] = "Kies een kassa module";
-$_["checkout_disable_label"] = "Schakel kassa selectie uit";
-$_["checkout_method_advanced_label"] = "Geavanceerde kassa opties";
+$_["entry_locationpicker"]="Servicepunten";
 
 $_["text_restrict_carriers"] = "Beperk afhaallocaties";
 $_["text_restrict_carriers_helper"] = "Beperk afhaallocaties tot de door U in SendCloud gekozen verzendpartijen (beta)";
