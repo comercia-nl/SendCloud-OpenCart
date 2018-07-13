@@ -1,5 +1,7 @@
 <?php
 
+use comercia\Util;
+
 class ModelModuleSendcloud extends Model
 {
     function getPickerPresets()
@@ -82,6 +84,12 @@ class ModelModuleSendcloud extends Model
                 "sendcloud_checkout_selector_button_css" => "btn btn-info"
             )*/
         );
+    }
+
+    function isShippingInstalled(){
+        $methods= Util::load()->model("extension/extension")->getInstalled("shipping");
+        return in_array("sendcloud",$methods) && Util::config()->sendcloud_status;
+
     }
 }
 

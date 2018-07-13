@@ -13,6 +13,14 @@ class ArrayHelper
         return $array;
     }
 
+    function keyValuePairs($array,$keyField,$valueField){
+        $result=[];
+        foreach($array as $arrayItem){
+            $result[$arrayItem[$keyField]]=$arrayItem[$valueField];
+        }
+        return $result;
+    }
+
     function keyToVal($data)
     {
         $new = array();
@@ -21,7 +29,20 @@ class ArrayHelper
         }
         return $new;
     }
-
+    function allPrefixed($input,$prefix, $removePrefix = true)
+    {
+        $result = [];
+        $prefixLen = strlen($prefix);
+        foreach ($input as $key => $val) {
+            if (substr($key, 0, $prefixLen) == $prefix) {
+                if ($removePrefix) {
+                    $key = substr($key, $prefixLen);
+                }
+                $result[$key] = $val;
+            }
+        }
+        return $result;
+    }
 }
 
 ?>

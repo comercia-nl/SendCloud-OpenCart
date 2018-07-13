@@ -4,9 +4,13 @@ class Language
 {
     private $language;
 
-    function __construct()
+    function __construct($language=false)
     {
-        $this->language = Util::registry()->get("language");
+        if(!$language){
+            $this->language = Util::registry()->get("language");
+        }else{
+            $this->language=new \Language($language);
+        }
     }
 
     function __get($name)
@@ -17,6 +21,11 @@ class Language
     function get($name)
     {
         return @$this->language->get($name) ?: "";
+    }
+
+    function load($file){
+        $arr=[];
+        return Util::load()->language($file,$arr,$this->language);
     }
 
 

@@ -1,54 +1,51 @@
 <?php
+
 use comercia\Util;
 
 class ControllerCommonSendcloud extends Controller
 {
     function checkout()
     {
-        $settings = Util::config()->getGroup("sendcloud");
-
-        //if this is the right location to inject the sendcloud checkout options
-        if (!empty($settings["sendcloud_checkout_route"]) && $settings["sendcloud_checkout_route"] == Util::request()->get()->route) {
-            //add the sendcloud api
+        if (strpos(strtolower(Util::request()->get()->route), "checkout") !== false) {
             Util::document()->addScript('//embed.sendcloud.sc/spp/1.0.0/api.min.js');
-
-            //inject our sendcloud code
-            Util::document()->addScript('view/javascript/sendcloud_injector.js');
-
-            //avoid injecting wrong information
-            $settings["sendcloud_checkout_api_key"] = $settings["sendcloud_api_key"];
-            $settings["sendcloud_checkout_address2_as_housenumber"] = $settings["sendcloud_address2_as_housenumber"];
-            $settings = Util::arrayHelper()->keepPrefix("sendcloud_checkout", $settings);
-
-            //inject the settings into javascript
-            Util::document()->addVariable('sendcloud_settings', $settings);
-
-            //add language
-            $sendcloud_language = comercia\util::load()->language("checkout/sendcloud");
-            Util::document()->addVariable('action_location_picker', $sendcloud_language["action_location_picker"]);
+            Util::document()->addScript('view/javascript/sendcloud.js');
+            comercia\util::load()->language("checkout/sendcloud");
         }
     }
 
-    public function getCountryId()
+    public function saveSPInfo()
     {
-        $isocode = $this->request->get["isocode"];
+        $spId = Util::request()->post()->id;
+        $orderId = \comercia\Util::session()->order_id;
+        if (!empty($spId)) {
+            $this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . $orderId . "'");
+        }
 
-        $model = Util::load()->model("module/sendcloud");
-        $countryId = $model->getCountryId($isocode);
+        $shippingInfo = Util::session()->shipping_address;
+
+        if (Util::config()->sendcloud_address2_as_housenumber) {
+            $shippingInfo["address_1"]=Util::request()->post()->street;
+            $shippingInfo["address_2"]=Util::request()->post()->house_number;
+        }else{
+            $shippingInfo["address_1"]=Util::request()->post()->street." ".Util::request()->post()->house_number;
+        }
+        $shippingInfo["postcode"]=Util::request()->post()->postal_code;
+        $shippingInfo["city"]=Util::request()->post()->city;
 
         $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($countryId));
+        $this->response->setOutput(json_encode(true));
     }
 
-    public function getIsoCode()
+    public function getSPInfo()
     {
-        $country_id = $this->request->get["country_id"];
-
-        $model = Util::load()->model("module/sendcloud");
-        $isocode = strtolower($model->getIsoCode($country_id));
+        $result = [
+            "country" => Util::session()->shipping_address['iso_code_2'],
+            "postalCode" => Util::session()->shipping_address['postcode'],
+            "apiKey" => Util::config()->sendcloud_api_key
+        ];
 
         $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($isocode));
+        $this->response->setOutput(json_encode($result));
     }
 }
 

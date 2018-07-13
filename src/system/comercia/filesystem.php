@@ -21,4 +21,8 @@ class Filesystem
             return "";
         }
     }
+
+    function search($dir, $pattern){
+        return glob($dir . $pattern . ".*");
+    }
 }

@@ -10,6 +10,28 @@ class StringHelper
     function ccToUnderline($subject){
         return strtolower(preg_replace('/\B([A-Z])/', '_$1', lcfirst($subject)));
     }
+
+    function rewriteForVersion($string,$words){
+        foreach($words as $word){
+            $match=false;
+            $versionMatch=@$word[0]?:array_values($word)[0];
+            foreach ($word as $version=>$newWord){
+                if(strpos($string, $newWord) !== false){
+                    $match=$newWord;
+                }
+                if($version>0 && Util::version()->isMinimal($version)){
+                    $versionMatch=$newWord;
+                }
+            }
+
+            if($match){
+                $string= str_replace($newWord,$versionMatch,$string);
+            }
+        }
+
+        return $string;
+    }
+
 }
 
 ?>

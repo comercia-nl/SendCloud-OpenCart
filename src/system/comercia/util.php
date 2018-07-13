@@ -1,5 +1,6 @@
 <?php
 namespace comercia;
+
 use Cache\File;
 
 class Util
@@ -36,7 +37,8 @@ class Util
         return $load;
     }
 
-    static function image(){
+    static function image()
+    {
         static $image = false;
         if (!$image) {
             require_once(__DIR__ . "/image.php");
@@ -48,14 +50,15 @@ class Util
     public static function db()
     {
         static $db = false;
-        if(!$db) {
+        if (!$db) {
             require_once __DIR__ . "/db.php";
             $db = new db();
         }
         return $db;
     }
 
-    static function filesystem(){
+    static function filesystem()
+    {
         static $fs = false;
         if (!$fs) {
             require_once(__DIR__ . "/filesystem.php");
@@ -125,27 +128,28 @@ class Util
         return $route;
     }
 
-    static function config()
+    static function config($store_id = 0)
     {
-        static $config = false;
-        if (!$config) {
+        static $config = array();
+        if (!@$config[$store_id]) {
             require_once(__DIR__ . "/config.php");
-            $config = new Config();
+            $config[$store_id] = new Config($store_id);
         }
-        return $config;
+        return $config[$store_id];
     }
 
-    static function form(&$data)
+    static function form(&$data = array(), $store_id = -1)
     {
         require_once(__DIR__ . "/form.php");
-        return new Form($data);
+        return new Form($data, $store_id);
     }
 
-    static function breadcrumb(&$data)
+    static function breadcrumb(&$data = array())
     {
         require_once(__DIR__ . "/breadcrumb.php");
         return new Breadcrumb($data);
     }
+
 
     static function request()
     {
@@ -158,14 +162,14 @@ class Util
         return $path;
     }
 
-    static function language()
+    static function language($language=false)
     {
-        static $language = false;
-        if (!$language) {
+        static $languages = [];
+        if (!@$languages[$language]) {
             require_once(__DIR__ . "/language.php");
-            $path = new Language();
+            $languages[$language] = new Language($language);
         }
-        return $path;
+        return $languages[$language];
     }
 
     public static function session()
@@ -205,6 +209,17 @@ class Util
         return $helper;
     }
 
+    public static function dateTimeHelper()
+    {
+        static $helper = false;
+        if (!$helper) {
+            require_once(__DIR__ . "/dateTimeHelper.php");
+            $helper = new DateTimeHelper();
+        }
+        return $helper;
+    }
+
+
     public static function document()
     {
         static $document = false;
@@ -215,13 +230,24 @@ class Util
         return $document;
     }
 
-    public static function patch(){
+    public static function patch()
+    {
         static $patch = false;
         if (!$patch) {
             require_once(__DIR__ . "/patch.php");
             $patch = new Patch();
         }
         return $patch;
+    }
+
+    public static function twig()
+    {
+        static $twig = false;
+        if (!$twig) {
+            require_once(__DIR__ . "/twig.php");
+            $twig = new Twig();
+        }
+        return $twig;
     }
 }
 

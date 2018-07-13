@@ -63,6 +63,8 @@
                             </select>
                         </div>
                     </div>
+
+
                     <div class="form-group">
                         <label class="col-sm-2 control-label"
                                for="sendcloud_address2_as_housenumber"><?php echo $sendcloud_address2_as_housenumber_label; ?></label>
@@ -78,228 +80,75 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="panel-heading">
-                        <?php echo $location_picker_heading; ?>
+                        <?php echo $shipping_method_heading; ?>
                     </div>
-                    <div id="checkout-method">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_method_label; ?>
-                            </label>
-                            <div class="col-sm-8">
-                                <input type="button" class="btn btn-success checkout-picker-button" id=""
-                                       value="<?php echo $checkout_method_picker_label; ?>">
-                                <input type="button" class="btn btn-warning checkout-advanced-button"
-                                       value="<?php echo $checkout_method_advanced_label; ?>">
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo $entry_status; ?></label>
+                        <div class="col-sm-10">
+                            <a href="<?php echo $shipping_toggle_url; ?>" class="btn btn-<?php echo $shipping_installed?"warning":"success"; ?>">
+                                <?php echo $shipping_installed?$shipping_method_deactivate:$shipping_method_activate ?>
+                            </a>
                         </div>
                     </div>
-
-                    <div id="checkout-disable">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_method_label; ?>
-                            </label>
-                            <div class="col-sm-8">
-                                <input type="button" class="btn btn-danger checkout-disable-button" id=""
-                                       value="<?php echo $checkout_disable_label; ?>">
-                            </div>
+                    <?php if($shipping_installed){ ?>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            <?php echo $shipping_method_tax_class; ?>
+                        </label>
+                        <div class="col-sm-10">
+                            <?php
+                    echo comercia\util::html()->selectbox("sendcloud_tax_class_id",$sendcloud_tax_class_id,$tax_classes,"form-control");
+                            ?>
                         </div>
-                    </div>
-
-                    <div id="checkout-picker">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_presets_label; ?>
-                            </label>
-                            <div class="col-sm-8">
-                                <?php
-                                $selected = !empty($sendcloud_checkout_preset) ? $sendcloud_checkout_preset : "";
-                    echo comercia\util::html()->
-                                selectbox("checkout_preset_options",$selected,$checkout_presets,"form-control");
-                                ?>
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="button" class="form-control btn btn-success" id="checkout_preset_apply"
-                                       value="<?php echo $checkout_apply_label; ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div id="checkout-advanced">
-                        <input type="hidden" name="sendcloud_checkout_preset"
-                               value="<?php echo $sendcloud_checkout_preset?>">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_picker_route_label; ?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_route"
-                                       value="<?php echo $sendcloud_checkout_route; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><?php echo $checkout_picker_selector_label; ?></label>
-                            <div class="col-sm-2">
-                                <?php
-                    echo comercia\util::html()->
-                                selectbox("sendcloud_checkout_picker_position",$sendcloud_checkout_picker_position,$checkout_picker_position_options,"form-control");
-                                ?>
-                            </div>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" name="sendcloud_checkout_picker_selector"
-                                       value="<?php echo $sendcloud_checkout_picker_selector; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="panel-heading">
-                            <?php echo $checkout_selector_shipping_heading; ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_address_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_address"
-                                       value="<?php echo $sendcloud_checkout_selector_address; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_address2_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_address2"
-                                       value="<?php echo $sendcloud_checkout_selector_address2; ?>"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_city_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_city"
-                                       value="<?php echo $sendcloud_checkout_selector_city; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_postcode_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_postcode"
-                                       value="<?php echo $sendcloud_checkout_selector_postcode; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_country_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_country"
-                                       value="<?php echo $sendcloud_checkout_selector_country; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_zone_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_zone"
-                                       value="<?php echo $sendcloud_checkout_selector_zone; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="panel-heading">
-                            <?php echo $checkout_selector_payment_heading; ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_payment_postcode_label; ?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_payment_postcode"
-                                       value="<?php echo $sendcloud_checkout_payment_postcode; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_payment_country_label; ?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_payment_country"
-                                       value="<?php echo $sendcloud_checkout_payment_country; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="panel-heading">
-                            <?php echo $checkout_selector_extra_options_heading; ?>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_fake_click_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_fake_click"
-                                       value="<?php echo $sendcloud_checkout_selector_fake_click; ?>"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">
-                                <?php echo $checkout_selector_button_css_label ;?>
-                            </label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="sendcloud_checkout_selector_button_css"
-                                       value="<?php echo $sendcloud_checkout_selector_button_css; ?>"/>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-2 control-label"><span data-toggle="tooltip" title="<?php echo $text_restrict_carriers_helper; ?>"><?php echo $text_restrict_carriers;?></span></label>
+                        <label class="col-sm-2 control-label">
+                            <?php echo $shipping_method_sort_order; ?>
+                        </label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <?php if ($sendcloud_checkout_selector_restrict_carriers) { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" checked="checked" />
-                                <?php echo $text_yes; ?>
-                                <?php } else { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="1" />
-                                <?php echo $text_yes; ?>
-                                <?php } ?>
-                            </label>
-                            <label class="radio-inline">
-                                <?php if (!$sendcloud_checkout_selector_restrict_carriers) { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" checked="checked" />
-                                <?php echo $text_no; ?>
-                                <?php } else { ?>
-                                <input type="radio" name="sendcloud_checkout_selector_restrict_carriers" value="0" />
-                                <?php echo $text_no; ?>
-                                <?php } ?>
-                            </label>
+                            <input class="form-control" type="text" name="sendcloud_sort_order"
+                                   value="<?php echo $sendcloud_sort_order; ?>"/>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">
+                            <?php echo $entry_locationpicker; ?>
+                        </label>
+                        <div class="col-sm-10">
+
+                            <select name="sendcloud_locationpicker" class="form-control">
+                                <option value="">
+                                    <?php echo $text_disabled; ?>
+                                </option>
+                                <option
+                                <?php if($sendcloud_locationpicker){ ?> selected <?php }?> value = "true">
+                                <?php echo $text_enabled; ?>
+                                </option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <?php } ?>
 
                     <div class="panel-heading"><?php echo $tracking_heading; ?></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $text_update_url;?></label>
-                        <div class="col-sm-10">  <div class="form-control"><?php echo $url_api_tracking;?></div></div>
+                        <div class="col-sm-10">
+                            <div class="form-control"><?php echo $url_api_tracking;?></div>
+                        </div>
 
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
-                             target="_blank"><?php echo $text_update_tracking?> <i class="fa fa-external-link"></i></a>
+                               target="_blank"><?php echo $text_update_tracking?> <i
+                                        class="fa fa-external-link"></i></a>
                         </div>
                     </div>
 
