@@ -87,7 +87,14 @@ class ModelModuleSendcloud extends Model
     }
 
     function isShippingInstalled(){
-        $methods= Util::load()->model("extension/extension")->getInstalled("shipping");
+        $version = Util::version()->isMinimal('3.0');
+        if($version) {
+            $methods= Util::load()->model("setting/extension")->getInstalled("shipping");
+        }
+        else {
+            $methods= Util::load()->model("extension/extension")->getInstalled("shipping");
+        }
+        
         return in_array("sendcloud",$methods) && Util::config()->sendcloud_status;
 
     }
