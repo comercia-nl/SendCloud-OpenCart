@@ -25,10 +25,9 @@ class StringHelper
             }
 
             if($match){
-                $string= str_replace($newWord,$versionMatch,$string);
+                $string= str_replace($match,$versionMatch,$string);
             }
         }
-
         return $string;
     }
 

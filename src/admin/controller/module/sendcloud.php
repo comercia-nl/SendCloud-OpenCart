@@ -84,16 +84,8 @@ class ControllerModuleSendcloud extends Controller
     {
         if (Util::load()->model("module/sendcloud")->isShippingInstalled()) {
             $this->db->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = 'shipping' AND `code` = 'sendcloud'");
-            Util::config()->sendcloud_status = false;
         } else {
-            $version = Util::version()->isMinimal('3.0');
-            if($version) {
-                Util::load()->model("setting/extension")->install("shipping", "sendcloud");
-            }
-            else {
-                Util::load()->model("extension/extension")->install("shipping", "sendcloud");
-            }
-
+            Util::load()->model("extension/extension")->install("shipping", "sendcloud");
             Util::config()->sendcloud_status = true;
         }
         Util::response()->redirectBack();
