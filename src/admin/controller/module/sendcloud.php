@@ -254,7 +254,19 @@ class ControllerModuleSendcloud extends Controller
                     'country' => $order['shipping_iso_code_2'],
                     'order_number' => $order['order_id']
                 );
-
+                $productData = array();
+                $orderProducts = $order_model->getOrderProducts($order['order_id']);
+                foreach($orderProducts as $product) {
+                    $productData[] = array(
+                    'description' => $product['name'],
+                    'quantity'    => $product['quantity'],
+                    'weight'      => $product['quantity'] * $this->getProductDetails($product['product_id'])['weight'],
+                    'sku'         => $this->getProductDetails($product['product_id'])['sku'],
+                    'value'       => number_format($product['total'], 2, '.', '')
+                );
+                }
+                
+                $newParcel += ['parcel_items' => $productData];
 
                 if (!empty($spId) && strtolower($spId) != "null") {
                     $newParcel += ['to_service_point' => $spId];
@@ -270,7 +282,6 @@ class ControllerModuleSendcloud extends Controller
                         }
                     }
                 }
-
 
                 $parcel = $api->parcels->create($newParcel);
                 $this->db->query("UPDATE `" . DB_PREFIX . "order` SET sendcloud_id='" . $parcel["id"] . "'  WHERE order_id = '" . (int)$order['order_id'] . "'");
@@ -330,6 +341,16 @@ class ControllerModuleSendcloud extends Controller
         }
         return false;
     }
+
+    private function getProductDetails($productId) {
+        $product_model = Util::load()->model("catalog/product");
+        $productDetail = $product_model->getProduct($productId);
+        return [
+            'weight' => $productDetail['weight'],
+            'sku'    => $productDetail['sku']
+        ];
+    }
+
 }
 
 ?>
