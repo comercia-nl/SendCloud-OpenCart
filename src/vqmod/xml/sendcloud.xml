@@ -16,13 +16,21 @@
     <file name="admin/view/template/sale/order_list.twig">
         <operation error="skip">
             <search position="before" index="1"><![CDATA[<button type="submit" id="button-shipping"]]></search>
-            <add><![CDATA[<button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="{{sendcloud_url}}" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>]]></add>
+            <add><![CDATA[
+                {% if sendcloud_status %}
+                    <button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="{{sendcloud_url}}" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>
+                {% endif %}
+                ]]></add>
         </operation>
     </file>
     <file name="admin/view/template/sale/order_list.tpl">
         <operation error="skip">
             <search position="before" index="1"><![CDATA[<button type="submit" id="button-shipping"]]></search>
-            <add><![CDATA[<button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="<?php echo $sendcloud_url; ?>" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>]]></add>
+            <add><![CDATA[
+                <?php if($sendcloud_status) { ?>
+                        <button id="button-sendcloud" title = "Orders doorsturen naar SendCloud" class="btn btn-info" form="form-order" formaction="<?php echo $sendcloud_url; ?>" form="form-order" type="submit" onclick="$('#form-order').attr('target', '_self');"  style="padding:4px 10px 3px 9px"><img src="../image/module/sendcloud/sendcloud.svg" style="width:111px; height:26px;"></button>
+                <?php } ?>
+                ]]></add>
         </operation>
     </file>
 
@@ -39,11 +47,11 @@
             <search position="after"><![CDATA[$('input[name^=\'selected\']:first').trigger('change');]]></search>
             <add>
                 <![CDATA[$('#form-order thead input[type=checkbox]').click(function() {
-				if($(this).prop("checked")) {$('#button-sendcloud').removeClass('disabled');
-				 } else {
-				  $('#button-sendcloud').addClass('disabled');
-				 }
-				});]]>
+                if($(this).prop("checked")) {$('#button-sendcloud').removeClass('disabled');
+                 } else {
+                  $('#button-sendcloud').addClass('disabled');
+                 }
+                });]]>
             </add>
         </operation>
     </file>
@@ -51,28 +59,80 @@
     <file name="admin/controller/sale/order.php">
         <operation error="abort">
             <search position="after"><![CDATA[$data['invoice'] = $this->url->link('sale/order/invoice']]></search>
-            <add><![CDATA[$data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk');]]></add>
+            <add><![CDATA[
+                $data['sendcloud_url'] = \comercia\Util::url()->link('module/sendcloud/bulk');
+                $data['sendcloud_status'] = \comercia\Util::config()->get('sendcloud_status');
+                ]]></add>
         </operation>
     </file>
 
     <file name="admin/controller/extension/extension/module.php">
         <operation error="skip">
+            <search position="after"><![CDATA[if ($files) {]]></search>
+            <add position="after"><![CDATA[
+                $count = false;
+            ]]></add>
+        </operation>
+        <operation error="skip">
             <search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
             <add position="before"><![CDATA[
-			if (\comercia\Util::version()->isMaximal('2.3.0.2')) {
-             if ($extension == 'sendcloud') {
+            if(($extension == 'sendcloud') && $count == false) {
+                $count = true;
+                \comercia\Util::load()->language("module/sendcloud");
+                if (\comercia\Util::version()->isMinimal(3.0)) {
+                    $name = $this->language->get('extension')->get('heading_title');
+                } else {
+                    $name = $this->language->get('heading_title');
+                }
+            
                 $data['extensions'][] = array(
-                'name'      => $this->language->get('heading_title'),
-                'module'    => $module_data,
-                'install'   => $this->url->link('extension/extension/module/install', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
-                'uninstall' => $this->url->link('extension/extension/module/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, true),
-                'installed' => in_array($extension, $extensions),
-                'edit'      => $this->url->link('module/' . $extension, 'token=' . $this->session->data['token'], true)
+                    'name'       => $name,
+                    'status'    => $this->config->get($extension . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+                    'module'    => $module_data,
+                    'install'   => \comercia\Util::url()->link('extension/extension/module/install&extension=' . $extension),
+                    'uninstall' => \comercia\Util::url()->link('extension/extension/module/uninstall&extension=' . $extension),
+                    'installed' => in_array($extension, $extensions),
+                    'edit'      => \comercia\Util::url()->link('extension/module/' . $extension)
                 );
                 continue;
-             }
             }
-			]]></add>
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/extension/extension/shipping.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[$data['extensions'][] = array(]]></search>
+            <add position="before"><![CDATA[
+                if($extension == 'sendcloud') {
+                    \comercia\Util::load()->language("module/sendcloud");
+                    if (\comercia\Util::version()->isMinimal(3.0)) {
+                        $name = $this->language->get('extension')->get('heading_title');
+                    } else {
+                        $name = $this->language->get('heading_title');
+                    }
+                
+                    $data['extensions'][] = array(
+                        'name'       => $name,
+                        'status'     => $this->config->get($extension . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+                        'sort_order' => $this->config->get($extension . '_sort_order'),
+                        'install'    => \comercia\Util::url()->link('extension/extension/shipping/install&extension=' . $extension),
+                        'uninstall'  => \comercia\Util::url()->link('extension/extension/shipping/uninstall&extension=' . $extension),
+                        'installed'  => in_array($extension, $extensions),
+                        'edit'       => \comercia\Util::url()->link('extension/shipping/' . $extension)
+                    );
+                    continue;
+                }
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/model/setting/extension.php">
+        <operation error="skip">
+            <search position="after"><![CDATA[$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code` = '" . $this->db->escape($type . '_' . $code) . "'");]]></search>
+            <add><![CDATA[
+                if($code == 'sendcloud') {
+                    $this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code` = '" . $this->db->escape($code) . "'");
+                }
+            ]]></add>
         </operation>
     </file>
 </modification>

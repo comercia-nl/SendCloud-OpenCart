@@ -59,7 +59,7 @@ class Url
             }
         }
 
-        if ($ssl && !defined(HTTPS_SERVER)) {
+        if ($ssl && !HTTPS_SERVER) {
             $ssl = false;
         }
 

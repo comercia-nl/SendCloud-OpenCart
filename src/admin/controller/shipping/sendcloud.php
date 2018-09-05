@@ -1,7 +1,3 @@
 <?php
-class ControllerShippingSendcloud extends Controller
-{
-    function index(){
-        \comercia\Util::response()->redirect(\comercia\Util::route()->extension("sendcloud"));
-    }
-}
+include (__DIR__."/../module/sendcloud.php");
+class ControllerShippingSendcloud extends ControllerModuleSendcloud{}
