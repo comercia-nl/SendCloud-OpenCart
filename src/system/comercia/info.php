@@ -1,6 +1,7 @@
 <?php
 
 namespace comercia;
+
 class Info
 {
     function IsInAdmin()
@@ -10,10 +11,24 @@ class Info
             (defined("HTTPS_CATALOG") && HTTPS_CATALOG != HTTPS_SERVER || defined("HTTP_CATALOG") && HTTP_CATALOG != HTTPS_SERVER);
     }
 
-    function theme()
+    function theme($location = false)
     {
-        return Util::config()->config_template;
+        static $themeName = false;
+        if (!$themeName) {
+            $themeName = Util::config()->config_template;
+        }
+        if (!$themeName) {
+            $themeName = Util::config()->theme_default_directory;
+        }
+
+
+        if ($location) {
+            return "view/theme/" . $themeName . "/";
+        }
+
+        return $themeName;
     }
+
 
     function stores()
     {
@@ -36,6 +51,12 @@ class Info
             $stores = array_values($stores);
         }
         return $stores;
+    }
+
+
+    function currentStore()
+    {
+        return Util::config()->config_store_id;
     }
 }
 

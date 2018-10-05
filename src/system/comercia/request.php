@@ -30,9 +30,10 @@ class Request
     {
         static $server = false;
         if (!$server) {
-            $server = new ArrayObject(array_merge(Util::registry("load")->get("request")->server,[
+            $serverObject=array_merge(Util::registry("load")->get("request")->server,[
                 "protocol"=>(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://"
-            ]));
+            ]);
+            $server = new ArrayObject($serverObject);
         }
         return $server;
     }
@@ -119,7 +120,7 @@ class Request
 
     public function getUrl()
     {
-        return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     }
 }
 

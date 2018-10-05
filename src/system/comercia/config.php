@@ -13,7 +13,11 @@ class Config
         $this->store_id = $store_id;
         $data = Util::db()->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = " . $store_id . "");
         foreach ($data as $value) {
-            $this->data[$value["key"]] = $value["value"];
+            if (!$value['serialized']) {
+                $this->data[$value["key"]] = $value["value"];
+            } else {
+                $this->data[$value["key"]] = json_decode($value["value"], true);
+            }
         }
     }
 
