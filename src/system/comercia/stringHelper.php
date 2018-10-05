@@ -1,5 +1,6 @@
 <?php
 namespace comercia;
+
 class StringHelper
 {
     function startsWith($haystack, $needle)
@@ -7,28 +8,39 @@ class StringHelper
         $length = strlen($needle);
         return (substr($haystack, 0, $length) === $needle);
     }
-    function ccToUnderline($subject){
+
+    function ccToUnderline($subject)
+    {
         return strtolower(preg_replace('/\B([A-Z])/', '_$1', lcfirst($subject)));
     }
 
-    function rewriteForVersion($string,$words){
-        foreach($words as $word){
-            $match=false;
-            $versionMatch=@$word[0]?:array_values($word)[0];
-            foreach ($word as $version=>$newWord){
-                if(strpos($string, $newWord) !== false){
-                    $match=$newWord;
+    function rewriteForVersion($string, $words)
+    {
+        foreach ($words as $word) {
+            $match = false;
+            $versionMatch = @$word[0] ?: array_values($word)[0];
+            foreach ($word as $version => $newWord) {
+                if (strpos($string, $newWord) !== false) {
+                    $match = $newWord;
                 }
-                if($version>0 && Util::version()->isMinimal($version)){
-                    $versionMatch=$newWord;
+                if ($version > 0 && Util::version()->isMinimal($version)) {
+                    $versionMatch = $newWord;
                 }
             }
 
-            if($match){
-                $string= str_replace($match,$versionMatch,$string);
+            if ($match) {
+                $string = str_replace($match, $versionMatch, $string);
             }
         }
         return $string;
+    }
+
+    function currency($price, $currency = false)
+    {
+        if (!$currency) {
+            $currency = Util::session()->currency;
+        }
+        return Util::registry()->get("currency")->format($price, $currency);
     }
 
 }

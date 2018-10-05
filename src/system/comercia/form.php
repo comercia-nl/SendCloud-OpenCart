@@ -88,7 +88,7 @@ class Form
             }
 
             $this->initializeKey($key);
-            if (!$this->data[$key] && isset($post->$value)) {
+            if (!$this->data[$key] && $post->$value) {
                 $this->data[$key] = $post->$value;
             }
         }
@@ -169,6 +169,7 @@ class Form
         if ((Util::request()->server()->REQUEST_METHOD == 'POST')) {
             $function($this->data);
         }
+        return $this;
     }
 
 }

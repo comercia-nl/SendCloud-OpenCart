@@ -128,6 +128,9 @@ class Util
         return $route;
     }
 
+    /**
+     * @return Config
+     */
     static function config($store_id = 0)
     {
         static $config = array();
@@ -162,6 +165,10 @@ class Util
         return $path;
     }
 
+
+    /**
+     * @return Language
+     */
     static function language($language=false)
     {
         static $languages = [];
@@ -248,6 +255,15 @@ class Util
             $twig = new Twig();
         }
         return $twig;
+    }
+
+    public static function customer(){
+        static $customer = false;
+        if (!$customer) {
+            require_once(__DIR__ . "/customer.php");
+            $customer = new Customer();
+        }
+        return $customer;
     }
 }
 

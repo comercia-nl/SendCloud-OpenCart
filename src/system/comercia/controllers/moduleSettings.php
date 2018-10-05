@@ -55,9 +55,11 @@ class ModuleSettings
             Util::session()->success = $data['msg_settings_saved'];
             $postFinish = $this->postFinish;
             if (is_callable($postFinish)) {
-                $postFinish($data);
+                $avoid_redirect=$postFinish($data);
             }
-            Util::response()->redirect(@$data['redirect'] ?: Util::route()->extension());
+            if(!$avoid_redirect) {
+                Util::response()->redirect(@$data['redirect'] ?: Util::route()->extension());
+            }
         });
 
         //handle the form when finished

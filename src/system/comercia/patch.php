@@ -69,6 +69,7 @@ class Patch
 
     function registerDone($path,$patch){
         $prefix=DB_PREFIX;
+        $path=str_replace(DIR_APPLICATION,"",$path);
         $this->db->query("insert into ".$prefix."comercia_patch set 
             `path`='".$path."',
             `patch`='".$patch."',
@@ -78,9 +79,10 @@ class Patch
     }
 
     function needPatch($path,$patch){
-            $prefix = DB_PREFIX;
-            $query = $this->db->query("select comercia_patch_id from " . $prefix . "comercia_patch where `path`='".$path."' and `patch`='" . $patch . "' and success=1");
-            return !$query->num_rows;
+        $prefix = DB_PREFIX;
+        $path=str_replace(DIR_APPLICATION,"",$path);
+        $query = $this->db->query("SELECT comercia_patch_id FROM " . $prefix . "comercia_patch WHERE `path` LIKE '%".$path."' AND `patch`='" . $patch . "' AND success=1");
+        return !$query->num_rows;
     }
 
     function table($table){
