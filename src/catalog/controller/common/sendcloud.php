@@ -17,8 +17,15 @@ class ControllerCommonSendcloud extends Controller
     {
         $spId = Util::request()->post()->id;
         $orderId = \comercia\Util::session()->order_id;
-        if (!empty($spId)) {
+        if (!empty($spId) && !empty($orderId)) {
             $this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . $orderId . "'");
+        } else if (!empty($spId)) {
+            \comercia\Util::session()->spId = $spId;
+        } else if (!empty($orderId)) {
+            $spId = \comercia\Util::session()->spId;
+            if (!empty($spId)) {
+                $this->db->query("UPDATE " . DB_PREFIX . "order SET sendcloud_sp_id = '" . $spId . "', shipping_zone = '', shipping_zone_id=0 WHERE order_id = '" . $orderId . "'");
+            }
         }
 
         $shippingInfo = Util::session()->shipping_address;

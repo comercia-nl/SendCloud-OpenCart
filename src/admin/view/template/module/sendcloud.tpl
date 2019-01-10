@@ -11,7 +11,7 @@
             <h1><?php echo $settings_title; ?></h1>
             <ul class="breadcrumb">
                 <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-                <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+                    <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
                 <?php } ?>
             </ul>
         </div>
@@ -32,15 +32,13 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="sendcloud_api_key">API Public Key:</label>
                         <div class="col-sm-10">
-                            <input class="form-control" type="text" name="sendcloud_api_key"
-                                   value="<?php echo $sendcloud_api_key; ?>"/>
+                            <input class="form-control" type="text" name="sendcloud_api_key" value="<?php echo $sendcloud_api_key; ?>"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="sendcloud_api_secret">API Secret Key:</label>
                         <div class="col-sm-10">
-                            <input class="form-control" type="text" name="sendcloud_api_secret"
-                                   value="<?php echo $sendcloud_api_secret; ?>"/>
+                            <input class="form-control" type="text" name="sendcloud_api_secret" value="<?php echo $sendcloud_api_secret; ?>"/>
                         </div>
                     </div>
 
@@ -50,16 +48,12 @@
                         <div class="col-sm-10">
                             <select name="sendcloud_automate" class="form-control">
                                 <option value=""><?php echo $default_status; ?></option>
-                                <?php
-                foreach ($statuses as $status) {
-                ?>
-                                <option
-                                <?php if ($sendcloud_automate == $status['order_status_id']) { ?>SELECTED<?php } ?>
-                                value="<?php echo $status['order_status_id']; ?>
-                                "><?php echo $status['name']; ?></option>
-                                <?php
-                }
-                ?>
+                                <?php foreach ($statuses as $status) { ?>
+                                    <option
+                                    <?php if ($sendcloud_automate == $status['order_status_id']) { ?>SELECTED<?php } ?>
+                                    value="<?php echo $status['order_status_id']; ?>
+                                    "><?php echo $status['name']; ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -74,8 +68,8 @@
                                     <?php echo $text_disabled; ?>
                                 </option>
                                 <option
-                                <?php if($sendcloud_address2_as_housenumber){ ?> selected <?php }?> value = "true">
-                                <?php echo $text_enabled; ?>
+                                    <?php if ($sendcloud_address2_as_housenumber) { ?> selected <?php } ?> value = "true">
+                                    <?php echo $text_enabled; ?>
                                 </option>
                             </select>
                         </div>
@@ -87,53 +81,35 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label"><?php echo $entry_status; ?></label>
                         <div class="col-sm-10">
-                            <a href="<?php echo $shipping_toggle_url; ?>" class="btn btn-<?php echo $shipping_installed?"warning":"success"; ?>">
-                                <?php echo $shipping_installed?$shipping_method_deactivate:$shipping_method_activate ?>
-                            </a>
-                        </div>
-                    </div>
-                    <?php if($shipping_installed){ ?>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">
-                            <?php echo $shipping_method_tax_class; ?>
-                        </label>
-                        <div class="col-sm-10">
-                            <?php
-                    echo comercia\util::html()->selectbox("sendcloud_tax_class_id",$sendcloud_tax_class_id,$tax_classes,"form-control");
-                            ?>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">
-                            <?php echo $shipping_method_sort_order; ?>
-                        </label>
-                        <div class="col-sm-10">
-                            <input class="form-control" type="text" name="sendcloud_sort_order"
-                                   value="<?php echo $sendcloud_sort_order; ?>"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">
-                            <?php echo $entry_locationpicker; ?>
-                        </label>
-                        <div class="col-sm-10">
-
-                            <select name="sendcloud_locationpicker" class="form-control">
-                                <option value="">
-                                    <?php echo $text_disabled; ?>
-                                </option>
-                                <option
-                                <?php if($sendcloud_locationpicker){ ?> selected <?php }?> value = "true">
-                                <?php echo $text_enabled; ?>
-                                </option>
+                            <select name="sendcloud_status" class="form-control">
+                                <option value=""><?php echo $text_disabled; ?></option>
+                                <option <?php if ($sendcloud_status) { ?> selected <?php } ?> value = "1"><?php echo $text_enabled; ?></option>
                             </select>
-
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo $shipping_method_tax_class; ?></label>
+                        <div class="col-sm-10">
+                            <?php echo comercia\util::html()->selectbox("sendcloud_tax_class_id", $sendcloud_tax_class_id, $tax_classes, "form-control"); ?>
                         </div>
                     </div>
 
-                    <?php } ?>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo $shipping_method_sort_order; ?></label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="sendcloud_sort_order" value="<?php echo $sendcloud_sort_order; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"><?php echo $entry_locationpicker; ?></label>
+                        <div class="col-sm-10">
+                            <select name="sendcloud_locationpicker" class="form-control">
+                                <option value=""><?php echo $text_disabled; ?></option>
+                                <option <?php if ($sendcloud_locationpicker) { ?> selected <?php }?> value = "1"><?php echo $text_enabled; ?></option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="panel-heading"><?php echo $tracking_heading; ?></div>
                     <div class="form-group">
@@ -147,8 +123,7 @@
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-10">
                             <a class="btn btn-success" href="<?php echo $url_update_tracking; ?>"
-                               target="_blank"><?php echo $text_update_tracking?> <i
-                                        class="fa fa-external-link"></i></a>
+                               target="_blank"><?php echo $text_update_tracking?> <i class="fa fa-external-link"></i></a>
                         </div>
                     </div>
 

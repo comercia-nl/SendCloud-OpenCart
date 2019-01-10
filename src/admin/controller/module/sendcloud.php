@@ -14,13 +14,23 @@ class ControllerModuleSendcloud extends Controller
         //load the language data
         $data = array();
         Util::load()->language("module/sendcloud", $data);
-
         $model = Util::load()->model("module/sendcloud");
+
+        Util::breadcrumb($data)
+            ->add("text_home", "common/home")
+            ->add("settings_title", "module/sendcloud");
 
         //handle the form when finished
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
             $this->request->post['sendcloud_automate'] = (int)$this->request->post['sendcloud_automate'];
             Util::config()->set('sendcloud', $this->request->post);
+            // OC3 Compatibility
+            $shipping_settings = array();
+            foreach ($this->request->post as $key => $value) {
+                $shipping_settings['shipping_' . $key] = $value;
+            }
+            Util::config()->set('shipping_sendcloud', $shipping_settings);
+
             Util::session()->success = $data['msg_settings_saved'];
             Util::response()->redirect(Util::route()->extension());
         }
@@ -30,44 +40,20 @@ class ControllerModuleSendcloud extends Controller
         $data['statuses'] = $statuses->rows;
 
         $formFields = array("sendcloud_automate", "sendcloud_api_key", "sendcloud_api_secret", "sendcloud_address2_as_housenumber",  //basic information
-            "sendcloud_sort_order", "sendcloud_tax_class_id","sendcloud_locationpicker"
+            "sendcloud_sort_order", "sendcloud_status", "sendcloud_tax_class_id","sendcloud_locationpicker"
         );
-
-        $picker_positions = array(
-            "checkout_picker_selector_position_before" => "before",
-            "checkout_picker_selector_position_after" => "after",
-            "checkout_picker_selector_position_replace" => "replace",
-            "checkout_picker_selector_position_prepend" => "prepend",
-            "checkout_picker_selector_position_append" => "append",
-        );
-
-        $pickerPresets = $model->getPickerPresets();
 
         $taxClasses = Util::load()->model("localisation/tax_class")->getTaxClasses();
-
 
         //place the prepared data into the form
         $form = Util::form($data)
             ->fillFromSessionClear("error_warning", "success")
             ->fillFromPost($formFields)
             ->fillFromConfig($formFields)
-            ->fillSelectboxOptions("checkout_picker_position_options", $picker_positions)
-            ->fillSelectboxOptions("tax_classes", Util::arrayHelper()->keyValuePairs($taxClasses, "title", "tax_class_id"))
-            ->fillSelectboxOptions("checkout_presets", Util::arrayHelper()->keyToVal($pickerPresets));
-
-        Util::breadcrumb($data)
-            ->add("text_home", "common/home")
-            ->add("settings_title", "module/sendcloud");
-
-        //load external configuration
-
-        $data["shipping_installed"] = $model->isShippingInstalled();
-        $data["shipping_toggle_url"] = Util::url()->link("module/sendcloud/toggleShipping");
+            ->fillSelectboxOptions("tax_classes", Util::arrayHelper()->keyValuePairs($taxClasses, "title", "tax_class_id"));
 
         //handle document related things
         Util::document()->setTitle(Util::language()->heading_title);
-        Util::document()->addVariable("picker_presets", $pickerPresets);
-        util::document()->addScript("view/javascript/sendcloud.js");
 
         //create links
         $data['form_action'] = Util::url()->link('module/sendcloud');
@@ -75,20 +61,10 @@ class ControllerModuleSendcloud extends Controller
         $data['url_patch'] = Util::url()->link('module/sendcloud/patch');
         $data["url_update_tracking"] = Util::url()->link('module/sendcloud/updateTrackingCodes');
         $data["url_api_tracking"] = Util::url()->catalog('api/sendcloud/updateTrackingCodes');
+        $data['url_toggle_shipping'] = Util::url()->link("module/sendcloud/toggleShipping");
 
         //create a response
         Util::response()->view("module/sendcloud.tpl", $data);
-    }
-
-    function toggleShipping()
-    {
-        if (Util::load()->model("module/sendcloud")->isShippingInstalled()) {
-            $this->db->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = 'shipping' AND `code` = 'sendcloud'");
-        } else {
-            Util::load()->model("extension/extension")->install("shipping", "sendcloud");
-            Util::config()->sendcloud_status = true;
-        }
-        Util::response()->redirectBack();
     }
 
     function patch()
@@ -131,13 +107,14 @@ class ControllerModuleSendcloud extends Controller
             $api = new SendcloudApi('live', $sendcloud_settings['sendcloud_api_key'], $sendcloud_settings['sendcloud_api_secret']);
         }
 
-        $query = $this->db->query("select * from `" . DB_PREFIX . "order` where sendcloud_id>0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
+        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE sendcloud_id > 0 && (sendcloud_tracking IS NULL || sendcloud_tracking='')");
         foreach ($query->rows as $row) {
             $parcel = $api->parcels->get($row["sendcloud_id"]);
             if ($parcel["tracking_number"]) {
                 $this->db->query("UPDATE  `" . DB_PREFIX . "order` SET sendcloud_tracking='" . $parcel["tracking_number"] . "' WHERE order_id='" . $row["order_id"] . "'");
             }
         }
+
         Util::response()->redirect("module/sendcloud/index");
     }
 
@@ -171,6 +148,7 @@ class ControllerModuleSendcloud extends Controller
         if (!$this->user->hasPermission('modify', Util::route()->extension())) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
+
         return !$this->error;
     }
 
@@ -257,10 +235,12 @@ class ControllerModuleSendcloud extends Controller
                 $productData = array();
                 $orderProducts = $order_model->getOrderProducts($order['order_id']);
                 foreach($orderProducts as $product) {
+                    $weight = ($product['quantity'] * $this->getProductDetails($product['product_id'])['weight'] > 0.001) ? $product['quantity'] * $this->getProductDetails($product['product_id'])['weight'] : 0.001;
+
                     $productData[] = array(
                     'description' => $product['name'],
                     'quantity'    => $product['quantity'],
-                    'weight'      => $product['quantity'] * $this->getProductDetails($product['product_id'])['weight'],
+                    'weight'      => $weight,
                     'sku'         => $this->getProductDetails($product['product_id'])['sku'],
                     'value'       => number_format($product['total'], 2, '.', '')
                 );
@@ -345,6 +325,7 @@ class ControllerModuleSendcloud extends Controller
     private function getProductDetails($productId) {
         $product_model = Util::load()->model("catalog/product");
         $productDetail = $product_model->getProduct($productId);
+
         return [
             'weight' => $productDetail['weight'],
             'sku'    => $productDetail['sku']
