@@ -136,6 +136,21 @@
         </operation>
     </file>
 
+    <file name="catalog/controller/event/compatibility.php" error="skip">
+        <operation>
+            <search position="replace"><![CDATA['model/' . $route . '.php']]></search>
+            <add><![CDATA['model/'.((strpos($route,'get') !== false) ? dirname($route) : $route).'.php']]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/event/compatibility.php" error="skip">
+        <operation>
+            <search position="after" index="1"><![CDATA[$route = $part[1] . '/' . $part[2];]]></search>
+            <add><![CDATA[if(array_key_exists(3, $part)) {
+                $route = $part[1] . '/' . $part[2] . '/' . $part[3];
+            }]]></add>
+        </operation>
+    </file>
+
     <!-- Checkout specific code -->
     <file name="catalog/controller/checkout/confirm.php">
         <operation error="skip" info="OC Default Checkout">

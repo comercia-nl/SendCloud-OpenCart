@@ -193,7 +193,7 @@ class Load
             }
         } elseif (Util::version()->isMinimal(2.0)) {
             if (Util::version()->isMinimal("2.2") || Util::version()->isMinimal("2") && Util::info()->IsInAdmin()) {
-                if (Util::version()->isMaximal("2.1")) { // must be 2.0 or 2.1; both versions don't add tpl in the loader
+                if (Util::version()->isMaximal("2.1.0.2")) { // must be 2.0 or 2.1; both versions don't add tpl in the loader
                     $view .= "." . $extension;
                 } else {
                     $view = str_replace("." . $extension, "", $view);

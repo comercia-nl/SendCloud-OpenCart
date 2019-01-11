@@ -14,7 +14,6 @@ class ControllerModuleSendcloud extends Controller
         //load the language data
         $data = array();
         Util::load()->language("module/sendcloud", $data);
-        $model = Util::load()->model("module/sendcloud");
 
         Util::breadcrumb($data)
             ->add("text_home", "common/home")
@@ -64,7 +63,7 @@ class ControllerModuleSendcloud extends Controller
         $data['url_toggle_shipping'] = Util::url()->link("module/sendcloud/toggleShipping");
 
         //create a response
-        Util::response()->view("module/sendcloud.tpl", $data);
+        Util::response()->view("module/sendcloud", $data);
     }
 
     function patch()
