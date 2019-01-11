@@ -2,6 +2,13 @@
 Releases
 ********
 
+1.3.0
+=====
+
+* Made SendCloud into a shipping method, displaying shipping methods configured in SendCloud directly.
+* Added support for SendCloud Plus.
+* Multiple bug fixes.
+
 1.2.0
 =====
 
